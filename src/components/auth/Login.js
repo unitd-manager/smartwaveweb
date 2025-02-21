@@ -2,10 +2,15 @@ import React,{useState} from 'react'
 import { useToasts } from "react-toast-notifications";
 import { Link, useHistory } from "react-router-dom";
 import api from '../../constants/api';
+import { useDispatch } from "react-redux";
+import {
+  fetchCartData } from '../../redux/actions/cartItemActions';
+  import {
+    fetchWishlistData } from '../../redux/actions/wishlistItemActions';
 
 function Login() {
     const { addToast } = useToasts();
-
+const dispatch = useDispatch();
     const [signinData, setSigninData] = useState({
         email: "",
         password: "",
@@ -64,7 +69,8 @@ function Login() {
             else {
               localStorage.setItem("user", JSON.stringify(res.data.data));
               localStorage.setItem("token", JSON.stringify(res.data.token));
-    
+     dispatch(fetchCartData(res.data.data));
+     dispatch(fetchWishlistData(res.data.data));
               setTimeout(()=>{
     history.push('/')
               },300)

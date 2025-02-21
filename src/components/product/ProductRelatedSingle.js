@@ -146,20 +146,6 @@ const ProductRelatedSingle = ({
                   <span className="product-name">{product.title}</span>
                 </Link>
               </h3>
-              <div className="price-2">
-                {discountedPrice !== null ? (
-                  <Fragment>
-                    <span>
-                      {currency.currencySymbol + finalDiscountedPrice}
-                    </span>{" "}
-                    <span className="old">
-                      {currency.currencySymbol + finalProductPrice}
-                    </span>
-                  </Fragment>
-                ) : (
-                  <span>{currency.currencySymbol + finalProductPrice} </span>
-                )}
-              </div>
             </div>
             <div className="pro-wishlist-2">
               <button

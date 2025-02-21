@@ -48,6 +48,8 @@ const ProductModal = ({
   const [user, setUser] = useState();
   const [loginModal, setLoginModal] = useState(false);
 
+  console.log('productStockproduct',product);
+  console.log('productStock',productStock);
   console.log("proimage", product.images);
   const [gallerySwiper, getGallerySwiper] = useState(null);
   const [thumbnailSwiper, getThumbnailSwiper] = useState(null);
@@ -58,7 +60,7 @@ const ProductModal = ({
     product.variation ? product.variation[0].size[0].name : ""
   );
   const [productStock, setProductStock] = useState(
-    product.variation ? product.variation[0].size[0].stock : product.stock
+    product.variation ? product.variation[0].size[0].stock : product.qty_in_stock
   );
   const [quantityCount, setQuantityCount] = useState(1);
   const [sessionId, setSessionId] = useState("");
@@ -71,6 +73,8 @@ console.log('modalcartitem',cartItem)
   // );
   const onAddToCart = (data) => {
     // dispatch(addToCart(data, 1, "none", "none"));
+
+    console.log('data',data)
     if (user) {
       data.contact_id = user.contact_id;
       data.qty = quantityCount;
@@ -222,21 +226,7 @@ console.log('modalcartitem',cartItem)
             </div>
             <div className="col-md-7 col-sm-12 col-xs-12">
               <div className="product-details-content quickview-content">
-                <h2>{product.title}</h2>
-                <div className="product-details-price">
-                  {discountedprice !== null ? (
-                    <Fragment>
-                      <span>
-                        {currency.currencySymbol + finaldiscountedprice}
-                      </span>{" "}
-                      <span className="old">
-                        {currency.currencySymbol + finalproductprice}
-                      </span>
-                    </Fragment>
-                  ) : (
-                    <span>{currency.currencySymbol + finalproductprice} </span>
-                  )}
-                </div>
+                <h2>{product.title}abc</h2>
                 {product.rating && product.rating > 0 ? (
                   <div className="pro-details-rating-wrap">
                     <div className="pro-details-rating">
@@ -394,7 +384,7 @@ console.log('modalcartitem',cartItem)
                                   selectedProductColor,
                                   selectedProductSize
                               )}}}
-                          disabled={ productStock}
+                          disabled={ !productStock}
                         >
                           {" "}
                           Add To Cart{" "}
@@ -417,7 +407,7 @@ console.log('modalcartitem',cartItem)
                         <i className="pe-7s-like" />
                       </button>
                     </div>
-                    <div className="pro-details-compare">
+                    {/* <div className="pro-details-compare">
                       <button
                         className={compareItem !== undefined ? "active" : ""}
                         disabled={compareItem !== undefined}
@@ -430,7 +420,7 @@ console.log('modalcartitem',cartItem)
                       >
                         <i className="pe-7s-shuffle" />
                       </button>
-                    </div>
+                    </div> */}
                   </div>
                 )}
               </div>

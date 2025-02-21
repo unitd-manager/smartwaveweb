@@ -6,10 +6,12 @@ import { ToastProvider } from "react-toast-notifications";
 import { multilanguage, loadLanguages } from "redux-multilanguage";
 import { connect } from "react-redux";
 import { BreadcrumbsProvider } from "react-breadcrumbs-dynamic";
-
-
-
-
+import { useDispatch } from "react-redux";
+import {
+  fetchCartData,
+  emptyCartData
+} from "../src/redux/actions/cartItemActions";
+import { fetchWishlistData, emptyWishlistData } from "../src/redux/actions/wishlistItemActions";
 
 // home pages
 
@@ -79,6 +81,9 @@ const SupportPage = lazy(() => import("./wrappers/footer/SupportPage"));
 const FaqPage = lazy(() => import("./wrappers/footer/FaqPage"));
 
 const App = (props) => {
+  
+ const dispatch = useDispatch();
+  const user = JSON.parse(localStorage.getItem("user"));
   useEffect(() => {
     props.dispatch(
       loadLanguages({
@@ -90,7 +95,21 @@ const App = (props) => {
       })
     );
   });
-
+  
+  useEffect(() => {
+    const userdata = JSON.parse(localStorage.getItem("user"));
+    console.log('user in app.js',userdata);
+     // Replace with your auth logic
+     if (userdata) {
+      console.log('fetching cart in app.js')
+          dispatch(fetchCartData(userdata));
+          dispatch(fetchWishlistData(userdata));
+        }else {
+          console.log('empty cart in app.js')
+      dispatch(emptyCartData(user)); // Clear cart when user logs out
+      dispatch(emptyWishlistData(user));
+    }
+  }, [user, dispatch]);
   return (
     <ToastProvider placement="bottom-left">
       <BreadcrumbsProvider>

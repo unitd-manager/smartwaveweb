@@ -116,7 +116,7 @@ const onAddToCompare = (data) => {
     setLoginModal(true)
   }
 };
- 
+ console.log('productStock - productCartQty',productStock , productCartQty)
   useEffect(()=>{
     const userData = localStorage.getItem('user')
     ? localStorage.getItem('user')
@@ -145,18 +145,6 @@ const onAddToCompare = (data) => {
     <div className="product-details-content ml-70">
         {loginModal&&<LoginModal loginModal={loginModal} setLoginModal={setLoginModal} />}
       <h2>{product.title}</h2>
-      <div className="product-details-price">
-        {discountedPrice !== null && discountedPrice !=='' ? (
-          <Fragment>
-            <span>{currency.currencySymbol + finalDiscountedPrice}</span>{" "}
-            <span className="old">
-              {currency.currencySymbol + product.price}
-            </span>
-          </Fragment>
-        ) : (
-          <span>{currency.currencySymbol + product.price} </span>
-        )}
-      </div>
       {proRating && proRating > 0 ? (
         <div className="pro-details-rating-wrap">
           <div className="pro-details-rating">
@@ -272,11 +260,19 @@ const onAddToCompare = (data) => {
             <button
               onClick={() =>
                 setQuantityCount(
-                  quantityCount < productStock - productCartQty
+                  quantityCount < Number(productStock) - Number(productCartQty || 0)
                     ? quantityCount + 1
                     : quantityCount
                 )
               }
+              // onClick={() => {
+              //   console.log("Before increment:", quantityCount, "Stock:", productStock, "CartQty:", productCartQty);
+              //   setQuantityCount((prevQuantity) => {
+              //     console.log("Updated Quantity:", prevQuantity + 1);
+              //     return prevQuantity < Number(productStock) - Number(productCartQty) ? prevQuantity + 1 : prevQuantity;
+              //   });
+              // }}
+              
               className="inc qtybutton"
             >
               +

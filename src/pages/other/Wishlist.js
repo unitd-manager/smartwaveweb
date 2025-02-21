@@ -112,7 +112,6 @@ getWishlistItems(userInfo)
                           <tr>
                             <th>Image</th>
                             <th>Product Name</th>
-                            <th>Unit Price</th>
                             <th>Add To Cart</th>
                             <th>action</th>
                           </tr>
@@ -123,6 +122,7 @@ getWishlistItems(userInfo)
                               wishlistItem.price,
                               wishlistItem.discount_amount
                             );
+                            console.log('qty_in_stock',wishlistItem)
                             const finalProductPrice = (
                               wishlistItem.price
                             );
@@ -163,26 +163,6 @@ getWishlistItems(userInfo)
                                   </Link>
                                 </td>
 
-                                <td className="product-price-cart">
-                                  {discountedPrice !== null ? (
-                                    <Fragment>
-                                      <span className="amount old">
-                                        {currency.currencySymbol +
-                                          finalProductPrice}
-                                      </span>
-                                      <span className="amount">
-                                        {currency.currencySymbol +
-                                          finalDiscountedPrice}
-                                      </span>
-                                    </Fragment>
-                                  ) : (
-                                    <span className="amount">
-                                      {currency.currencySymbol +
-                                        finalProductPrice}
-                                    </span>
-                                  )}
-                                </td>
-
                                 <td className="product-wishlist-cart">
                                   {wishlistItem.affiliateLink ? (
                                     <a
@@ -200,8 +180,8 @@ getWishlistItems(userInfo)
                                     >
                                       Select option
                                     </Link>
-                                  ) : wishlistItem.qty &&
-                                    wishlistItem.qty > 0 ? (
+                                  ) : wishlistItem.qty_in_stock &&
+                                    wishlistItem.qty_in_stock > 0 ? (
                                     <button
                                       onClick={() => onAddToCart(wishlistItem)}
                                       className={

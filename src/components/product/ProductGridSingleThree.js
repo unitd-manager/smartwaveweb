@@ -155,7 +155,7 @@ const formattedTitle = product.title.replace(/\s+/g, '-');
                 <i className="fa fa-eye"></i>
               </button>
      
-              <button
+              {/* <button
                 className={compareItem !== undefined ? "active" : ""}
                 disabled={compareItem !== undefined}
                 title={
@@ -166,7 +166,7 @@ const formattedTitle = product.title.replace(/\s+/g, '-');
                 onClick={() => {onAddToCompare(product,addToast)}}
               >
                 <i className="fa fa-retweet"></i>
-              </button>
+              </button> */}
             </div>
           </div>
           <div className="product-content-2">
@@ -179,22 +179,7 @@ const formattedTitle = product.title.replace(/\s+/g, '-');
                 <Link to={process.env.PUBLIC_URL + "/product/" + product.product_id+"/"+formattedTitle}>
                   <span className="product-name">{product.title}</span>
                 </Link>
-              </h3>
-           
-              <div className="price-2">
-                {discountedPrice !== null&&discountedPrice !== '' ? (
-                  <Fragment>
-                    <span>
-                      {currency.currencySymbol + finalDiscountedPrice}
-                    </span>{" "}
-                    <span className="old">
-                     ({currency.currencySymbol + finalProductPrice})
-                    </span>
-                  </Fragment>
-                ) : (
-                  <span>{currency.currencySymbol + finalProductPrice} </span>
-                )}
-              </div>
+              </h3>           
             </div>
             <div className="pro-wishlist-2">
               <button
