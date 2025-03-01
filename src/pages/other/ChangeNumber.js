@@ -39,7 +39,7 @@ const ForgotPassword = ({ location }) => {
   return (
     <Fragment>
       <MetaTags>
-        <title>Pearl | ForgotPassword</title>
+        <title>Smartwave | ForgotPassword</title>
         <meta
           name="description"
           content="Compare page of UnitdEcom react minimalist eCommerce template."

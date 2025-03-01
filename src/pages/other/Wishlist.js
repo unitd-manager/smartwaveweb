@@ -78,7 +78,7 @@ getWishlistItems(userInfo)
   return (
     <Fragment>
       <MetaTags>
-        <title>Pearl | Wishlist</title>
+        <title>Smartwave | Wishlist</title>
         <meta
           name="description"
           content="Wishlist page of Pearl react minimalist eCommerce template."

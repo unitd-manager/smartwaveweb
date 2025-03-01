@@ -111,6 +111,7 @@ function Register() {
               appearance: "success",
               autoDismiss: true,
             });
+            sendMail();
             setTimeout(() => {
               // Pass the contact ID as state to the next page
               history.push({
@@ -261,7 +262,7 @@ function Register() {
               type="submit"
               onClick={(event) => {
                 signup(event);
-                sendMail(event);
+                
               }}
             >
               <span>Register</span>

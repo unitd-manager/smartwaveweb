@@ -18,7 +18,7 @@ const LoginRegister = ({ location }) => {
   return (
     <Fragment>
       <MetaTags>
-        <title>Pearl | Login Register</title>
+        <title>Smartwave | Login Register</title>
         <meta
           name="description"
           content="Compare page of UnitdEcom react minimalist eCommerce template."

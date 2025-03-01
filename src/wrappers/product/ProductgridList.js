@@ -4,7 +4,7 @@ import {v4 as uuid} from 'uuid';
 import { useToasts } from "react-toast-notifications";
 import { connect } from "react-redux";
 import { addToCart } from "../../redux/actions/cartActions";
-import { addToWishlist } from "../../redux/actions/wishlistActions";
+import { addToWishlist, deleteFromWishlist } from "../../redux/actions/wishlistActions";
 import { addToCompare } from "../../redux/actions/compareActions";
 import ProductGridSingleTwo from "../../components/product/ProductGridSingleTwo";
 import api from "../../constants/api";
@@ -205,6 +205,9 @@ const mapDispatchToProps = dispatch => {
     },
     insertWishlistData:(item,addToast)=>{
       dispatch(insertWishlistData(item,addToast));
+    },
+    removeWishlistData:(item,addToast)=>{
+      dispatch(deleteFromWishlist(item,addToast));
     },
     insertCompareData: (item, addToast) => {
       dispatch(insertCompareData(item, addToast));

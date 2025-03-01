@@ -84,7 +84,7 @@ const Cart = ({ location }) => {
   return (
     <Fragment>
       <MetaTags>
-        <title>Pearl | Cart</title>
+        <title>Smartwave | Cart</title>
         <meta
           name="description"
           content="Cart page of Pearl eCommerce template."
