@@ -73,13 +73,13 @@ const Cart = ({ location }) => {
     if (confirmClear) {
       dispatch(clearCartData(user));
     }
-  }, [dispatch, user]);
+  }, []);
 
   useEffect(() => {
     if (user) {
       dispatch(fetchCartData(user));
     }
-  }, [dispatch, user]);
+  }, [ ]);
 
   return (
     <Fragment>
@@ -163,8 +163,8 @@ const Cart = ({ location }) => {
                     <Link to="/checkout" className="checkout-btn">
                       Proceed to Checkout
                     </Link>
-                    <Link
-                      onClick={handleClearCart}
+                    <Link to={''}
+                      onClick={()=>handleClearCart}
                       className="clear-btn"
                       style={{ backgroundColor: "red", color: "white" }}
                     >
