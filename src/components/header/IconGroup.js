@@ -51,12 +51,17 @@ const user=getUser();
            
             <li>
               <Link to={process.env.PUBLIC_URL + "/my-account"}>
-                My Account
+                My Profile
               </Link>
             </li>
             <li>
               <Link to={process.env.PUBLIC_URL + "/orders"}>
-                My Orders
+                Enquiry History
+              </Link>
+            </li>
+            <li>
+              <Link to={process.env.PUBLIC_URL + "/orders"}>
+                Shipping Address
               </Link>
             </li>
             <li>

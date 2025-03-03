@@ -5,13 +5,14 @@ import React, {
   useMemo,
   useCallback,
 } from "react";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { useToasts } from "react-toast-notifications";
 import MetaTags from "react-meta-tags";
 import { BreadcrumbsItem } from "react-breadcrumbs-dynamic";
 import { useSelector, useDispatch } from "react-redux";
 import LayoutOne from "../../layouts/Layout";
 import Breadcrumb from "../../wrappers/breadcrumb/Breadcrumb";
+import api from "../../constants/api";
 import {
   fetchCartData,
   removeCartData,
@@ -28,6 +29,7 @@ const Cart = ({ location }) => {
   const user = JSON.parse(localStorage.getItem("user")); // Replace with your auth logic
   const cartItems = useSelector((state) => state.cartItems.cartItems);
   const currency = useSelector((state) => state.currencyData);
+  const history = useHistory();
 
   const cartTotalPrice = useMemo(() => {
     return cartItems.reduce((total, item) => {
@@ -62,6 +64,87 @@ const Cart = ({ location }) => {
     },
     [dispatch, addToast]
   );
+
+  const placeEnquiry = (os) => {
+   
+  
+    if (user) {
+      const enquiryDetails = {
+        contact_id : user.contact_id
+      
+      };
+      api
+        .post("/enquiry/insertEnquiry", enquiryDetails)
+        .then((res) => {
+          const insertedId = res.data.data.insertId;
+          cartItems.forEach((item) => {
+            item.enquiry_id = insertedId;
+            item.item_title=item.title;
+            item.quantity=item.qty;
+            item.product_id=item.product_id;
+            api
+              .post("/enquiry/insertQuoteItems", item)
+              .then(() => {
+                console.log("order placed");
+              })
+              .catch((err) => console.log(err));
+          });
+        }).then(() => {
+          console.log("cart user",user)
+          clearCartData(user)
+            // Make the API call
+      api
+      .post("/contact/clearCartItems", { contact_id: user.contact_id })
+       
+        })
+        .then(() => {
+          alert("Enquiry Submitted Successfully");
+          history.push('/')
+          window.location.reload()
+        })
+        .catch((err) => console.log(err));
+    } else {
+      console.log("please login");
+    }
+    const orderDate = new Date();
+    const deliveryDate = new Date();
+    deliveryDate.setDate(orderDate.getDate() + 7);
+
+    const formatDate = (date) => {
+      const day = String(date.getDate()).padStart(2, '0');
+      const month = String(date.getMonth() + 1).padStart(2, '0'); // Month is zero-based
+      const year = date.getFullYear();
+      return `${day}-${month}-${year}`;
+    };
+
+    {
+      
+      const to = user.email;
+      const dynamic_template_data= 
+      {
+     first_name:user.first_name,
+     order_date:formatDate(orderDate),
+     delivery_date:formatDate(deliveryDate),
+     order_status: "Paid"
+    };
+    api
+      .post('/commonApi/sendgmail',{to,dynamic_template_data})
+      .then(() => {
+        addToast("Send Mail Successfully", {
+          appearance: "success",
+          autoDismiss: true,
+        })
+      })
+      .catch(() => {
+        addToast("Send Mail Successfully", {
+          appearance: "success",
+          autoDismiss: true,
+        })
+      });
+    
+    };
+
+  };
 
   // const handleClearCart = useCallback(() => {
   //   dispatch(clearCartData(user));
@@ -160,8 +243,8 @@ const Cart = ({ location }) => {
                 </div>
                 <div className="grand-totall">
                   <div className="button-group">
-                    <Link to="/checkout" className="checkout-btn">
-                      Proceed to Checkout
+                    <Link  onClick={()=>placeEnquiry()} className="checkout-btn">
+                      Submit Enquiry
                     </Link>
                     <Link to={''}
                       onClick={()=>handleClearCart}
