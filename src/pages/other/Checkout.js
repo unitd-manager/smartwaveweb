@@ -264,7 +264,7 @@ stripeToken && makeRequest();
   return (
     <Fragment>
       <MetaTags>
-        <title>Pearl | Checkout</title>
+        <title>Smartwave | Checkout</title>
         <meta
           name="description"
           content="Checkout page of UnitdEcom react minimalist eCommerce template."

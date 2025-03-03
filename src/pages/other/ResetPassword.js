@@ -64,7 +64,7 @@ setTimeout(()=>{
   return (
     <Fragment>
       <MetaTags>
-        <title>Pearl | Reset Password</title>
+        <title>Smartwave | Reset Password</title>
         <meta
           name="description"
           content="Compare page of Pearl react minimalist eCommerce template."

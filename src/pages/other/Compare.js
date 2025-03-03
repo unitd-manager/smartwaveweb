@@ -46,7 +46,7 @@ const Compare = ({
   return (
     <Fragment>
       <MetaTags>
-        <title>Pearl | Compare</title>
+        <title>Smartwave | Compare</title>
         <meta
           name="description"
           content="Compare page of UnitdEcom react minimalist eCommerce template."

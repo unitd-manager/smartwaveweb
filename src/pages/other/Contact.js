@@ -141,7 +141,7 @@ export default function Contact({ location }) {
   return (
     <Fragment>
       <MetaTags>
-        <title>Pearl | Contact</title>
+        <title>Smartwave | Contact</title>
         <meta
           name="description"
           content="Contact of UnitdEcom react minimalist eCommerce template."

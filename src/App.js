@@ -12,6 +12,7 @@ import {
   emptyCartData
 } from "../src/redux/actions/cartItemActions";
 import { fetchWishlistData, emptyWishlistData } from "../src/redux/actions/wishlistItemActions";
+import { HashRouter } from "react-router-dom/cjs/react-router-dom.min";
 
 // home pages
 
@@ -113,7 +114,7 @@ const App = (props) => {
   return (
     <ToastProvider placement="bottom-left">
       <BreadcrumbsProvider>
-        <Router>
+        <HashRouter>
           <ScrollToTop>
             <Suspense
               fallback={
@@ -299,7 +300,7 @@ const App = (props) => {
               </Switch>
             </Suspense>
           </ScrollToTop>
-        </Router>
+        </HashRouter>
       </BreadcrumbsProvider>
     </ToastProvider>
   );
