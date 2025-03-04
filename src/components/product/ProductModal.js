@@ -5,14 +5,14 @@ import { v4 as uuid } from "uuid";
 // import { getProductCartQuantity } from "../../helpers/product";
 import { Modal } from "react-bootstrap";
 import Rating from "./sub-components/ProductRating";
-import { connect } from "react-redux";
+import { connect, useDispatch, useSelector } from "react-redux";
 import { addToCart } from "../../redux/actions/cartActions";
 import { addToWishlist } from "../../redux/actions/wishlistActions";
 import { addToCompare } from "../../redux/actions/compareActions";
 import imageBase from "../../constants/imageBase";
 import LoginModal from "../LoginModal";
 import { insertCartData, updateCartData } from "../../redux/actions/cartItemActions";
-import { insertWishlistData } from "../../redux/actions/wishlistItemActions";
+import { insertWishlistData, removeWishlistData } from "../../redux/actions/wishlistItemActions";
 import { insertCompareData } from "../../redux/actions/compareItemActions";
 
 const ProductModal = ({
@@ -65,6 +65,11 @@ const ProductModal = ({
   const [quantityCount, setQuantityCount] = useState(1);
   const [sessionId, setSessionId] = useState("");
 console.log('modalcartitem',cartItem)
+
+const dispatch=useDispatch();
+
+
+const wishlistItems=useSelector(state=>state.wishlistItems.wishlistItems);
   // const productCartQty = getProductCartQuantity(
   //   cartItems,
   //   product,
@@ -398,11 +403,24 @@ console.log('modalcartitem',cartItem)
                         className={wishlistItem !== undefined ? "active" : ""}
                         disabled={wishlistItem !== undefined}
                         title={
-                          wishlistItem !== undefined
+                          wishlistItems.filter(
+                            wishlistItem => wishlistItem.product_id === product.product_id
+                          )[0]
                             ? "Added to wishlist"
                             : "Add to wishlist"
                         }
-                        onClick={() => onAddToWishlist(product, addToast)}
+                        onClick={() => {
+                                                         const isInWishlist = wishlistItems.filter(
+                                                           wishlistItem => wishlistItem.product_id === product.product_id
+                                                         )[0];
+                                                         console.log('wishlistitem',isInWishlist);
+                                                         if(isInWishlist) {
+                                                           dispatch(removeWishlistData(isInWishlist));
+                                                           
+                                                         } else {
+                                                           onAddToWishlist(product);
+                                                         }
+                                                       }} 
                       >
                         <i className="pe-7s-like" />
                       </button>

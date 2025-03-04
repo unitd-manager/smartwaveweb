@@ -132,6 +132,11 @@ console.log('user',user)
                 cartItem => cartItem.product_id === product.product_id
               )[0]
             }
+            wishlistItem={
+              wishlistItems.filter(
+                cartItem => cartItem.product_id === product.product_id
+              )[0]
+            }
             compareItem={
               compareItems.filter(
                 compareItem => compareItem.product_id === product.product_id

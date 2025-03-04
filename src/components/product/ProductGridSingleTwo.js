@@ -1,12 +1,14 @@
 import PropTypes from "prop-types";
 import React, { Fragment, useState } from "react";
 import { Badge } from "reactstrap";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { useToasts } from "react-toast-notifications";
 import { getDiscountPrice } from "../../helpers/product";
 import ProductModal from "./ProductModal";
 import imageBase from "../../constants/imageBase";
 import { useReducer } from "react";
+import { removeWishlistData } from "../../redux/actions/wishlistItemActions";
 
 const ProductGridSingleTwo = ({
   product,
@@ -32,12 +34,16 @@ const ProductGridSingleTwo = ({
   const { addToast } = useToasts();
 const[loginModal , setLoginModal]=useState(false);
 
+const dispatch=useDispatch();
+
+
+const wishlistItems=useSelector(state=>state.wishlistItems.wishlistItems);
   const discountedPrice = getDiscountPrice(product.price, product.discount_amount);
   // const finalProductPrice = +(product.price * currency.currencyRate).toFixed(2);
     const finalProductPrice = +(product.price);
   const finalDiscountedPrice = +(
     discountedPrice);
-  
+    console.log('wishlistItems',wishlistItems);
   product.images= String(product.images).split(',')
 console.log('file',product)
 console.log('images',product.images)
@@ -180,11 +186,25 @@ console.log('cartItem',cartItem);
                 className={wishlistItem !== undefined ? "active" : ""}
                 disabled={wishlistItem !== undefined}
                 title={
-                  wishlistItem !== undefined
+                  wishlistItems.filter(
+                    wishlistItem => wishlistItem.product_id === product.product_id
+                  )[0]
                     ? "Added to wishlist"
                     : "Add to wishlist"
                 }
-                onClick={() =>{ onAddToWishlist(product,addToast)}}
+                // onClick={() =>{ onAddToWishlist(product,addToast)}}
+                onClick={() => {
+                  const isInWishlist = wishlistItems.filter(
+                    wishlistItem => wishlistItem.product_id === product.product_id
+                  )[0];
+                  console.log('wishlistitem',isInWishlist);
+                  if(isInWishlist) {
+                    dispatch(removeWishlistData(isInWishlist));
+                    
+                  } else {
+                    onAddToWishlist(product);
+                  }
+                }} 
               >
                 <i className="fa fa-heart-o" />
               </button>

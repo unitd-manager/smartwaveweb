@@ -208,7 +208,7 @@ const Cart = ({ location }) => {
                               />
                             </Link>
                           </td>
-                          <td className="product-name">{item.title}</td>
+                          <td className="product-name text-center">{item.title}</td>
                           <td className="product-quantity">
                             <div className="cart-plus-minus">
                               <button
