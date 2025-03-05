@@ -92,12 +92,29 @@ export default function Contact({ location }) {
       })
       .then((res) => {
         console.log(res);
+        addToast("Thank you for your enquiry submission!", {
+          appearance: "success",
+          autoDismiss: true,
+        });
+  
+        // Reset form after successful submission
+        setUser({
+          first_name: "",
+          last_name: "",
+          email: "",
+          comments: "",
+        });
+      })
+      .catch((err) => {
+        addToast("Enquiry submission failed!", {
+          appearance: "error",
+          autoDismiss: true,
+        });
       });
-    console.log(user);
   };
-  //Email
+  
   const sendMail = () => {
-    if (window.confirm(" Are you sure do you want to send Mail\n")) {
+    if (window.confirm("Are you sure you want to send Mail?")) {
       const to = mailId.email;
       const text = user.comments;
       const subject = user.email;
@@ -106,6 +123,7 @@ export default function Contact({ location }) {
         email: user.email,
         comments: user.comments,
       };
+  
       api
         .post("/commonApi/sendemail", {
           to,
@@ -114,9 +132,17 @@ export default function Contact({ location }) {
           dynamic_template_data,
         })
         .then(() => {
-          addToast("Email has sent successfully", {
+          addToast("Email has been sent successfully!", {
             appearance: "success",
             autoDismiss: true,
+          });
+  
+          // Reset form after successful email
+          setUser({
+            first_name: "",
+            last_name: "",
+            email: "",
+            comments: "",
           });
         })
         .catch((err) => {
@@ -129,6 +155,7 @@ export default function Contact({ location }) {
       applyChanges();
     }
   };
+  
   useEffect(() => {
     getMobile();
     getContact();

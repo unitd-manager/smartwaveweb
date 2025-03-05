@@ -48,32 +48,37 @@ const Footer = ({
         <div className="row">
           <div
             className={`${
-              sideMenu ? "col-xl-2 col-sm-4" : "col-lg-2 col-sm-4"
+              sideMenu ? "col-xl-3 col-sm-5" : "col-lg-2 col-sm-4"
             }`}
-          >
+          > 
             {/* footer copyright */}
             <FooterCopyright
-              footerLogo="/images/Ampro_Logo.png"
+              footerLogo="/images/smartwave.jpg"
               spaceBottomClass="mb-30"
             />
           </div>
           <div
             className={`${
-              sideMenu ? "col-xl-2 col-sm-4" : "col-lg-2 col-sm-4"
+              sideMenu ? "col-xl-3 col-sm-5" : "col-lg-3 col-sm-5"
             }`}
           >
             <div className="footer-widget mb-30 ml-30">
               <div className="footer-title">
-                <h3>ABOUT US</h3>
+                <h3>QUICK LINKS</h3>
               </div>
               <div className="footer-list">
                 <ul>
                   <li>
-                    <Link to={process.env.PUBLIC_URL + "/about"}>About us</Link>
+                    <Link to={process.env.PUBLIC_URL + "/"}>Home</Link>
                   </li>
                   <li>
-                    <Link to={process.env.PUBLIC_URL + "/StoreLocatorPage"}>
-                      Store location
+                    <Link to={process.env.PUBLIC_URL + "/shop"}>
+                      Shop
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to={process.env.PUBLIC_URL + "/shop"}>
+                      Collection
                     </Link>
                   </li>
                   <li>
@@ -81,16 +86,12 @@ const Footer = ({
                       Contact
                     </Link>
                   </li>
-                  <li>
-                    <Link to={process.env.PUBLIC_URL + "/orders"}>
-                      Orders tracking
-                    </Link>
-                  </li>
+                 
                 </ul>
               </div>
             </div>
           </div>
-          <div
+          {/* <div
             className={`${
               sideMenu ? "col-xl-2 col-sm-4" : "col-lg-2 col-sm-4"
             }`}
@@ -119,10 +120,10 @@ const Footer = ({
                 </ul>
               </div>
             </div>
-          </div>
+          </div> */}
           <div
             className={`${
-              sideMenu ? "col-xl-3 col-sm-4" : "col-lg-2 col-sm-6"
+              sideMenu ? "col-xl-4 col-sm-5" : "col-lg-3 col-sm-7"
             }`}
           >
             <div

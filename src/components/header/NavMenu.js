@@ -37,7 +37,7 @@ const NavMenu = ({ strings, menuWhiteClass, sidebarMenu, categories }) => {
 
           <li>
             <Link to={process.env.PUBLIC_URL + "/shop"}>
-              <span>Categories</span>
+              <span>Collection</span>
               {sidebarMenu ? (
                 <span>
                   <i className="fa fa-angle-right"></i>

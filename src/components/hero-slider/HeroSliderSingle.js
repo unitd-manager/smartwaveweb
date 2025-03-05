@@ -13,6 +13,7 @@ const HeroSliderSingle = ({ data, sliderClass }) => {
     }`}
     style={{ 
       backgroundImage: `url(${imageBase}${data.file_name})`,
+      minHeight: "700px", // Ensures a proper height
     }}
   >
   

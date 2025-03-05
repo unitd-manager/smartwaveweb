@@ -15,9 +15,9 @@ const FooterCopyright = ({ footerLogo, spaceBottomClass, colorClass }) => {
         </Link>
       </div>
       <p>
-        © 2020{" "}
+        © 2025{" "}
         <a href="//hasthemes.com" rel="noopener noreferrer" target="_blank">
-          Pearl
+          SmartWave
         </a>
         .<br /> All Rights Reserved
       </p>

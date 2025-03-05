@@ -12,4 +12,4 @@ baseURL: 'http://smartwave.unitdtechnologies.com:2013',
 // });
 
 
-export default api
+export default api 

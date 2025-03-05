@@ -33,7 +33,7 @@
     "react-hooks-paginator": "^0.4.0",
     "react-html-parser": "^2.0.2",
     "react-icons": "^4.8.0",
-    "react-id-swiper": "2.4.0",
+    "react-id-swiper": "^4.0.0",
     "react-image-magnify": "^2.7.4",
     "react-lightgallery": "0.6.3",
     "react-lottie": "^1.2.3",
@@ -64,7 +64,7 @@
     "redux-thunk": "^2.3.0",
     "slick-carousel": "^1.8.1",
     "stripe": "^12.6.0",
-    "swiper": "5.2.0",
+    "swiper": "^11.2.5",
     "uuid": "^9.0.0"
   },
   "scripts": {
