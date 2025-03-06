@@ -69,9 +69,6 @@ const ProductRelatedSingle = ({
                 ) : (
                   ""
                 )}
-                {product.latest ? <span className="purple" ><Badge style={{position:'relative',top:'2px',right:'5px'}}>New</Badge></span> : ""}
-                {product.top_seller ? <span className="purple" ><Badge style={{position:'relative',top:'5px',right:'2px'}}>Best Seller</Badge></span> : ""}
-                {product.most_popular ? <span className="purple"><Badge style={{position:'relative',top:'5px',right:'2px'}}>Most Popular</Badge></span> : ""}
               </div>
             ) : (
               ""
