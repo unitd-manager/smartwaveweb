@@ -8,6 +8,8 @@ import DealProductSlider from "../../components/DealSlider";
 // import HeroSlider from "../../wrappers/hero-slider/HeroSlider";
 import api from "../../constants/api";
 import HeroSliderNine from "../../wrappers/hero-slider/HeroSliderNine";
+import TopBrands from "../../components/TopBrands";
+import FeaturesSection from "../../components/FeaturesSection";
 
 const Home = () => {
   const slideInterval = 3000;
@@ -139,7 +141,7 @@ const Home = () => {
           bestSellingProducts={bestSellingProducts}
           mostPopularProducts={mostPopularProducts}
         />
-
+<TopBrands spaceBottomClass="pb-100"/>
         {/* Top Deals */}
         {offerProducts.length > 0 && (
           <DealProductSlider
@@ -148,7 +150,7 @@ const Home = () => {
             products={offerProducts}
           />
         )}
-       
+       <FeaturesSection spaceBottomClass="pb-100"/>
         {/* feature icon */}
         <FeatureIconTwo spaceTopClass="pt-100" spaceBottomClass="pb-60" />
 
