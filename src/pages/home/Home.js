@@ -123,8 +123,6 @@ const Home = () => {
       </MetaTags>
       <Layout headerTop="visible">
         <HeroSliderNine
-          spaceLeftClass="ml-70"
-          spaceRightClass="mr-70"
           interval={slideInterval}
           sliderData={sliderData}
         />

@@ -55,12 +55,12 @@ const user=getUser();
               </Link>
             </li>
             <li>
-              <Link to={process.env.PUBLIC_URL + "/orders"}>
+              <Link to={process.env.PUBLIC_URL + "/enquiries"}>
                 Enquiry History
               </Link>
             </li>
             <li>
-              <Link to={process.env.PUBLIC_URL + "/orders"}>
+              <Link to={process.env.PUBLIC_URL + "/shippingaddress"}>
                 Shipping Address
               </Link>
             </li>

@@ -75,6 +75,7 @@ const OrderFailurePage = lazy(() => import("./pages/other/OrderFailure"));
 const EnquiryHistory = lazy(() => import("./pages/other/Enquiries"));
 const EnquiryDetails = lazy(() => import("./pages/other/EnquiryDetails"));
 const EnquirySuccess = lazy(() => import("./pages/other/EnquirySuccess"));
+const ShippingAddress = lazy(() => import("./pages/other/ShippingAddress"));
 
 const Review = lazy(() => import("./pages/other/Review"));
 const NotFound = lazy(() => import("./pages/other/NotFound"));
@@ -262,17 +263,21 @@ const App = (props) => {
                   path={process.env.PUBLIC_URL + "/orders"}
                   component={Orders}
                 />
-    <Route
+                <Route
                   path={process.env.PUBLIC_URL + "/enquiries"}
                   component={EnquiryHistory}
                 />
                  <Route
-                  path={process.env.PUBLIC_URL + "/enquirydetails"}
+                  path={process.env.PUBLIC_URL + "/enquirydetails/:id"}
                   component={EnquiryDetails}
                 />
                       <Route
                   path={process.env.PUBLIC_URL + "/enquirysuccess"}
                   component={EnquirySuccess}
+                />
+                <Route
+                  path={process.env.PUBLIC_URL + "/shippingaddress"}
+                  component={ShippingAddress}
                 />
                 <Route
                   path={process.env.PUBLIC_URL + "/orders/search/:keyword"}

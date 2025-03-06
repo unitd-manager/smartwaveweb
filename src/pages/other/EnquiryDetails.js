@@ -1,9 +1,29 @@
-import React from "react";
+import React, {useState, useEffect} from "react";
 import { FaArrowLeft, FaUpload, FaWhatsapp } from "react-icons/fa";
 import "bootstrap/dist/css/bootstrap.min.css";
+import LayoutOne from "../../layouts/Layout";
+import api from "../../constants/api";
+import { useParams } from "react-router-dom";
 
 const EnquiryDetails = () => {
-  return (
+  const [enquiries, setEnquiries] = useState([]);
+  const { id } = useParams();
+
+  useEffect(() => {
+    api
+      .post(`/enquiry/getEnquiryById`, {
+        enquiry_id: id,
+      })
+      .then((res) => {
+        setEnquiries(res.data.data[0]);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+}, []);
+
+return (
+    <LayoutOne headerTop="visible">
     <div className="container mt-4">
       {/* Back Button & Title */}
       <div className="d-flex align-items-center mb-3">
@@ -11,27 +31,16 @@ const EnquiryDetails = () => {
         <h4 className="m-0">Enquiry Details</h4>
       </div>
 
-      {/* Profile Section */}
-      <div className="text-center mb-4">
-        <img
-          src="https://via.placeholder.com/80"
-          alt="User Profile"
-          className="rounded-circle mb-2"
-        />
-        <p className="m-0">Welcome to</p>
-        <h6 className="fw-bold">Esther Howard</h6>
-      </div>
-
       {/* Enquiry Information */}
       <div className="card p-3 mb-4">
         <h6 className="fw-bold">
-          Enquiry ID: <span className="text-primary">#ENQ-2025-0123</span>
+          Enquiry ID: <span className="text-primary">{enquiries?.enquiry_code}</span>
           <span className="badge bg-success ms-2">Active</span>
         </h6>
 
         <div className="mt-3">
           <p className="mb-1 text-muted">Created Date:</p>
-          <p className="fw-bold">Jan 15, 2025</p>
+          <p className="fw-bold">{enquiries?.creation_date}</p>
         </div>
 
         <div>
@@ -66,6 +75,7 @@ const EnquiryDetails = () => {
         </a>
       </p>
     </div>
+    </LayoutOne>
   );
 };
 

@@ -35,7 +35,7 @@ const EnquiryHistory = () => {
 
   useEffect(() => {
       api
-        .post(`/enquiry/getEnquiryByContactId`, {
+        .post(`/address/getQuoteTrackItemsById`, {
           contact_id: userData?.contact_id,
         })
         .then((res) => {
@@ -49,34 +49,31 @@ const EnquiryHistory = () => {
   return (
     <LayoutOne headerTop="visible">
     <div className="container mt-4">
-      <h2 className="text-center mb-3">Enquiry History</h2>
-
-      {/* Summary Cards */}
-      <div className="row justify-content-center mb-4">
-        <div className="col-5 text-center p-3 border rounded bg-light">
-          <p className="text-muted">Total Enquiries</p>
-          <h5>{enquiries.length}</h5>
-        </div>
-        <div className="col-5 text-center p-3 border rounded bg-light ms-2">
-          <p className="text-muted">Pending</p>
-          <h5>3</h5>
-        </div>
-      </div>
+      <h2 className="text-center mb-3">Shipping Address</h2>
 
       {/* Enquiries List */}
       <div className="d-flex flex-column align-items-center">
         {enquiries?.map((enquiry, index) => (
           <div key={index} className="card mb-3 w-75 shadow-sm text-center">
-            <div className="card-body">
-              <h6 className="card-title"><Link to={
-                                      process.env.PUBLIC_URL +
-                                      "/enquirydetails/" +
-                                      enquiry.enquiry_id
-                                    }>{enquiry.enquiry_code}</Link></h6>
-              <p className="text-muted">{enquiry.creation_date}</p>
-              <p className="small">Preferred Contact</p>
-              <div className="d-flex justify-content-center align-items-center gap-2">
-                <span className={getStatusBadge(enquiry.status)}>{enquiry.status}</span>
+            <div className="card-body d-flex align-items-center">
+              {/* Radio Button Inside Card (Aligned Left) */}
+              <div className="form-check me-3">
+                <input
+                  className="form-check-input"
+                  type="radio"
+                  name="enquirySelection"
+                  id={`enquiry-${index}`}
+                  value={enquiry.company_address_id}
+                />
+              </div>
+
+              {/* Card Content */}
+              <div className="flex-grow-1">
+                <h6 className="card-title">
+                    {enquiry.shipper_name}
+                </h6>
+                <p className="text-muted">{enquiry.address_flat}, {enquiry.address_street}, {enquiry.address_town}</p>
+                <p className="text-muted">{enquiry.address_state}, {enquiry.address_country} {enquiry.address_po_code}</p>
               </div>
             </div>
           </div>
