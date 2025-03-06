@@ -3,7 +3,7 @@ import React, { Fragment,useState,useEffect } from "react";
 import { useToasts } from "react-toast-notifications";
 import { connect, useSelector } from "react-redux";
 // import { getProducts } from "../../helpers/product";
-import ProductGridSingleThree from "../../components/product/ProductGridSingle";
+import ProductGridSingleThree from "./gridBest";
 import { addToCart } from "../../redux/actions/cartActions";
 import { addToWishlist } from "../../redux/actions/wishlistActions";
 import { addToCompare } from "../../redux/actions/compareActions";

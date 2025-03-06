@@ -4,13 +4,13 @@ import { Link } from "react-router-dom";
 import { useToasts } from "react-toast-notifications";
 import { useDispatch, useSelector } from "react-redux";
 import { getDiscountPrice } from "../../helpers/product";
-import ProductModal from "./ProductModal";
+import ProductModal from "../../components/product/ProductModal";
 import imageBase from "../../constants/imageBase";
-import Rating from "./sub-components/ProductRating";
+import "./TabProductTwo.css";
 
 import { removeWishlistData } from "../../redux/actions/wishlistItemActions";
 
-const ProductGridSingle = ({
+const TabProductTwo = ({
   product,
   currency,
   addToCart,
@@ -36,41 +36,14 @@ const ProductGridSingle = ({
 
   return (
     <Fragment>
-      <div className={`product-range ${sliderClassName || ""}`}>
-        <div className={`product-wrap ${spaceBottomClass || ""}`}>
-          <div className="product-img">
-            <Link to={`${process.env.PUBLIC_URL}/product/${product.product_id}/${formattedTitle}`}>
-              <img className="default-img" src={`${imageBase}${product.images[0]}`} alt=""  style={{height:'300px',width:'400px'}}/>
-              {product.images.length > 1 && (
-                <img className="hover-img" src={`${imageBase}${product.images[1]}`} alt=""  style={{height:'300px',width:'400px'}}/>
-              )}
-            </Link>
-            {product.discount_amount || product.latest || product.top_seller || product.most_popular ? (
-              <div className="product-img-badges">
-                {product.discount_percentage && <span className="pink">{product.discount_percentage}%</span>}
-              
-                {product.most_popular && <span className="purple">Popular</span>}
-              </div>
-            ) : null}
-           
-          </div>
-          <div className="product-content text-center">
-            <h3>
-              <Link to={`${process.env.PUBLIC_URL}/product/${product.product_id}/${formattedTitle}`}>{product.title}</Link>
-            </h3>
-            {/* <div className="product-price">
-              {discountedPrice !== null ? (
-                <Fragment>
-                  <span>{currency.currencySymbol + finalDiscountedPrice}</span>
-                  <span className="old">{currency.currencySymbol + finalProductPrice}</span>
-                </Fragment>
-              ) : (
-                <span>{currency.currencySymbol + finalProductPrice}</span>
-              )}
-            </div> */}
-              <div className="product-rating">
-                <Rating ratingValue={product.top_rating} />
-              </div>
+                  <div className="col-md-6 col-lg-5 product-card">
+                    <div className="product-item">
+                      <div className="product-info">
+                        <h5 className="product-title">{product.title}</h5>
+                        <p className="product-desc" dangerouslySetInnerHTML={{ 
+  __html: product.product_description.split(" ").slice(0, 10).join(" ") + (product.product_description.split(" ").length > 10 ? "..." : "")
+}} />
+                       
             <div className="pro-wishlist">
             {product.qty_in_stock > 0 ? (
                 <button
@@ -113,28 +86,37 @@ const ProductGridSingle = ({
                 <i className="pe-7s-like" />
               </button>
             </div>
-          </div>
-        </div>
-      </div>
-      {modalShow && (
-        <ProductModal
-          show={modalShow}
-          onHide={() => setModalShow(false)}
-          product={product}
-          currency={currency}
-          discountedprice={discountedPrice}
-          finalproductprice={finalProductPrice}
-          finaldiscountedprice={finalDiscountedPrice}
-          cartItem={cartItem}
-          wishlistitem={wishlistItem}
-          addToast={addToast}
-        />
-      )}
-    </Fragment>
+                      </div>
+                      <div className="product-image">
+                        <img
+                  className="hover-img"
+                  src={`https://smartwaveadmin.unitdtechnologies.com/storage/uploads/${product.images}`}
+                  alt={product.title}
+                />
+                      </div>
+                    </div>
+                  </div>
+             
+          
+          {modalShow && (
+            <ProductModal
+              show={modalShow}
+              onHide={() => setModalShow(false)}
+              product={product}
+              currency={currency}
+              discountedprice={discountedPrice}
+              finalproductprice={finalProductPrice}
+              finaldiscountedprice={finalDiscountedPrice}
+              cartItem={cartItem}
+              wishlistitem={wishlistItem}
+              addToast={addToast}
+            />
+          )}
+        </Fragment>
   );
 };
 
-ProductGridSingle.propTypes = {
+TabProductTwo.propTypes = {
   addToCart: PropTypes.func,
   onAddToCart: PropTypes.func,
   onUpdateCart: PropTypes.func,
@@ -147,4 +129,4 @@ ProductGridSingle.propTypes = {
   wishlistItem: PropTypes.object
 };
 
-export default ProductGridSingle;
+export default TabProductTwo;

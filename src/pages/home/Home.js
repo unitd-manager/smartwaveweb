@@ -2,6 +2,8 @@ import React, { Fragment, useState, useEffect } from "react";
 import MetaTags from "react-meta-tags";
 import Layout from "../../layouts/Layout";
 import TabProductTwo from "../../wrappers/product/TabProduct";
+import TabProductThree from "../../wrappers/product/BestSeller";
+import TabProductFour from "../../wrappers/product/MostPopular";
 import FeatureIconTwo from "../../wrappers/feature-icon/FeatureIcon";
 import BlogFeatured from "../../wrappers/blog-featured/BlogFeatured";
 import DealProductSlider from "../../components/DealSlider";
@@ -136,6 +138,23 @@ const Home = () => {
           spaceBottomClass="pb-100"
           category="furniture"
           newProducts={newProducts}
+          bestSellingProducts={bestSellingProducts}
+          mostPopularProducts={mostPopularProducts}
+        />
+
+        <TabProductThree
+          spaceBottomClass="pb-100"
+          category="furniture"
+          bestSellingProducts={bestSellingProducts}
+          mostPopularProducts={mostPopularProducts}
+          
+        />
+        
+
+
+        <TabProductFour
+          spaceBottomClass="pb-100"
+          category="furniture"
           bestSellingProducts={bestSellingProducts}
           mostPopularProducts={mostPopularProducts}
         />
