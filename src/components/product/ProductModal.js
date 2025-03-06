@@ -231,7 +231,7 @@ const wishlistItems=useSelector(state=>state.wishlistItems.wishlistItems);
             </div>
             <div className="col-md-7 col-sm-12 col-xs-12">
               <div className="product-details-content quickview-content">
-                <h2>{product.title}abc</h2>
+                <h2>{product.title}</h2>
                 {product.rating && product.rating > 0 ? (
                   <div className="pro-details-rating-wrap">
                     <div className="pro-details-rating">
