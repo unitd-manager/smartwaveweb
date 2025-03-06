@@ -12,7 +12,6 @@ import moment from "moment";
 //   { id: "#2458", type: "Order", date: "Jan 15, 2025", status: "Rejected" },
 //   { id: "#2458", type: "Order", date: "Jan 15, 2025", status: "Approved" },
 //   { id: "#2458", type: "Order", date: "Jan 15, 2025", status: "Pending" },
-//   { id: "#2458", type: "Order", date: "Jan 15, 2025", status: "Approved" },
 // ];
 
 const getStatusBadge = (status) => {

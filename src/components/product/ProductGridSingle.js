@@ -68,9 +68,9 @@ const ProductGridSingle = ({
                 <span>{currency.currencySymbol + finalProductPrice}</span>
               )}
             </div> */}
-              <div className="product-rating">
+              {/* <div className="product-rating">
                 <Rating ratingValue={product.top_rating} />
-              </div>
+              </div> */}
             <div className="pro-wishlist">
             {product.qty_in_stock > 0 ? (
                 <button
