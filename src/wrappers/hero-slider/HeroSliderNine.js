@@ -20,11 +20,7 @@ const HeroSliderNine = ({ spaceLeftClass, spaceRightClass, sliderData }) => {
   };
 
   return (
-    <div
-      className={`slider-area ${spaceLeftClass || ""} ${
-        spaceRightClass || ""
-      }`}
-    >
+    <div className="slider-area">
       <div className="slider-active nav-style-1">
         <Slider {...settings}>
           {sliderData &&

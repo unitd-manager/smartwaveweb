@@ -8,7 +8,7 @@ const HeroSliderSingle = ({ data, sliderClass }) => {
   
   return (
     <div
-    className={`single-slider-2 slider-height-1 d-flex align-items-center slider-height-res bg-img ${
+    className={`single-slider-2 slider-height-1  ${
       sliderClass ? sliderClass : ""
     }`}
     style={{ 
