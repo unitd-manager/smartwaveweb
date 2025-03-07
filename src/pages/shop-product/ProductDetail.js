@@ -64,10 +64,10 @@ const ProductDetail = ({ location, product }) => {
   return (
     <Fragment>
       <MetaTags>
-        <title>Pearl | Product Page</title>
+        <title>SmartWave | Product Page</title>
         <meta
           name="description"
-          content="Product page of Pearl react minimalist eCommerce template."
+          content="Product page of Smart Wave react minimalist eCommerce template."
         />
       </MetaTags>
 

@@ -81,7 +81,7 @@ getWishlistItems(userInfo)
         <title>Smartwave | Wishlist</title>
         <meta
           name="description"
-          content="Wishlist page of Pearl react minimalist eCommerce template."
+          content="Wishlist page of Smart Wave react minimalist eCommerce template."
         />
       </MetaTags>
 

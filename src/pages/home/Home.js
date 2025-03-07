@@ -5,6 +5,8 @@ import TabProductTwo from "../../wrappers/product/TabProduct";
 import TabProductThree from "../../wrappers/product/BestSeller";
 import TabProductFour from "../../wrappers/product/MostPopular";
 import FeatureIconTwo from "../../wrappers/feature-icon/FeatureIcon";
+import FeatureIcon from "../../wrappers/feature-icon/FeatureIcon";
+
 import BlogFeatured from "../../wrappers/blog-featured/BlogFeatured";
 import DealProductSlider from "../../components/DealSlider";
 // import HeroSlider from "../../wrappers/hero-slider/HeroSlider";
@@ -119,10 +121,10 @@ const Home = () => {
   return (
     <Fragment>
       <MetaTags>
-        <title>Pearl | Home</title>
+        <title>SmartWave | Home</title>
         <meta
           name="description"
-          content="Home of Pearl Food eCommerce template."
+          content="Home of Smart Wave eCommerce template."
         />
       </MetaTags>
       <Layout headerTop="visible">
@@ -133,7 +135,8 @@ const Home = () => {
         <br />
         <br />
         {/* <HeroSlider /> */}
-        
+        <FeatureIcon spaceTopClass="pt-100" spaceBottomClass="pb-60" />
+
 
         {/* tab product */}
         <TabProductTwo
@@ -154,8 +157,7 @@ const Home = () => {
  <FeaturesSection spaceBottomClass="pb-100"/>
         <section
           style={{
-            width: "1349px",
-            left: "-89.5px",
+            width: "100%",
             backgroundImage: `url("https://demoapus2.com/ogami/wp-content/uploads/2019/01/bg-countdown.jpg")`,
             backgroundSize: "cover", // Optional: Makes sure the image covers the entire section
             backgroundPosition: "center", // Optional: Centers the image
@@ -163,7 +165,7 @@ const Home = () => {
             marginBottom:100,
           }}
         >
-          <div className="container row">
+          <div className=" row">
               <div className="col-md-6 col-lg-6" style={{textAlign: 'center', marginTop:120}}>
                 <h2 className="title">Deal Of The Week</h2>
                 <div className="des" style={{marginTop:20, marginBottom:40}}>
@@ -211,9 +213,7 @@ const Home = () => {
           />
         )}
       
-        {/* feature icon */}
-        <FeatureIconTwo spaceTopClass="pt-100" spaceBottomClass="pb-60" />
-
+   
         {/* blog featured */}
         {/* <BlogFeatured spaceBottomClass="pb-55" /> */}
       </Layout>
