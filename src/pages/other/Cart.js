@@ -170,7 +170,7 @@ const Cart = ({ location }) => {
         <title>Smartwave | Cart</title>
         <meta
           name="description"
-          content="Cart page of Pearl eCommerce template."
+          content="Cart page of Smart Wave eCommerce template."
         />
       </MetaTags>
 
