@@ -1,11 +1,51 @@
 import PropTypes from "prop-types";
-import React from "react";
+import React, { useState } from "react";
 import { setActiveSort } from "../../helpers/product";
+import { Link } from "react-router-dom/cjs/react-router-dom.min";
 
 const ShopCategories = ({ categories, getSortParams }) => {
+  const [selectedCategories, setSelectedCategories] = useState([]);
+
+  const handleCategorySelection = (categoryId) => {
+    let updatedCategories = [...selectedCategories];
+
+    if (categoryId === "") {
+      // If "All Categories" is clicked, reset selection
+      updatedCategories = [];
+    } else {
+      if (updatedCategories.includes(categoryId)) {
+        // Remove category if already selected
+        updatedCategories = updatedCategories.filter(id => id !== categoryId);
+      } else {
+        // Add category to selection
+        updatedCategories.push(categoryId);
+      }
+    }
+
+    setSelectedCategories(updatedCategories);
+    getSortParams("category", updatedCategories,updatedCategories); // Pass selected categories array
+  };
+  // const handleCategorySelection = (categoryId) => {
+  //   let updatedCategories = [...selectedCategories];
+  
+  //   if (categoryId === "") {
+  //     // If "All Categories" is clicked, reset selection
+  //     updatedCategories = [];
+  //   } else {
+  //     updatedCategories = updatedCategories.includes(categoryId)
+  //       ? updatedCategories.filter(id => id !== categoryId) // Remove category
+  //       : [...updatedCategories, categoryId]; // Add category
+  //   }
+  
+  //   setSelectedCategories(updatedCategories);
+  //   getSortParams("category", updatedCategories,updatedCategories); // Pass only the updated category array
+  // };
+
+  
+console.log('selectedCategories',selectedCategories);
   return (
     <div className="sidebar-widget">
-      <h4 className="pro-sidebar-title">Categories </h4>
+      <h4 className="pro-sidebar-title">Categories</h4>
       <div className="sidebar-widget-list mt-30">
         {categories ? (
           <ul>
@@ -13,31 +53,52 @@ const ShopCategories = ({ categories, getSortParams }) => {
               <div className="sidebar-widget-list-left">
                 <button
                   onClick={e => {
-                    getSortParams("category", "");
+                    handleCategorySelection("");
                     setActiveSort(e);
                   }}
+                  className={selectedCategories.length === 0 ? "active" : ""}
                 >
-                  <span className="checkmark" /> All Categories
+                 Clear All
                 </button>
               </div>
             </li>
-            {categories.map((category, key) => {
+            {/* {categories.map((category, key) => {
+              const isSelected = selectedCategories.includes(category.category_id);
               return (
                 <li key={key}>
                   <div className="sidebar-widget-list-left">
                     <button
                       onClick={e => {
-                        getSortParams("category", category.category_id);
+                        handleCategorySelection(category.category_id);
                         setActiveSort(e);
                       }}
+                      className={isSelected ? "active" : ""}
                     >
-                      {" "}
-                      <span className="checkmark" /> {category.category_title}{" "}
+                      <span className="checkmark" /> {category.category_title}
                     </button>
                   </div>
                 </li>
               );
-            })}
+            })} */}
+            {categories.map((category) => {
+  const isSelected = selectedCategories.includes(category.category_id); // Ensure selection is checked
+  return (
+    <li key={category.category_id}>
+      <div className="sidebar-widget-list-left">
+        <button
+          onClick={e => {
+            handleCategorySelection(category.category_id);
+            setActiveSort(e);
+          }}
+          className={isSelected ? "active" : ""}
+        >
+          <span className="checkmark" /> {category.category_title}
+        </button>
+      </div>
+    </li>
+  );
+})}
+
           </ul>
         ) : (
           "No categories found"

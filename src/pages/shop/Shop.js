@@ -17,6 +17,7 @@ const Shop = ({}) => {
   const [layout, setLayout] = useState('grid three-column');
   const [sortType, setSortType] = useState("");
   const [sortValue, setSortValue] = useState("");
+  const [selectedCategories, setSelectedCategories] = useState([]);
   const [filterSortType, setFilterSortType] = useState("");
   const [filterSortValue, setFilterSortValue] = useState("");
   const [offset, setOffset] = useState(0);
@@ -75,9 +76,11 @@ const Shop = ({}) => {
     setLayout(layout);
   };
 
-  const getSortParams = (sortType, sortValue) => {
+  const getSortParams = (sortType, sortValue,selectedCategories) => {
+    console.log('selectedCategories getparams',selectedCategories);
     setSortType(sortType);
     setSortValue(sortValue);
+    setSelectedCategories(selectedCategories);
     console.log("sortType", sortType);
     console.log("sortvalue", sortValue);
   };
@@ -86,22 +89,23 @@ const Shop = ({}) => {
     setFilterSortType(sortType);
     setFilterSortValue(sortValue);
   };
-
+console.log('selectedCategories',selectedCategories);
   useEffect(() => {
     const filter = async () => {
-      let sortedProducts = getSortedProducts(products, sortType, sortValue);
+      let sortedProducts = getSortedProducts(products, sortType, sortValue,selectedCategories);
       const filterSortedProducts = await getSortedProducts(
         sortedProducts,
         filterSortType,
-        filterSortValue
+        filterSortValue,selectedCategories
       );
+      console.log("sortedpros", sortedProducts);
       sortedProducts = filterSortedProducts;
       console.log("sorted", sortedProducts);
       setSortedProducts(sortedProducts);
       setCurrentData(sortedProducts.slice(offset, offset + pageLimit));
     };
     filter();
-  }, [offset, products, sortType, sortValue, filterSortType, filterSortValue]);
+  }, [offset, products, sortType, sortValue, selectedCategories,filterSortType, filterSortValue]);
 
   const handleSearchSubmit = (event) => {
     event.preventDefault();
