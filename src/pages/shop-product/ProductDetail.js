@@ -35,8 +35,9 @@ const ProductDetail = ({ location, product }) => {
           .post("/product/getProductbyCategoryId", {
             category_id: res.data.data[0].category_id,
           })
-          .then((res) => {
-            setRelatedProducts(res.data.data);
+          .then((resp) => {
+            const relateds=resp.data.data.filter((el)=>{return el.product_id !=res.data.data[0].product_id})
+            setRelatedProducts(relateds);
             setLoading(false);
           })
           .catch((err) => {

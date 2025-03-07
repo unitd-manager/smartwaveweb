@@ -118,18 +118,7 @@ const ProductRelatedSingle = ({
                 <i className="fa fa-eye"></i>
               </button>
 
-              <button
-                className={compareItem !== undefined ? "active" : ""}
-                disabled={compareItem !== undefined}
-                title={
-                  compareItem !== undefined
-                    ? "Added to compare"
-                    : "Add to compare"
-                }
-                onClick={() => addToCompare(product, addToast)}
-              >
-                <i className="fa fa-retweet"></i>
-              </button>
+             
             </div>
           </div>
           <div className="product-content-2">

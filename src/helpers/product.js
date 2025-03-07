@@ -158,34 +158,26 @@ export const getProductCartQuantity = (cartItems, product, color, size) => {
 
 
 
-export const getSortedProducts = (products, sortType, sortValue) => {
+export const getSortedProducts = (products, sortType, sortValue,selectedCategories) => {
   if (sortType && sortValue) {
-    if (sortType === "category") {
-      // return products.filter(
-      //   product => product.category.filter(single => single === sortValue)[0]
-      // );
-     const getvalues=async()=>{
+    console.log('selectedCategories',selectedCategories);
+    if (sortType === "category" && selectedCategories?.length > 0) {
 
-     
-     const sorted= await api.post('/category/getProductByCategory',{category_id:sortValue})
-   
-     .then((res)=>{
-      console.log(res.data.data)
-        return res.data.data
-        
-      }).then((result)=>{
-        console.log(result)
-          return result
+      
+       const result=api.post('/category/getProductByCategory', { category_ids: selectedCategories }).then((res)=>{
+        console.log(res.data.data)
+          return res.data.data
           
-        }).catch((err)=>{
-        console.log(err)
-      })
-   
-        return sorted
+        }).then((result)=>{
+          console.log(result)
+            return result
+            
+          }).catch((err)=>{
+          console.log(err)
+        })
+     return result
     }
-    const pro=getvalues();
-    return pro
-    }
+  
     if (sortType === "tag") {
       if(sortValue===''){
 
