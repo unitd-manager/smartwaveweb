@@ -62,25 +62,8 @@ console.log('selectedCategories',selectedCategories);
                 </button>
               </div>
             </li>
-            {/* {categories.map((category, key) => {
-              const isSelected = selectedCategories.includes(category.category_id);
-              return (
-                <li key={key}>
-                  <div className="sidebar-widget-list-left">
-                    <button
-                      onClick={e => {
-                        handleCategorySelection(category.category_id);
-                        setActiveSort(e);
-                      }}
-                      className={isSelected ? "active" : ""}
-                    >
-                      <span className="checkmark" /> {category.category_title}
-                    </button>
-                  </div>
-                </li>
-              );
-            })} */}
-            {categories.map((category) => {
+            
+            {/* {categories.map((category) => {
   const isSelected = selectedCategories.includes(category.category_id); // Ensure selection is checked
   return (
     <li key={category.category_id}>
@@ -90,14 +73,27 @@ console.log('selectedCategories',selectedCategories);
             handleCategorySelection(category.category_id);
             setActiveSort(e);
           }}
-          className={isSelected ? "active" : ""}
+           className={isSelected ? "active" : ""}
+        
         >
           <span className="checkmark" /> {category.category_title}
         </button>
       </div>
     </li>
   );
-})}
+})} */}
+{categories.map((category) => (
+  <label key={category.category_id} className="custom-checkbox">
+    <input
+      type="checkbox"
+      value={category.category_id}
+      checked={selectedCategories.includes(category.category_id)}
+      onChange={() => handleCategorySelection(category.category_id)}
+    />
+    <span className="checkmark"></span> {category.category_title}
+  </label>
+))}
+
 
           </ul>
         ) : (
