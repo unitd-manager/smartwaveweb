@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 const api = axios.create({
-baseURL: 'http://smartwave.unitdtechnologies.com:2013',
+baseURL: 'https://smartwave.unitdtechnologies.com:2014',
 // baseURL:'http://43.228.126.245:3005',
 //baseURL: 'http://localhost:3001',
 });
