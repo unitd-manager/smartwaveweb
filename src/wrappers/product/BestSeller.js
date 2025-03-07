@@ -3,28 +3,29 @@ import React from "react";
 import { Link } from "react-router-dom";
 import Tab from "react-bootstrap/Tab";
 import SectionTitle from "../../components/section-title/SectionTitle";
-import ProductGridThree from "./ProductGridThree";
+import ProductGridThree from "./ProductGridBest";
 
-const TabProductTwo = ({ spaceBottomClass, newProducts }) => {
+
+const TabProductTwo = ({ spaceBottomClass, bestSellingProducts }) => {
   return (
     <div className={`product-area ${spaceBottomClass ? spaceBottomClass : ""}`}>
       <div className="container">
-        <SectionTitle titleText="New Arrival!" positionClass="text-center" />
-        <Tab.Container defaultActiveKey="newArrival">
+        <SectionTitle titleText="Best Seller" positionClass="text-center" />
+        <Tab.Container defaultActiveKey="bestSeller">
           <Tab.Content>
-            <Tab.Pane eventKey="newArrival">
-              <div className="row three-column">
+            <Tab.Pane eventKey="bestSeller">
+              <div className="row custom-product-grid">
                 <ProductGridThree
-                  products={newProducts}
-                  type="new"
-                  limit={6}
-                  spaceBottomClass="mb-25"
-                />
+                                 products={bestSellingProducts}
+                                 type="saleItems"
+                                 limit={8}
+                                 spaceBottomClass="mb-25"
+                               />
               </div>
             </Tab.Pane>
           </Tab.Content>
         </Tab.Container>
-        <div className="view-more text-center mt-20 toggle-btn6 col-12">
+        <div className="view-more text-center mt-20 col-12">
           <Link className="loadMore6" to={process.env.PUBLIC_URL + "/shop"}>
             VIEW MORE PRODUCTS
           </Link>
@@ -36,7 +37,7 @@ const TabProductTwo = ({ spaceBottomClass, newProducts }) => {
 
 TabProductTwo.propTypes = {
   spaceBottomClass: PropTypes.string,
-  newProducts: PropTypes.array
+  bestSellingProducts: PropTypes.array
 };
 
 export default TabProductTwo;

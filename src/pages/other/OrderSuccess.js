@@ -13,7 +13,7 @@ const OrderSuccessPage = () => {
         <title>Smartwave | Order-Success</title>
         <meta
           name="description"
-          content="Shop page of Pearl react minimalist eCommerce template."
+          content="Shop page of Smart Wave react minimalist eCommerce template."
         />
       </MetaTags>
 
