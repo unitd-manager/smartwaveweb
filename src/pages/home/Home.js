@@ -119,10 +119,10 @@ const Home = () => {
   return (
     <Fragment>
       <MetaTags>
-        <title>Pearl | Home</title>
+        <title>SmartWave | Home</title>
         <meta
           name="description"
-          content="Home of Pearl Food eCommerce template."
+          content="Home of Smart Wave eCommerce template."
         />
       </MetaTags>
       <Layout headerTop="visible">
@@ -154,8 +154,7 @@ const Home = () => {
  <FeaturesSection spaceBottomClass="pb-100"/>
         <section
           style={{
-            width: "1349px",
-            left: "-89.5px",
+            width: "100%",
             backgroundImage: `url("https://demoapus2.com/ogami/wp-content/uploads/2019/01/bg-countdown.jpg")`,
             backgroundSize: "cover", // Optional: Makes sure the image covers the entire section
             backgroundPosition: "center", // Optional: Centers the image
@@ -163,7 +162,7 @@ const Home = () => {
             marginBottom:100,
           }}
         >
-          <div className="container row">
+          <div className=" row">
               <div className="col-md-6 col-lg-6" style={{textAlign: 'center', marginTop:120}}>
                 <h2 className="title">Deal Of The Week</h2>
                 <div className="des" style={{marginTop:20, marginBottom:40}}>
