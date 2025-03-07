@@ -29,7 +29,15 @@ const Cart = ({ location }) => {
   const user = JSON.parse(localStorage.getItem("user")); // Replace with your auth logic
   const cartItems = useSelector((state) => state.cartItems.cartItems);
   const currency = useSelector((state) => state.currencyData);
-  const history = useHistory();
+  const history = useHistory(); 
+
+  const [mailId, setmailId] = useState("");
+  const getEmail = () => {
+    api.get("/setting/getMailId").then((res) => {
+      setmailId(res.data.data[0]);
+    });
+  };
+
 
   const cartTotalPrice = useMemo(() => {
     return cartItems.reduce((total, item) => {
@@ -38,7 +46,7 @@ const Cart = ({ location }) => {
         : item.price;
       return total + discountedPrice * item.qty;
     }, 0);
-  }, [cartItems]);
+  }, [cartItems]); 
 
   const handleIncreaseQuantity = useCallback(
     (item) => {
@@ -117,6 +125,43 @@ const Cart = ({ location }) => {
       return `${day}-${month}-${year}`;
     };
 
+  
+    const to = mailId.email;
+    const toCustomer = user.email; // Customer's Email
+    const subject = "Smartwave Product Details";
+    
+    // Group all products into an array
+    const dynamic_template_data = {
+      first_name: cartItems[0]?.first_name,
+      phone: cartItems[0]?.phone, // Assuming same user for all products
+      address: cartItems[0]?.address, // Assuming same user for all products
+      email: cartItems[0]?.email, // Assuming same user for all products
+      // Assuming same user for all products
+      products: cartItems.map((item) => ({
+        title: item.title,
+        qty: item.qty,
+      })),
+    };
+    // Send a single API request with all products
+    api
+      .post("/commonApi/sendProductAdmin", { to, subject, dynamic_template_data })
+      .then((res) => {
+        console.log("Product admin email sent successfully.");
+      })
+      .catch((err) => {
+        console.error("Error sending product admin email:", err);
+      });
+      
+  // Send Email to Customer (Customer Dynamic Template)
+api
+.post("/commonApi/sendProduct",{ toCustomer, subject, dynamic_template_data })
+.then((res) => {
+  console.log("Customer email sent successfully.");
+})
+.catch((err) => {
+  console.error("Error sending customer email:", err);
+});
+
     {
       
       const to = user.email;
@@ -162,6 +207,7 @@ const Cart = ({ location }) => {
     if (user) {
       dispatch(fetchCartData(user));
     }
+    getEmail()
   }, [ ]);
 
   return (
@@ -243,8 +289,8 @@ const Cart = ({ location }) => {
                 </div>
                 <div className="grand-totall">
                   <div className="button-group">
-                    <Link  onClick={()=>placeEnquiry()} className="checkout-btn">
-                      Submit Enquiry
+                  <Link onClick={() => placeEnquiry()} className="checkout-btn">
+                  Submit Enquiry
                     </Link>
                     <Link to={''}
                       onClick={()=>handleClearCart}
