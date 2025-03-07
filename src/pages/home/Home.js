@@ -5,6 +5,8 @@ import TabProductTwo from "../../wrappers/product/TabProduct";
 import TabProductThree from "../../wrappers/product/BestSeller";
 import TabProductFour from "../../wrappers/product/MostPopular";
 import FeatureIconTwo from "../../wrappers/feature-icon/FeatureIcon";
+import FeatureIcon from "../../wrappers/feature-icon/FeatureIcon";
+
 import BlogFeatured from "../../wrappers/blog-featured/BlogFeatured";
 import DealProductSlider from "../../components/DealSlider";
 // import HeroSlider from "../../wrappers/hero-slider/HeroSlider";
@@ -133,7 +135,8 @@ const Home = () => {
         <br />
         <br />
         {/* <HeroSlider /> */}
-        
+        <FeatureIcon spaceTopClass="pt-100" spaceBottomClass="pb-60" />
+
 
         {/* tab product */}
         <TabProductTwo
@@ -210,9 +213,7 @@ const Home = () => {
           />
         )}
       
-        {/* feature icon */}
-        <FeatureIconTwo spaceTopClass="pt-100" spaceBottomClass="pb-60" />
-
+   
         {/* blog featured */}
         {/* <BlogFeatured spaceBottomClass="pb-55" /> */}
       </Layout>
