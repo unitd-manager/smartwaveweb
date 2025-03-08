@@ -66,17 +66,19 @@ const EnquiryHistory = () => {
         {/* Enquiry List */}
         <div className="d-flex flex-wrap justify-content-center">
           {enquiries?.map((enquiry, index) => (
-            <div key={index} className="card mb-3 mx-2 shadow-lg" style={{ width: "22rem", borderRadius: "15px" }}>
-              <div className="card-body text-center">
-                <h6 className="card-title">
-                  <Link to={`${process.env.PUBLIC_URL}/enquirydetails/${enquiry.enquiry_id}`} className="text-decoration-none fw-bold text-primary">
-                    {enquiry.enquiry_code}
-                  </Link>
-                </h6>
-                <p className="text-muted">{moment(enquiry?.creation_date).format("MMM DD, YYYY")}</p>
-                <div className={getStatusBadge(enquiry.status)}>{enquiry.status}</div>
+            <Link 
+              key={index} 
+              to={`${process.env.PUBLIC_URL}/enquirydetails/${enquiry.enquiry_id}`} 
+              className="text-decoration-none"
+            >
+              <div className="card mb-3 mx-2 shadow-lg" style={{ width: "22rem", borderRadius: "15px", cursor: "pointer" }}>
+                <div className="card-body text-center">
+                  <h6 className="card-title fw-bold text-primary">{enquiry.enquiry_code}</h6>
+                  <p className="text-muted">{moment(enquiry?.creation_date).format("MMM DD, YYYY")}</p>
+                  <div className={getStatusBadge(enquiry.status)}>{enquiry.status}</div>
+                </div>
               </div>
-            </div>
+            </Link>
           ))}
         </div>
       </div>
