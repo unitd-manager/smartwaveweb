@@ -32,6 +32,16 @@ const EnquiryHistory = () => {
   const userData = getUser();
   
   const [enquiries, setEnquiries] = useState([]);
+  const [showModal, setShowModal] = useState(false);
+  const [newAddress, setNewAddress] = useState({
+    shipper_name: "",
+    address_flat: "",
+    address_street: "",
+    address_town: "",
+    address_state: "",
+    address_country: "",
+    address_po_code: ""
+  });
 
   useEffect(() => {
       api
@@ -46,10 +56,27 @@ const EnquiryHistory = () => {
         });
   }, []);
 
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setNewAddress({ ...newAddress, [name]: value });
+  };
+
+  const handleSaveAddress = () => {
+    console.log("Saving Address", newAddress);
+    setShowModal(false);
+  };
+
   return (
     <LayoutOne headerTop="visible">
     <div className="container mt-4">
       <h2 className="text-center mb-3">Shipping Address</h2>
+
+        {/* Add Shipment Address Button */}
+        <div className="text-center mb-3">
+          <button className="btn btn-primary" onClick={() => setShowModal(true)}>
+            Add Shipment Address
+          </button>
+        </div>
 
       {/* Enquiries List */}
       <div className="d-flex flex-column align-items-center">
@@ -57,7 +84,7 @@ const EnquiryHistory = () => {
           <div key={index} className="card mb-3 w-75 shadow-sm text-center">
             <div className="card-body d-flex align-items-center">
               {/* Radio Button Inside Card (Aligned Left) */}
-              <div className="form-check me-3">
+              {/* <div className="form-check me-3">
                 <input
                   className="form-check-input"
                   type="radio"
@@ -65,7 +92,7 @@ const EnquiryHistory = () => {
                   id={`enquiry-${index}`}
                   value={enquiry.company_address_id}
                 />
-              </div>
+              </div> */}
 
               {/* Card Content */}
               <div className="flex-grow-1">
@@ -80,6 +107,32 @@ const EnquiryHistory = () => {
         ))}
       </div>
     </div>
+    {showModal && (
+        <div className="modal d-block" tabIndex="-1" role="dialog">
+          <div className="modal-dialog" role="document">
+            <div className="modal-content">
+              <div className="modal-header">
+                <h5 className="modal-title">Add Shipment Address</h5>
+                <button type="button" className="btn-close" onClick={() => setShowModal(false)}></button>
+              </div>
+              <div className="modal-body">
+                <input type="text" className="form-control mb-2" name="shipper_name" placeholder="Shipper Name" onChange={handleInputChange} />
+                <input type="text" className="form-control mb-2" name="address_flat" placeholder="Flat/House No." onChange={handleInputChange} />
+                <input type="text" className="form-control mb-2" name="address_street" placeholder="Street" onChange={handleInputChange} />
+                <input type="text" className="form-control mb-2" name="address_town" placeholder="Town/City" onChange={handleInputChange} />
+                <input type="text" className="form-control mb-2" name="address_state" placeholder="State" onChange={handleInputChange} />
+                <input type="text" className="form-control mb-2" name="address_country" placeholder="Country" onChange={handleInputChange} />
+                <input type="text" className="form-control mb-2" name="address_po_code" placeholder="Postal Code" onChange={handleInputChange} />
+              </div>
+              <div className="modal-footer">
+                <button type="button" className="btn btn-secondary" onClick={() => setShowModal(false)}>Cancel</button>
+                <button type="button" className="btn btn-primary" onClick={handleSaveAddress}>Save Address</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
     </LayoutOne>
   );
 };

@@ -75,6 +75,7 @@ const EnquiryHistory = () => {
                 <div className="card-body text-center">
                   <h6 className="card-title fw-bold text-primary">{enquiry.enquiry_code}</h6>
                   <p className="text-muted">{moment(enquiry?.creation_date).format("MMM DD, YYYY")}</p>
+                  <p className="text-muted">Order Code : {enquiry.order_code}</p>
                   <div className={getStatusBadge(enquiry.status)}>{enquiry.status}</div>
                 </div>
               </div>

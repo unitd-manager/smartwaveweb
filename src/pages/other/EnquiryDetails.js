@@ -12,6 +12,7 @@ import { Form } from "react-bootstrap";
 const EnquiryDetails = () => {
   const user = JSON.parse(localStorage.getItem("user"));
   const [enquiries, setEnquiries] = useState({});
+  const [tracking, setTracking] = useState({});
   const [receiptFile, setReceiptFile] = useState(null);
   const [receiptUrl, setReceiptUrl] = useState("");
   const [addressList, setAddressList] = useState([]);
@@ -46,6 +47,14 @@ if(user){
     })
     .catch((err) => console.log(err));
   }
+
+  api
+  .post(`/tracking/getQuoteTrackItemsById`, { enquiry_id: id })
+  .then((res) => {
+    setTracking(res.data.data);
+    
+  })
+  .catch((err) => console.log(err));
 
   
   }, [id]);
@@ -200,7 +209,7 @@ console.log('receiptUrl',receiptUrl)
     {enquiries?.status && (
       <Badge
         bg={enquiries.status === "Active" ? "success" : "secondary"}
-        className="ms-2"
+        className="ms-2 text-white ml-3"
       >
         {enquiries.status}
       </Badge>
@@ -210,7 +219,7 @@ console.log('receiptUrl',receiptUrl)
   <Row className="gy-3">
     {/* Title */}
     <Col md={6}>
-      <div>
+      <div className="mb-3">
         <p className="text-muted mb-1">Title:</p>
         <p className="fw-bold m-0">{enquiries?.title || 'N/A'}</p>
       </div>
@@ -218,15 +227,15 @@ console.log('receiptUrl',receiptUrl)
 
     {/* Enquiry Type */}
     <Col md={6}>
-      <div>
+      <div className="mb-3">
         <p className="text-muted mb-1">Enquiry Type:</p>
         <p className="fw-bold m-0">{enquiries?.enquiry_type || 'N/A'}</p>
       </div>
     </Col>
 
     {/* Address */}
-    <Col md={12}>
-      <div>
+    <Col md={6}>
+      <div className="mb-3">
         <p className="text-muted mb-1">Address:</p>
         <p className="fw-bold m-0">{enquiries?.shipping_address || 'N/A'}</p>
       </div>
@@ -239,6 +248,13 @@ console.log('receiptUrl',receiptUrl)
         <p className="fw-bold m-0">
           {enquiries?.creation_date ? moment(enquiries.creation_date).format("MMM DD, YYYY") : 'N/A'}
         </p>
+      </div>
+    </Col>
+
+    <Col md={6}>
+      <div>
+        <p className="text-muted mb-1">Order Code:</p>
+        <p className="fw-bold m-0">{enquiries?.order_code || 'N/A'}</p>
       </div>
     </Col>
   </Row>
@@ -335,6 +351,93 @@ console.log('receiptUrl',receiptUrl)
   </p>
 ))}
 
+        <Card className="p-4 shadow-sm rounded-3">
+          {/* Enquiry Code & Status */}
+          <h5 className="fw-bold mb-4">
+            Carrier Tracking
+          </h5>
+
+          <Row className="gy-3">
+            {/* Title */}
+            <Col md={6}>
+              <div className="mb-3">
+                <p className="text-muted mr-3 pull-left">Carrier Name :</p>
+                <p className="fw-bold m-0 pull-left">{tracking?.carrier_name || 'N/A'}</p>
+              </div>
+            </Col>
+
+            <Col md={6}>
+              <div className="mb-3">
+                <p className="text-muted mr-3 pull-left">Tracking Number :</p>
+                <p className="fw-bold m-0 pull-left">{tracking?.tracking_number || 'N/A'}</p>
+              </div>
+            </Col>
+
+            <Col md={6}>
+              <div className="mb-3">
+                <p className="text-muted mr-3 pull-left">Tracking Link :</p>
+                <p className="fw-bold m-0 pull-left">{tracking?.tracking_link || 'N/A'}</p>
+              </div>
+            </Col>
+
+            <Col md={6}>
+              <div className="mb-3">
+                <p className="text-muted mr-3 pull-left">Shipment ID :</p>
+                <p className="fw-bold m-0 pull-left">{tracking?.shipment_id || 'N/A'}</p>
+              </div>
+            </Col>
+
+            <Col md={6}>
+              <div className="mb-3">
+                <p className="text-muted mr-3 pull-left">Shipment Date :</p>
+                <p className="fw-bold m-0 pull-left">{tracking?.shipment_date || 'N/A'}</p>
+              </div>
+            </Col>
+
+            <Col md={6}>
+              <div className="mb-3">
+                <p className="text-muted mr-3 pull-left">Delivery Date :</p>
+                <p className="fw-bold m-0 pull-left">{tracking?.actual_delivery_date || 'N/A'}</p>
+              </div>
+            </Col>
+
+            <Col md={6}>
+              <div className="mb-3">
+                <p className="text-muted mr-3 pull-left">Shipment Status :</p>
+                <p className="fw-bold m-0 pull-left">{tracking?.shipment_status || 'N/A'}</p>
+              </div>
+            </Col>
+
+            <Col md={6}>
+              <div className="mb-3">
+                <p className="text-muted mr-3 pull-left">Package Weight :</p>
+                <p className="fw-bold m-0 pull-left">{tracking?.package_weight || 'N/A'}</p>
+              </div>
+            </Col>
+
+            <Col md={6}>
+              <div className="mb-3">
+                <p className="text-muted mr-3 pull-left">Package Height :</p>
+                <p className="fw-bold m-0 pull-left">{tracking?.package_height || 'N/A'}</p>
+              </div>
+            </Col>
+
+            <Col md={6}>
+              <div className="mb-3">
+                <p className="text-muted mr-3 pull-left">Package Length :</p>
+                <p className="fw-bold m-0 pull-left">{tracking?.package_length || 'N/A'}</p>
+              </div>
+            </Col>
+
+            <Col md={6}>
+              <div className="mb-3">
+                <p className="text-muted mr-3 pull-left">Package Width :</p>
+                <p className="fw-bold m-0 pull-left">{tracking?.package_width || 'N/A'}</p>
+              </div>
+            </Col>
+
+          </Row>
+        </Card>
       </div>
     </LayoutOne>
   );
