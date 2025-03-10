@@ -5,20 +5,26 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import LayoutOne from "../../layouts/Layout";
 import api from "../../constants/api";
 import moment from "moment";
+import { useToasts } from "react-toast-notifications";
 import { Alert, Badge, Button, Card, Col, Row } from "reactstrap";
 import { Form } from "react-bootstrap";
 
 const EnquiryDetails = () => {
+  const user = JSON.parse(localStorage.getItem("user"));
   const [enquiries, setEnquiries] = useState({});
   const [receiptFile, setReceiptFile] = useState(null);
   const [receiptUrl, setReceiptUrl] = useState("");
-  const [selectedAddress, setSelectedAddress] = useState(""); // State for selected address
+  const [addressList, setAddressList] = useState([]);
+  const [selectedAddress, setSelectedAddress] = useState(null); // State for selected address
   const[uploaded, setUploaded]=useState(null);
 
+  const [selectedAddressString, setSelectedAddressString] = useState('');
+  console.log('selectedAddressString',selectedAddressString);
   const { id } = useParams();
   const history = useHistory();
-
+ const { addToast } = useToasts();
   useEffect(() => {
+
     api
       .post(`/enquiry/getEnquiryById`, { enquiry_id: id })
       .then((res) => {
@@ -31,6 +37,16 @@ const EnquiryDetails = () => {
     api.post('/file/getListOfFiles', { record_id: id, room_name: 'PaymentReceipt' }).then((res) => {
       setReceiptUrl(res.data);
     });
+if(user){
+    api
+    .post(`/contact/getAddressessByContactId`, { contact_id: user.contact_id })
+    .then((res) => {
+      setAddressList(res.data.data);
+      
+    })
+    .catch((err) => console.log(err));
+  }
+
   
   }, [id]);
 
@@ -67,38 +83,77 @@ console.log('receiptUrl',receiptUrl)
                  
               }}).then(()=>{
    
-                  Alert('Files Uploaded Successfully','success')
-                  
+                  addToast("Files Uploaded Successfully", {
+                    appearance: "success",
+                    autoDismiss: true,
+                  })
                   setTimeout(() => {
                       window.location.reload()
                   }, 400);
               }).catch(()=>{
                   
-                  Alert('Unable to upload File','error')
+                addToast("Unable to upload file", {
+                  appearance: "error",
+                  autoDismiss: true,
+                })
+              
                   
               })
   };
 
-  // Example shipping addresses (you can replace these with dynamic data if needed)
-  const addresses = [
-    {
-      id: 1,
-      label: 'Main house',
-      name: 'Maren Calzoni',
-      phone: '(702) 555-0122',
-      address: '4517 Washington Ave. Manchester, Kentucky 39495',
-      image: 'https://via.placeholder.com/80', // Placeholder image, replace with map URL if needed
-    },
-    {
-      id: 2,
-      label: 'Office',
-      name: 'Jordyn Curtis',
-      phone: '(505) 555-0125',
-      address: '6036 Robinlade Ave, Dearborn Heights, Michigan(MI), 48127',
-      image: 'https://via.placeholder.com/80', // Placeholder image
-    },
-  ];
-  const handleSelect = (id) => setSelectedAddress(id);
+  const updateOrder = (code) => {
+    enquiries.modification_date = moment().format('DD-MM-YYYY h:mm:ss a');
+    enquiries.order_code = code;
+    enquiries.shipping_address = selectedAddressString;
+      api
+        .post('/enquiry/updateOrderCode', enquiries)
+        .then(() => {
+          addToast("Order updated Successfully", {
+            appearance: "success",
+            autoDismiss: true,
+          })
+          // setTimeout(() => {
+          //   window.location.reload();
+          // }, 300);
+        })
+        .catch(() => {
+          addToast("Unable to update order", {
+            appearance: "error",
+            autoDismiss: true,
+          })
+        
+        });
+   
+  };
+
+  const generateOrder = async () => {
+    api
+    .post('/commonApi/getCodeValue', { type: 'orders' })
+    .then((res) => {
+      updateOrder(res.data.data);
+    })
+    .catch(() => {
+      updateOrder('');
+    });
+};
+
+
+
+
+  const handleSelect = (id) => {
+    setSelectedAddress(id);
+  
+    const selectedAddr = addressList.find(addr => addr.customer_address_id === id);
+  
+    if (selectedAddr) {
+      // Concatenate address fields
+      const fullAddress = `${selectedAddr.shipper_name}, ${selectedAddr.address_flat}, ${selectedAddr.address_street}, ${selectedAddr.address_city}, ${selectedAddr.address_town}, ${selectedAddr.address_state}, ${selectedAddr.address_country} - ${selectedAddr.address_po_code}${selectedAddr.phone ? `, Phone: ${selectedAddr.phone}` : ''}`;
+  
+      // Set the formatted address string
+      setSelectedAddressString(fullAddress);
+    }
+  };
+  
   return (
     <LayoutOne headerTop="visible">
       <div className="container mt-4">
@@ -139,121 +194,94 @@ console.log('receiptUrl',receiptUrl)
 
         <div>
         <Card className="p-4 shadow-sm rounded-3">
-          <h5 className="fw-bold mb-3">
-            Enquiry Code: <span className="text-primary">{enquiries?.enquiry_code}</span>
-            {enquiries?.status && (
-              <Badge color={enquiries.status === "Active" ? "success" : "secondary"} className="ms-2">
-                {enquiries.status}
-              </Badge>
-            )}
-          </h5>
+  {/* Enquiry Code & Status */}
+  <h5 className="fw-bold mb-4">
+    Enquiry Code: <span className="text-primary">{enquiries?.enquiry_code || 'N/A'}</span>
+    {enquiries?.status && (
+      <Badge
+        bg={enquiries.status === "Active" ? "success" : "secondary"}
+        className="ms-2"
+      >
+        {enquiries.status}
+      </Badge>
+    )}
+  </h5>
 
-          <Row>
-            {/* Full Name */}
-            <Col md={6}>
-              <p className="text-muted mb-1">Customer Name:</p>
-              <p className="fw-bold">{enquiries?.first_name} {enquiries?.last_name}</p>
-            </Col>
+  <Row className="gy-3">
+    {/* Title */}
+    <Col md={6}>
+      <div>
+        <p className="text-muted mb-1">Title:</p>
+        <p className="fw-bold m-0">{enquiries?.title || 'N/A'}</p>
+      </div>
+    </Col>
 
-            {/* Email */}
-            <Col md={6}>
-              <p className="text-muted mb-1">Email:</p>
-              <p className="fw-bold">{enquiries?.email}</p>
-            </Col>
+    {/* Enquiry Type */}
+    <Col md={6}>
+      <div>
+        <p className="text-muted mb-1">Enquiry Type:</p>
+        <p className="fw-bold m-0">{enquiries?.enquiry_type || 'N/A'}</p>
+      </div>
+    </Col>
 
-            {/* Phone */}
-            <Col md={6}>
-              <p className="text-muted mb-1">Phone:</p>
-              <p className="fw-bold">{enquiries?.phone_area_code} {enquiries?.phone}</p>
-            </Col>
+    {/* Address */}
+    <Col md={12}>
+      <div>
+        <p className="text-muted mb-1">Address:</p>
+        <p className="fw-bold m-0">{enquiries?.shipping_address || 'N/A'}</p>
+      </div>
+    </Col>
 
-            {/* Enquiry Type */}
-            <Col md={6}>
-              <p className="text-muted mb-1">Enquiry Type:</p>
-              <p className="fw-bold">{enquiries?.enquiry_type}</p>
-            </Col>
+    {/* Creation Date */}
+    <Col md={6}>
+      <div>
+        <p className="text-muted mb-1">Creation Date:</p>
+        <p className="fw-bold m-0">
+          {enquiries?.creation_date ? moment(enquiries.creation_date).format("MMM DD, YYYY") : 'N/A'}
+        </p>
+      </div>
+    </Col>
+  </Row>
+</Card>
 
-            {/* Subject */}
-            <Col md={6}>
-              <p className="text-muted mb-1">Subject:</p>
-              <p className="fw-bold">{enquiries?.subject}</p>
-            </Col>
+  <h5 className="mb-4 fw-bold">Select Address</h5>
 
-            {/* Product / Service */}
-            <Col md={6}>
-              <p className="text-muted mb-1">Product / Service:</p>
-              <p className="fw-bold">{enquiries?.product} / {enquiries?.service}</p>
-            </Col>
+  {addressList.map((addr) => (<Card
+  key={addr.customer_address_id}
+  className={`mb-3 p-3 shadow-sm ${selectedAddress === addr.customer_address_id ? 'border-primary' : ''}`}
+  style={{ borderRadius: '15px' }}
+>
+  <Row>
+    <Col xs={10}>
+      <div className="d-flex align-items-center mb-2">
+        <Badge bg="secondary" className="me-2">{addr.label || "Address"}</Badge>
+        <h6 className="m-0 fw-bold">{addr.shipper_name}</h6>
+      </div>
+      <div className="text-muted small">
+        {addr.address_flat}, {addr.address_street}<br />
+        {addr.address_city}, {addr.address_town}<br />
+        {addr.address_state}, {addr.address_country} - {addr.address_po_code}
+      </div>
+      {addr.phone && (
+        <p className="m-0 text-muted small mt-1"><b>Phone:</b> {addr.phone}</p>
+      )}
+    </Col>
+    <Col xs={2} className="text-end">
+      <Form.Check
+        type="radio"
+        name="addressSelect"
+        checked={selectedAddress === addr.customer_address_id}
+        onChange={() => handleSelect(addr.customer_address_id)}
+        style={{ transform: 'scale(0.5)' }}
+      />
+    </Col>
+  </Row>
+</Card>
 
-            {/* Enquiry Amount */}
-            <Col md={6}>
-              <p className="text-muted mb-1">Amount:</p>
-              <p className="fw-bold">{enquiries?.enquiry_amount ? `$${enquiries.enquiry_amount}` : 'N/A'}</p>
-            </Col>
-
-            {/* Comments */}
-            <Col md={12}>
-              <p className="text-muted mb-1">Comments:</p>
-              <p className="fw-bold">{enquiries?.comments}</p>
-            </Col>
-
-            {/* Address */}
-            <Col md={12}>
-              <p className="text-muted mb-1">Address:</p>
-              <p className="fw-bold">{enquiries?.shipping_address || enquiries?.address_country || enquiries?.country}</p>
-            </Col>
-
-            {/* Preferred Contact */}
-            <Col md={6}>
-              <p className="text-muted mb-1">Preferred Contact:</p>
-              <p className="fw-bold">
-                {enquiries?.preferred_contact} {enquiries?.preferred_contact === "WhatsApp" && <FaWhatsapp className="text-success" />}
-              </p>
-            </Col>
-
-            {/* Creation Date */}
-            <Col md={6}>
-              <p className="text-muted mb-1">Creation Date:</p>
-              <p className="fw-bold">{moment(enquiries?.creation_date).format("MMM DD, YYYY")}</p>
-            </Col>
-          </Row>
-
-          
-        </Card>
-  <h5 className="mb-4 fw-bold">Address list</h5>
-
-  {addresses.map((addr) => (
-    <Card
-      key={addr.id}
-      className={`mb-3 p-3 shadow-sm ${selectedAddress === addr.id ? 'border-primary' : ''}`}
-      style={{ borderRadius: '15px' }}
-    >
-      <Row className="align-items-center">
-        <Col xs={10}>
-          <div className="d-flex align-items-center mb-1">
-            <Badge bg={addr.id === 1 ? 'primary' : 'warning'} className="me-2">
-              {addr.label}
-            </Badge>
-            <h6 className="m-0 fw-bold">{addr.name}</h6>
-          </div>
-          <p className="m-0 text-muted small">{addr.phone}</p>
-          <p className="m-0 text-muted small">{addr.address}</p>
-        </Col>
-        <Col xs={2} className="text-end">
-          <Form.Check
-            type="radio"
-            name="addressSelect"
-            checked={selectedAddress === addr.id}
-            onChange={() => handleSelect(addr.id)}
-            style={{ transform: 'scale(0.8)' }} // ✅ Small radio button
-          />
-        </Col>
-      </Row>
-
-      
-    </Card>
   ))}
-
+<button className="btn btn-primary mt-2" onClick={()=>generateOrder()}>
+           Generate Order
+          </button>
  
 </div>
 
