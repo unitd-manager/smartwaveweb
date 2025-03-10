@@ -69,6 +69,7 @@ export default function Contact({ location }) {
     last_name: "",
     email: "",
     comments: "",
+    enquiry_code: "",
   });
 
   let name, value;
@@ -82,13 +83,14 @@ export default function Contact({ location }) {
     // email = e.target.email
     // message = e.target.message
   };
-  const ContactSubmit = () => {
+  const ContactSubmit = (code) => {
     api
       .post("/commonApi/addEnquiry", {
         first_name: user.first_name,
         last_name: user.last_name,
         email: user.email,
         comments: user.comments,
+        enquiry_code: code,
       })
       .then((res) => {
         console.log(res);
@@ -103,6 +105,7 @@ export default function Contact({ location }) {
           last_name: "",
           email: "",
           comments: "",
+          enquiry_code: "",
         });
       })
       .catch((err) => {
@@ -110,6 +113,18 @@ export default function Contact({ location }) {
           appearance: "error",
           autoDismiss: true,
         });
+      });
+  };
+
+
+  const generateCode = () => {
+    api
+      .post('/commonApi/getCodeValues', { type: 'enquiry' })
+      .then((res) => {
+        ContactSubmit(res.data.data);
+      })
+      .catch(() => {
+        ContactSubmit('');
       });
   };
   
@@ -308,7 +323,7 @@ export default function Contact({ location }) {
                           color="success"
                           onClick={() => {
                             sendMail();
-                            ContactSubmit();
+                            generateCode();
                           }}
                           type="button"
                           className="btn btn-primary"

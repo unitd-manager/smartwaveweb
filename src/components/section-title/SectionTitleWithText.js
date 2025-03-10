@@ -26,7 +26,7 @@ const SectionTitleWithText = ({ spaceTopClass, spaceBottomClass }) => {
       <div className="container">
         <div className="welcome-content text-center">
           <h5>Who Are We</h5>
-          <h1>Welcome To ShopKart</h1>
+          <h1>Welcome To Smartwave</h1>
           {about.map((data)=>{ 
    return(
     
