@@ -9,7 +9,7 @@ const BannerOneSingle = ({ data, spaceBottomClass }) => {
         className={`single-banner ${spaceBottomClass ? spaceBottomClass : ""}`}
       >
         <Link to={process.env.PUBLIC_URL + data.link}>
-          <img  className="hover-img" src={process.env.PUBLIC_URL + data.image} alt="" width="200px" height="400px"  />
+          <img  className="hover-img" src={process.env.PUBLIC_URL + data.image} alt="" width="200px" height="250px"  />
         </Link>
         {/* <div className="banner-content">
           <h3>{data.title}</h3>
