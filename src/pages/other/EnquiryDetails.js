@@ -51,7 +51,7 @@ if(user){
   api
   .post(`/tracking/getQuoteTrackItemsById`, { enquiry_id: id })
   .then((res) => {
-    setTracking(res.data.data);
+    setTracking(res.data.data[0]);
     
   })
   .catch((err) => console.log(err));
@@ -350,7 +350,7 @@ console.log('receiptUrl',receiptUrl)
   </p>
 ))}
 
-        <Card className="p-4 shadow-sm rounded-3">
+        <Card className="p-4 shadow-sm rounded-3 mb-4">
           {/* Enquiry Code & Status */}
           <h5 className="fw-bold mb-4">
             Carrier Tracking

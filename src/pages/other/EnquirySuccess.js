@@ -15,6 +15,11 @@ const history=useHistory();
     padding: "1.5rem",
   };
 
+  const reload = () => { 
+    history.push("/")
+    window.location.reload()
+  }
+
   // Choose background style based on status
   const backgroundClass ="bg-gray-100";
 
@@ -32,10 +37,10 @@ const history=useHistory();
             Enquiry Submitted Successfully!
           </h1>
           <p className="mb-6" style={{ color: "#4B5563", fontSize: "16px" }}>
-            Your enquiry has been submitted successfully. Please wait we will process.
+            Your enquiry has been submitted successfully.
           </p>
           <button
-            onClick={() => history.push("/")}
+            onClick={() => reload()}
             style={{
               padding: "12px 24px",
               backgroundColor: "#10B981",

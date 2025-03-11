@@ -62,6 +62,44 @@ const EnquiryHistory = () => {
   };
 
   const handleSaveAddress = () => {
+    if (!newAddress.shipper_name) {
+      alert("Please enter the shipper name");
+      return;
+    }
+    if (!newAddress.address_flat) {
+      alert("Please enter the flat");
+      return;
+    }
+    if (!newAddress.address_street) {
+      alert("Please enter the street");
+      return;
+    }
+    if (!newAddress.address_town) {
+      alert("Please enter the town");
+      return;
+    }
+    if (!newAddress.address_state) {
+      alert("Please enter the state");
+      return;
+    }
+    if (!newAddress.address_po_code) {
+      alert("Please enter the po code");
+      return;
+    }
+    if (!newAddress.address_country) {
+      alert("Please enter the country");
+      return;
+    }
+
+    newAddress.contact_id = userData.contact_id;
+    api
+      .post("/address/insertQuoteItems", newAddress)
+      .then(() => {
+        alert("Address added Successfully");
+        window.location.reload()
+      })
+      .catch((err) => console.log(err));
+
     console.log("Saving Address", newAddress);
     setShowModal(false);
   };
@@ -113,7 +151,7 @@ const EnquiryHistory = () => {
             <div className="modal-content">
               <div className="modal-header">
                 <h5 className="modal-title">Add Shipment Address</h5>
-                <button type="button" className="btn-close" onClick={() => setShowModal(false)}></button>
+                <button type="button" className="btn-close" onClick={() => setShowModal(false)}>X</button>
               </div>
               <div className="modal-body">
                 <input type="text" className="form-control mb-2" name="shipper_name" placeholder="Shipper Name" onChange={handleInputChange} />
