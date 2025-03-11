@@ -260,7 +260,7 @@ console.log('receiptUrl',receiptUrl)
   </Row>
 </Card>
 
-  <h5 className="mb-4 fw-bold">Select Address</h5>
+  <h5 className="mb-4 mt-4 fw-bold">Select Address</h5>
 
   {addressList.map((addr) => (<Card
   key={addr.customer_address_id}
@@ -270,8 +270,7 @@ console.log('receiptUrl',receiptUrl)
   <Row>
     <Col xs={10}>
       <div className="d-flex align-items-center mb-2">
-        <Badge bg="secondary" className="me-2">{addr.label || "Address"}</Badge>
-        <h6 className="m-0 fw-bold">{addr.shipper_name}</h6>
+        <Badge bg="secondary" className="me-2"><h6 className="m-0 fw-bold text-white">{addr.shipper_name || "Address"}</h6></Badge>        
       </div>
       <div className="text-muted small">
         {addr.address_flat}, {addr.address_street}<br />
