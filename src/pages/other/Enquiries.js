@@ -96,7 +96,7 @@ const EnquiryHistory = () => {
                   <div className="card-body text-center">
                     <h6 className="card-title fw-bold text-primary">{enquiry.enquiry_code}</h6>
                     <p className="text-muted mb-1" style={{ fontSize: "0.85rem" }}>
-                      {moment(enquiry?.enquiry_date).format("MMM DD, YYYY")}
+                      {enquiry.enquiry_date?moment(enquiry?.enquiry_date).format("MMM DD, YYYY"):""}
                     </p>
                     <p className="text-muted mb-2" style={{ fontSize: "0.85rem" }}>
                       Order: {enquiry.order_code}
