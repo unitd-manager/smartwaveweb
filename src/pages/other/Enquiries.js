@@ -24,6 +24,7 @@ const getStatusBadge = (status) => {
 const EnquiryHistory = () => {
   const userData = getUser();
   const [enquiries, setEnquiries] = useState([]);
+  const [searchQuery, setSearchQuery] = useState(""); // Search state
 
   useEffect(() => {
     api
@@ -38,6 +39,10 @@ const EnquiryHistory = () => {
       });
   }, []);
 
+  const filteredEnquiries = enquiries.filter((enquiry) =>
+    enquiry.enquiry_code?.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
   return (
     <LayoutOne headerTop="visible">
       <div className="container mt-4">
@@ -45,29 +50,43 @@ const EnquiryHistory = () => {
 
         {/* Summary Section */}
         <div className="row mb-4 justify-content-center">
-  <div
-    className="col-md-5 p-3 rounded text-center shadow-sm custom-summary-card me-md-3"
-    style={{ backgroundColor: "#124157", color: "white" }}
-  >
-    <p style={{ color: "white" }}>Total Enquiries</p>
-    <h5 style={{ color: "white" }}>
-      <FaList /> {enquiries.length}
-    </h5>
-  </div>
-  <div
-    className="col-md-5 p-3 rounded text-center shadow-sm custom-summary-card"
-    style={{ backgroundColor: "#96dbfc", col96dbfcor: "white" }}
-  >
-    <p style={{ color: "white" }}>Orders</p>
-    <h5 style={{ color: "white" }}>
-      <FaClock /> {parseFloat(enquiries.length)-parseFloat(enquiries.filter((e) => e.status === "Pending").length)}
-    </h5>
-  </div>
-</div>
+          <div
+            className="col-md-5 p-3 rounded text-center shadow-sm custom-summary-card me-md-3"
+            style={{ backgroundColor: "#124157", color: "white" }}
+          >
+            <p style={{ color: "white" }}>Total Enquiries</p>
+            <h5 style={{ color: "white" }}>
+              <FaList /> {enquiries.length}
+            </h5>
+          </div>
+          <div
+            className="col-md-5 p-3 rounded text-center shadow-sm custom-summary-card"
+            style={{ backgroundColor: "#96dbfc", color: "white" }}
+          >
+            <p style={{ color: "white" }}>Orders</p>
+            <h5 style={{ color: "white" }}>
+              <FaClock />{" "}
+              {parseFloat(enquiries.length) -
+                parseFloat(enquiries.filter((e) => e.status === "Pending").length)}
+            </h5>
+          </div>
+        </div>
+
+        {/* Search Input */}
+        <div className="mb-4 text-center">
+          <input
+            type="text"
+            placeholder="Search by Enquiry Code..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="form-control w-50 mx-auto shadow-sm"
+            style={{ borderRadius: "20px", padding: "10px" }}
+          />
+        </div>
 
         {/* Enquiry List */}
         <div className="row">
-          {enquiries?.map((enquiry, index) => (
+          {filteredEnquiries.map((enquiry, index) => (
             <div className="col-6 col-md-4 col-lg-3 col-xl-2 mb-4 d-flex" key={index}>
               <Link
                 to={`${process.env.PUBLIC_URL}/enquirydetails/${enquiry.enquiry_id}`}
@@ -97,7 +116,7 @@ const EnquiryHistory = () => {
           min-height: 120px;
         }
         .status-badge {
-          font-size: 1.1rem; /* Bigger status text */
+          font-size: 1.1rem;
           padding: 8px 16px;
           border-radius: 20px;
           display: inline-block;
