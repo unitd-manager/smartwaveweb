@@ -44,7 +44,7 @@ const user=getUser();
           className="account-setting-active"
           onClick={e => handleClick(e)}
         >
-          <i className="pe-7s-user-female" />
+        <i className="pe-7s-user-female" />
         </button>
         <div className="account-dropdown">
          {user&& <ul>
