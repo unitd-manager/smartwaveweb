@@ -73,9 +73,18 @@ const Cart = ({ location }) => {
     [dispatch, addToast]
   );
 
-  const placeEnquiry = (os) => {
-   
-  
+  const generateCode = () => {
+    api
+      .post('/commonApi/getCodeValues', { type: 'enquiry' })
+      .then((res) => {
+        placeEnquiry(res.data.data);
+      })
+      .catch(() => {
+        placeEnquiry('');
+      });
+  };
+
+  const placeEnquiry = (code) => {     
     if (user) {
       const enquiryDetails = {
         contact_id : user.contact_id,
@@ -83,6 +92,7 @@ const Cart = ({ location }) => {
         enquiry_type : 'Enquiry and order for Retail products.',
         status : 'New',
         title : 'Enquiry from ' + user.first_name,      
+        enquiry_code: code,
       };
       api
         .post("/enquiry/insertEnquiry", enquiryDetails)
@@ -90,9 +100,9 @@ const Cart = ({ location }) => {
           const insertedId = res.data.data.insertId;
           cartItems.forEach((item) => {
             item.enquiry_id = insertedId;
-            item.item_title=item.title;
             item.quantity=item.qty;
             item.product_id=item.product_id;
+            item.category_id=item.category_id;
             api
               .post("/enquiry/insertQuoteItems", item)
               .then(() => {
@@ -109,9 +119,8 @@ const Cart = ({ location }) => {
        
         })
         .then(() => {
-          alert("Enquiry Submitted Successfully");
-          history.push('/')
-          window.location.reload()
+          //alert("Enquiry Submitted Successfully");
+          history.push('/enquirysuccess')
         })
         .catch((err) => console.log(err));
     } else {
@@ -292,7 +301,7 @@ api
                 </div>
                 <div className="grand-totall">
                   <div className="button-group">
-                  <Link onClick={() => placeEnquiry()} className="checkout-btn">
+                  <Link onClick={() => generateCode()} className="checkout-btn">
                   Submit Enquiry
                     </Link>
                     <Link to={''}

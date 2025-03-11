@@ -13,7 +13,7 @@ const TabProductTwo = ({ spaceBottomClass, newProducts }) => {
         <Tab.Container defaultActiveKey="newArrival">
           <Tab.Content>
             <Tab.Pane eventKey="newArrival">
-              <div className="row three-column">
+              <div className="row four-column">
                 <ProductGridThree
                   products={newProducts}
                   type="new"
