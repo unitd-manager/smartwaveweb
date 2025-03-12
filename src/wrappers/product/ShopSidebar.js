@@ -6,7 +6,7 @@ import ShopCategories from "../../components/product/ShopCategories";
 import ShopTag from "../../components/product/ShopTag";
 import api from "../../constants/api";
 
-const ShopSidebar = ({ products, getSortParams, sideSpaceClass,handleSearchSubmit,handleSearchChange }) => {
+const ShopSidebar = ({ products, getSortParams, selectedCategories,setSelectedCategories,sideSpaceClass,handleSearchSubmit,handleSearchChange }) => {
 
   const uniqueTags = getIndividualTags(products);
 const[categories,setCategories]=useState([]);
@@ -25,6 +25,8 @@ console.log('tags',uniqueTags);
 
       {/* filter by categories */}
       <ShopCategories
+      selectedCategories={selectedCategories}
+      setSelectedCategories={setSelectedCategories} 
         categories={categories}
         getSortParams={getSortParams}
       />

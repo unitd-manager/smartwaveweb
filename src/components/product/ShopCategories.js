@@ -3,9 +3,9 @@ import React, { useState } from "react";
 import { setActiveSort } from "../../helpers/product";
 import { Link } from "react-router-dom/cjs/react-router-dom.min";
 
-const ShopCategories = ({ categories, getSortParams }) => {
-  const [selectedCategories, setSelectedCategories] = useState([]);
-
+const ShopCategories = ({ categories, selectedCategories,setSelectedCategories,getSortParams }) => {
+  // const [selectedCategories, setSelectedCategories] = useState([]);
+console.log('selectedCategories',selectedCategories);
   const handleCategorySelection = (categoryId) => {
     let updatedCategories = [...selectedCategories];
 
@@ -87,8 +87,9 @@ console.log('selectedCategories',selectedCategories);
     <input
       type="checkbox"
       value={category.category_id}
-      checked={selectedCategories.includes(category.category_id)}
-      onChange={() => handleCategorySelection(category.category_id)}
+      checked={selectedCategories.includes(String(category.category_id))}
+     // checked={selectedCategories.includes(category.category_id)}
+      onChange={() => handleCategorySelection(String(category.category_id))}
     />
     <span className="checkmark"></span> {category.category_title}
   </label>
