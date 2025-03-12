@@ -93,6 +93,7 @@ const Cart = ({ location }) => {
         status : 'New',
         title : 'Enquiry from ' + user.first_name,      
         enquiry_code: code,
+        creation_date : new Date().toISOString(),
       };
       api
         .post("/enquiry/insertEnquiry", enquiryDetails)
@@ -100,9 +101,10 @@ const Cart = ({ location }) => {
           const insertedId = res.data.data.insertId;
           cartItems.forEach((item) => {
             item.enquiry_id = insertedId;
-            item.quantity=item.qty;
-            item.product_id=item.product_id;
-            item.category_id=item.category_id;
+            item.quantity = item.qty;
+            item.product_id = item.product_id;
+            item.category_id = item.category_id;
+            item.created_by = user.first_name;
             api
               .post("/enquiry/insertQuoteItems", item)
               .then(() => {
