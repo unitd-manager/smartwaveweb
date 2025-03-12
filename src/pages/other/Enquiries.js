@@ -11,13 +11,13 @@ import moment from "moment";
 const getStatusBadge = (status) => {
   switch (status) {
     case "Approved":
-      return "badge bg-success text-white status-badge";
+      return "badge status-approved";
     case "Rejected":
-      return "badge bg-danger text-white status-badge";
+      return "badge status-rejected";
     case "Pending":
-      return "badge bg-warning text-dark status-badge";
+      return "badge status-pending";
     default:
-      return "badge bg-secondary text-white status-badge";
+      return "badge status-default";
   }
 };
 
@@ -26,6 +26,7 @@ const EnquiryHistory = () => {
   const [enquiries, setEnquiries] = useState([]);
   const [searchQuery, setSearchQuery] = useState(""); // Search state
 
+  // Fetch Enquiries
   useEffect(() => {
     api
       .post(`/enquiry/getEnquiryByContactId`, {
@@ -39,8 +40,11 @@ const EnquiryHistory = () => {
       });
   }, []);
 
-  const filteredEnquiries = enquiries.filter((enquiry) =>
-    enquiry.enquiry_code?.toLowerCase().includes(searchQuery.toLowerCase())
+  // Filter based on Enquiry Code & Order Code
+  const filteredEnquiries = enquiries.filter(
+    (enquiry) =>
+      enquiry.enquiry_code?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      enquiry.order_code?.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   return (
@@ -66,8 +70,9 @@ const EnquiryHistory = () => {
             <p style={{ color: "white" }}>Orders</p>
             <h5 style={{ color: "white" }}>
               <FaClock />{" "}
-              {parseFloat(enquiries.length) -
-                parseFloat(enquiries.filter((e) => e.status === "Pending").length)}
+              {
+                parseFloat(enquiries.filter((e) => e.order_id && e.order_id !== "").length
+              )}
             </h5>
           </div>
         </div>
@@ -76,37 +81,43 @@ const EnquiryHistory = () => {
         <div className="mb-4 text-center">
           <input
             type="text"
-            placeholder="Search by Enquiry Code..."
+            placeholder="Search by Enquiry Code or Order Code..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="form-control w-50 mx-auto shadow-sm"
-            style={{ borderRadius: "20px", padding: "10px" }}
+            className="form-control w-75 mx-auto shadow-sm"
+            style={{ borderRadius: "20px", padding: "12px", fontSize: "16px" }}
           />
         </div>
 
-        {/* Enquiry List */}
+        {/* Enquiry Cards */}
         <div className="row">
-          {filteredEnquiries.map((enquiry, index) => (
-            <div className="col-6 col-md-4 col-lg-3 col-xl-2 mb-4 d-flex" key={index}>
-              <Link
-                to={`${process.env.PUBLIC_URL}/enquirydetails/${enquiry.enquiry_id}`}
-                className="text-decoration-none flex-fill"
-              >
-                <div className="card h-100 shadow-sm small-card">
-                  <div className="card-body text-center">
-                    <h6 className="card-title fw-bold text-primary">{enquiry.enquiry_code}</h6>
-                    <p className="text-muted mb-1" style={{ fontSize: "0.85rem" }}>
-                      {enquiry.enquiry_date?moment(enquiry?.enquiry_date).format("MMM DD, YYYY"):""}
-                    </p>
-                    <p className="text-muted mb-2" style={{ fontSize: "0.85rem" }}>
-                      Order: {enquiry.order_code}
-                    </p>
-                    <div className={getStatusBadge(enquiry.status)}>{enquiry.status}</div>
+          {filteredEnquiries.length > 0 ? (
+            filteredEnquiries.map((enquiry, index) => (
+              <div className="col-6 col-md-4 col-lg-3 col-xl-2 mb-4 d-flex" key={index}>
+                <Link
+                  to={`${process.env.PUBLIC_URL}/enquirydetails/${enquiry.enquiry_id}`}
+                  className="text-decoration-none flex-fill"
+                >
+                  <div className="card h-100 enquiry-card">
+                    <div className="card-body text-center">
+                      <h6 className="card-title fw-bold text-primary">{enquiry.enquiry_code}</h6>
+                      <p className="text-muted mb-1" style={{ fontSize: "0.85rem" }}>
+                        {enquiry.enquiry_date
+                          ? moment(enquiry.enquiry_date).format("MMM DD, YYYY")
+                          : ""}
+                      </p>
+                      <p className="text-muted mb-2" style={{ fontSize: "0.85rem" }}>
+                        Order: {enquiry.order_code || "N/A"}
+                      </p>
+                      <div className={getStatusBadge(enquiry.status)}>{enquiry.status}</div>
+                    </div>
                   </div>
-                </div>
-              </Link>
-            </div>
-          ))}
+                </Link>
+              </div>
+            ))
+          ) : (
+            <p className="text-center text-muted">No enquiries found.</p>
+          )}
         </div>
       </div>
 
@@ -116,16 +127,46 @@ const EnquiryHistory = () => {
           min-height: 120px;
         }
         .status-badge {
-          font-size: 1.1rem;
-          padding: 8px 16px;
+          font-size: 0.95rem;
+          padding: 6px 12px;
           border-radius: 20px;
           display: inline-block;
           margin-top: 8px;
         }
-        .small-card {
+        .enquiry-card {
           border-radius: 12px;
-          min-height: 160px;
+          min-height: 170px;
           padding: 5px;
+          box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Shadow for cards */
+          transition: transform 0.2s ease-in-out;
+        }
+        .enquiry-card:hover {
+          transform: translateY(-5px);
+          box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+        }
+        .form-control {
+          font-size: 16px;
+        }
+          status-approved {
+    background-color: #124157; 
+    color: white;
+  }
+  .status-rejected {
+    background-color:rgb(50, 161, 213); 
+    color: white;
+  }
+  .status-pending {
+    background-color:rgb(122, 204, 226); 
+    color: white;
+  }
+  .status-default {
+    background-color:rgb(20, 65, 104);
+    color: white;
+  }
+        @media (max-width: 576px) {
+          .form-control {
+            width: 100% !important;
+          }
         }
       `}</style>
     </LayoutOne>

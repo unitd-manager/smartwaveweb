@@ -8,6 +8,7 @@ import moment from "moment";
 import { useToasts } from "react-toast-notifications";
 import { Alert, Badge, Button, Card, Col, Row } from "reactstrap";
 import { Form } from "react-bootstrap";
+import ProductsLinkedModal from "../../components/EnquiryProductsLinked";
 
 const EnquiryDetails = () => {
   const user = JSON.parse(localStorage.getItem("user"));
@@ -16,6 +17,7 @@ const EnquiryDetails = () => {
   const [receiptFile, setReceiptFile] = useState(null);
   const [receiptUrl, setReceiptUrl] = useState("");
   const [addressList, setAddressList] = useState([]);
+  const [productsLinked, setProductsLinked] = useState([]);
   const [selectedAddress, setSelectedAddress] = useState(null); // State for selected address
   const[uploaded, setUploaded]=useState(null);
 
@@ -24,6 +26,19 @@ const EnquiryDetails = () => {
   const { id } = useParams();
   const history = useHistory();
  const { addToast } = useToasts();
+
+ const profileAddress = {
+  customer_address_id: "profile", // Unique id for selection
+  shipper_name: user.first_name + ' ' + user.last_name,
+  address_flat: user.address1,
+  address_street: user.address_area,
+  address_city: user.address_city,
+  address_town: user.address_town,
+  address_po_code: user.address_po_code,
+  address_state: user.address_state,
+  address_country: user.address_country,
+
+};
   useEffect(() => {
 
     api
@@ -34,7 +49,14 @@ const EnquiryDetails = () => {
       })
       .catch((err) => console.log(err));
 
-     
+      api
+      .post(`/enquiry/getEnquiryProductsByEnquiryId`, { enquiry_id: id })
+      .then((res) => {
+        setProductsLinked(res.data.data);
+        
+      })
+      .catch((err) => console.log(err));
+
     api.post('/file/getListOfFiles', { record_id: id, room_name: 'PaymentReceipt' }).then((res) => {
       setReceiptUrl(res.data);
     });
@@ -59,6 +81,7 @@ if(user){
   
   }, [id]);
 
+  const combinedAddressList = [profileAddress, ...addressList];
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
@@ -115,9 +138,9 @@ console.log('receiptUrl',receiptUrl)
     enquiries.order_code = code;
     enquiries.shipping_address = selectedAddressString;
       api
-        .post('/enquiry/updateOrderCode', enquiries)
+        .post('/enquiry/updateShipping', enquiries)
         .then(() => {
-          addToast("Order updated Successfully", {
+          addToast("Address updated Successfully", {
             appearance: "success",
             autoDismiss: true,
           })
@@ -262,44 +285,52 @@ console.log('receiptUrl',receiptUrl)
 
   <h5 className="mb-4 mt-4 fw-bold">Select Address</h5>
 
-  {addressList.map((addr) => (<Card
-  key={addr.customer_address_id}
-  className={`mb-3 p-3 shadow-sm ${selectedAddress === addr.customer_address_id ? 'border-primary' : ''}`}
-  style={{ borderRadius: '15px' }}
->
-  <Row>
-    <Col xs={10}>
-      <div className="d-flex align-items-center mb-2">
-        <Badge bg="secondary" className="me-2"><h6 className="m-0 fw-bold text-white">{addr.shipper_name || "Address"}</h6></Badge>        
-      </div>
-      <div className="text-muted small">
-        {addr.address_flat}, {addr.address_street}<br />
-        {addr.address_city}, {addr.address_town}<br />
-        {addr.address_state}, {addr.address_country} - {addr.address_po_code}
-      </div>
-      {addr.phone && (
-        <p className="m-0 text-muted small mt-1"><b>Phone:</b> {addr.phone}</p>
-      )}
-    </Col>
-    <Col xs={2} className="text-end">
-      <Form.Check
-        type="radio"
-        name="addressSelect"
-        checked={selectedAddress === addr.customer_address_id}
-        onChange={() => handleSelect(addr.customer_address_id)}
-        style={{ transform: 'scale(0.5)' }}
-      />
-    </Col>
-  </Row>
-</Card>
+  {combinedAddressList.map((addr) => (
+  <Card
+    key={addr.customer_address_id}
+    className={`mb-3 p-3 shadow-sm ${selectedAddress === addr.customer_address_id ? 'border-primary' : ''}`}
+    style={{ borderRadius: '15px' }}
+  >
+    <Row>
+      <Col xs={10}>
+        <div className="d-flex align-items-center mb-2">
+          <Badge bg="secondary" className="me-2">
+            {/* <h6 className="m-0 fw-bold text-white">{addr.shipper_name || "Address"}</h6> */}
+            <h6 className="m-0 fw-bold text-white">
+  {addr.customer_address_id === 'profile' ? 'Profile Address' : (addr.shipper_name || 'Address')}
+</h6>
 
-  ))}
+          </Badge>        
+        </div>
+        <div className="text-muted small">
+          {addr.address_flat}, {addr.address_street}<br />
+          {addr.address_city}, {addr.address_town} - {addr.address_po_code}<br />
+          {addr.address_state}, {addr.address_country}
+        </div>
+        {addr.phone && (
+          <p className="m-0 text-muted small mt-1"><b>Phone:</b> {addr.phone}</p>
+        )}
+      </Col>
+      <Col xs={2} className="text-end">
+        <Form.Check
+          type="radio"
+          name="addressSelect"
+          checked={selectedAddress === addr.customer_address_id}
+          onChange={() => handleSelect(addr.customer_address_id)}
+          style={{ transform: 'scale(0.5)' }}
+        />
+      </Col>
+    </Row>
+  </Card>
+))}
+
 <button className="btn btn-primary mt-2" onClick={()=>generateOrder()}>
-           Generate Order
+          Save Address
           </button>
  
 </div>
 
+{productsLinked && <ProductsLinkedModal productsLinked={productsLinked}/>}
         {/* Stylish File Upload Section */}
         <h6 className="fw-bold mt-4">Payment Receipt</h6>
         <div className="card p-4 text-center border-dashed mb-3">
