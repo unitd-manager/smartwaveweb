@@ -1,11 +1,12 @@
 import PropTypes from "prop-types";
 import React, { useState } from "react";
 import { setActiveSort } from "../../helpers/product";
-import { Link } from "react-router-dom/cjs/react-router-dom.min";
+import { Link, useHistory } from "react-router-dom/cjs/react-router-dom.min";
 
 const ShopCategories = ({ categories, selectedCategories,setSelectedCategories,getSortParams }) => {
   // const [selectedCategories, setSelectedCategories] = useState([]);
 console.log('selectedCategories',selectedCategories);
+const history=useHistory();
   const handleCategorySelection = (categoryId) => {
     let updatedCategories = [...selectedCategories];
 
@@ -55,6 +56,7 @@ console.log('selectedCategories',selectedCategories);
                   onClick={e => {
                     handleCategorySelection("");
                     setActiveSort(e);
+                    history.push('/shop')
                   }}
                   className={selectedCategories.length === 0 ? "active" : ""}
                 >

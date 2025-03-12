@@ -71,7 +71,7 @@ const EnquiryHistory = () => {
             <h5 style={{ color: "white" }}>
               <FaClock />{" "}
               {
-                parseFloat(enquiries.filter((e) => e.order_id && e.order_id !== "").length
+                parseFloat(enquiries.filter((e) => e.order_code && e.order_code !== "").length
               )}
             </h5>
           </div>

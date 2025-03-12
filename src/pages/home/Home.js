@@ -213,7 +213,7 @@ const Home = () => {
             products={offerProducts}
           />
         )}
-      <DiscountModal/>
+      {/* <DiscountModal/> */}
    
         {/* blog featured */}
         {/* <BlogFeatured spaceBottomClass="pb-55" /> */}
