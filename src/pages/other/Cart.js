@@ -94,6 +94,7 @@ const Cart = ({ location }) => {
         title : 'Enquiry from ' + user.first_name,      
         enquiry_code: code,
         creation_date : new Date().toISOString().split('T')[0],
+        created_by: user.first_name,
       };
       api
         .post("/enquiry/insertEnquiry", enquiryDetails)
