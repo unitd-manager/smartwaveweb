@@ -88,12 +88,12 @@ const Cart = ({ location }) => {
     if (user) {
       const enquiryDetails = {
         contact_id : user.contact_id,
-        enquiry_date : new Date().toISOString(),
+        enquiry_date : new Date(),
         enquiry_type : 'Enquiry and order for Retail products.',
         status : 'New',
         title : 'Enquiry from ' + user.first_name,      
         enquiry_code: code,
-        creation_date : new Date().toISOString(),
+        creation_date : new Date().toISOString().split('T')[0],
       };
       api
         .post("/enquiry/insertEnquiry", enquiryDetails)

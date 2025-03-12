@@ -403,7 +403,7 @@ const MyAccount = ({ location }) => {
                                 </div>
                                 <div className="col-lg-6 col-md-6">
                                   <div className="billing-info">
-                                    <label>Country Code</label>
+                                    <label>Country</label>
                                     <input
                                       type="text"
                                       name="address_country_code"
@@ -419,7 +419,7 @@ const MyAccount = ({ location }) => {
                               <div className="row">
                                 <div className="col-lg-6 col-md-6">
                                   <div className="billing-info">
-                                    <label>PO Code</label>
+                                    <label>Pin Code</label>
                                     <input
                                       type="text"
                                       name="address_po_code"
