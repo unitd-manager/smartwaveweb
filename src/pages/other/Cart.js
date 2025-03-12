@@ -88,7 +88,7 @@ const Cart = ({ location }) => {
     if (user) {
       const enquiryDetails = {
         contact_id : user.contact_id,
-        enquiry_date : new Date(),
+        enquiry_date : new Date().toISOString().split('T')[0],
         enquiry_type : 'Enquiry and order for Retail products.',
         status : 'New',
         title : 'Enquiry from ' + user.first_name,      
