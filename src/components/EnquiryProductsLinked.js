@@ -13,9 +13,9 @@ const ProductsLinkedModal = ({productsLinked}) => {
   return (
     <>
       {/* Trigger Link/Button */}
-      <span onClick={handleShow} className="product-link">
-        View Products Linked
-      </span>
+      <span onClick={handleShow} className="product-link" style={{ fontSize: '18px', fontWeight: '500', cursor: 'pointer' }}>
+  View Products Linked
+</span>
 
       {/* Modal */}
       <Modal show={show} onHide={handleClose} centered size="lg" dialogClassName="custom-modal">

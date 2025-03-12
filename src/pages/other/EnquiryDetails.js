@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { FaArrowLeft, FaUpload, FaWhatsapp, FaFileDownload, FaFilePdf } from "react-icons/fa";
+import { FaArrowLeft, FaUpload, FaWhatsapp, FaFileDownload, FaFilePdf, FaTrash } from "react-icons/fa";
 import { useHistory, useParams } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import LayoutOne from "../../layouts/Layout";
@@ -9,11 +9,13 @@ import { useToasts } from "react-toast-notifications";
 import { Alert, Badge, Button, Card, Col, Row } from "reactstrap";
 import { Form } from "react-bootstrap";
 import ProductsLinkedModal from "../../components/EnquiryProductsLinked";
+import Swal from "sweetalert2";
 
 const EnquiryDetails = () => {
   const user = JSON.parse(localStorage.getItem("user"));
   const [enquiries, setEnquiries] = useState({});
   const [tracking, setTracking] = useState({});
+  const [profile, setProfile] = useState({});
   const [receiptFile, setReceiptFile] = useState(null);
   const [receiptUrl, setReceiptUrl] = useState("");
   const [addressList, setAddressList] = useState([]);
@@ -29,18 +31,25 @@ const EnquiryDetails = () => {
 
  const profileAddress = {
   customer_address_id: "profile", // Unique id for selection
-  shipper_name: user.first_name + ' ' + user.last_name,
-  address_flat: user.address1,
-  address_street: user.address_area,
-  address_city: user.address_city,
-  address_town: user.address_town,
-  address_po_code: user.address_po_code,
-  address_state: user.address_state,
-  address_country: user.address_country,
+  shipper_name: profile.first_name + ' ' + (profile.last_name || ''),
+  address_flat: profile.address2 || '',
+  address_street: profile.address_area || '',
+  address_city: profile.address_city || '',
+  address_town: profile.address_town || '',
+  address_po_code: profile.address_po_code || '',
+  address_state: profile.address_state || '',
+  address_country: profile.address_country || '',
 
 };
+console.log('profile',profile);
   useEffect(() => {
-
+    api
+    .post(`/contact/getContactsById`, { contact_id: user.contact_id })
+    .then((res) => {
+      setProfile(res.data.data[0]);
+      
+    })
+    .catch((err) => console.log(err));
     api
       .post(`/enquiry/getEnquiryById`, { enquiry_id: id })
       .then((res) => {
@@ -80,6 +89,36 @@ if(user){
 
   
   }, [id]);
+
+  const deleteFile = (fileId) => {
+    Swal.fire({
+      title: `Are you sure?`,
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#124157',
+      cancelButtonColor: '#grey',
+      confirmButtonText: 'Yes, delete it!',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        api
+          .post('/file/deleteFile', { media_id: fileId })
+          .then((res) => {
+            console.log(res);
+            Swal.fire('Deleted!', 'Media has been deleted.', 'success');
+            //setViewLineModal(false)
+
+            window.location.reload();
+          })
+          .catch(() => {
+            addToast("Unable to Upload file", {
+              appearance: "success",
+              autoDismiss: true,
+            })
+          });
+      }
+    });
+  };
 
   const combinedAddressList = [profileAddress, ...addressList];
 
@@ -133,9 +172,8 @@ console.log('receiptUrl',receiptUrl)
               })
   };
 
-  const updateOrder = (code) => {
+  const generateOrder = () => {
     enquiries.modification_date = moment().format('DD-MM-YYYY h:mm:ss a');
-    enquiries.order_code = code;
     enquiries.shipping_address = selectedAddressString;
       api
         .post('/enquiry/updateShipping', enquiries)
@@ -158,24 +196,11 @@ console.log('receiptUrl',receiptUrl)
    
   };
 
-  const generateOrder = async () => {
-    api
-    .post('/commonApi/getCodeValue', { type: 'orders' })
-    .then((res) => {
-      updateOrder(res.data.data);
-    })
-    .catch(() => {
-      updateOrder('');
-    });
-};
-
-
-
 
   const handleSelect = (id) => {
     setSelectedAddress(id);
   
-    const selectedAddr = addressList.find(addr => addr.customer_address_id === id);
+    const selectedAddr = combinedAddressList.find(addr => addr.customer_address_id === id);
   
     if (selectedAddr) {
       // Concatenate address fields
@@ -189,12 +214,20 @@ console.log('receiptUrl',receiptUrl)
   return (
     <LayoutOne headerTop="visible">
       <div className="container mt-4">
-        <div className="d-flex align-items-center mb-3">
-          <button className="btn btn-outline-primary me-3" onClick={() => history.goBack()}>
-            <FaArrowLeft className="me-2" /> Back
-          </button>
-          <h4 className="m-0 ml-3">Enquiry Details</h4>
-        </div>
+      <div className="d-flex align-items-center justify-content-between mb-3 w-100">
+  <div className="d-flex align-items-center">
+    <button className="btn btn-outline-primary me-3" onClick={() => history.goBack()}>
+      <FaArrowLeft className="me-2" /> Back
+    </button>
+    <h4 className="m-0">Enquiry Details</h4>
+  </div>
+  <div>
+    {productsLinked && <ProductsLinkedModal productsLinked={productsLinked} />}
+  </div>
+</div>
+
+
+
 {/* 
         <div className="card p-4 shadow-sm rounded-3">
           <h6 className="fw-bold">
@@ -285,7 +318,7 @@ console.log('receiptUrl',receiptUrl)
 
   <h5 className="mb-4 mt-4 fw-bold">Select Address</h5>
 
-  {combinedAddressList.map((addr) => (
+  {combinedAddressList?.map((addr) => (
   <Card
     key={addr.customer_address_id}
     className={`mb-3 p-3 shadow-sm ${selectedAddress === addr.customer_address_id ? 'border-primary' : ''}`}
@@ -330,7 +363,7 @@ console.log('receiptUrl',receiptUrl)
  
 </div>
 
-{productsLinked && <ProductsLinkedModal productsLinked={productsLinked}/>}
+
         {/* Stylish File Upload Section */}
         <h6 className="fw-bold mt-4">Payment Receipt</h6>
         <div className="card p-4 text-center border-dashed mb-3">
@@ -369,17 +402,30 @@ console.log('receiptUrl',receiptUrl)
 
         {/* Show Uploaded Receipt */}
         {receiptUrl && receiptUrl.length > 0 && receiptUrl.map((res, index) => (
-  <p className="text-primary" key={index}>
+  <div
+    key={index}
+    className="d-flex justify-content-between align-items-center my-2"
+  >
     <a
-       href={`https://smartwave.unitdtechnologies.com:2014/category/download/${res.name}`}
+      href={`https://smartwave.unitdtechnologies.com:2014/category/download/${res.name}`}
       target="_blank"
       rel="noopener noreferrer"
-      className="text-decoration-none d-flex align-items-center"
+      className="text-decoration-none d-flex align-items-center text-primary"
     >
-      <FaFileDownload className="me-2" />{res.name}
+      <FaFileDownload className="me-2" />
+      {res.name}
     </a>
-  </p>
+    
+    <button
+      type="button"
+      className="btn btn-sm btn-light shadow-none"
+      onClick={() => deleteFile(res.media_id)}
+    >
+      <FaTrash />
+    </button>
+  </div>
 ))}
+
 
         <Card className="p-4 shadow-sm rounded-3 mb-4">
           {/* Enquiry Code & Status */}
