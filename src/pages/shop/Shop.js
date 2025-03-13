@@ -34,12 +34,11 @@ const Shop = ({}) => {
   const history = useHistory();
 
   console.log("search", searchQuery);
-
   useEffect(() => {
     const urlSearchParams = new URLSearchParams(location.search);
     const query = urlSearchParams.get("search");
     const cate = urlSearchParams.get("category");
-
+  
     if (query) {
       setSearchQuery(query);
       api
@@ -51,7 +50,9 @@ const Shop = ({}) => {
           console.log(err);
         });
     } else if (cate) {
-      getSortParams("category", cate);
+      // If category exists, set it as selected category
+      setSelectedCategories([cate]); // <-- this line adds category to selectedCategories
+      getSortParams("category", cate, [cate]); // Pass to getSortParams as well
     } else {
       api
         .get("/product/getAllProducts")
@@ -68,6 +69,7 @@ const Shop = ({}) => {
     }
     console.log("searchquery", query);
   }, [location]);
+  
 
   const pageLimit = 15;
   const { pathname } = location;
@@ -76,14 +78,15 @@ const Shop = ({}) => {
     setLayout(layout);
   };
 
-  const getSortParams = (sortType, sortValue,selectedCategories) => {
-    console.log('selectedCategories getparams',selectedCategories);
+  const getSortParams = (sortType, sortValue, selectedCats = selectedCategories) => {
+    console.log('selectedCategories getparams', selectedCats);
     setSortType(sortType);
     setSortValue(sortValue);
-    setSelectedCategories(selectedCategories);
+    setSelectedCategories(selectedCats);
     console.log("sortType", sortType);
     console.log("sortvalue", sortValue);
   };
+  
 
   const getFilterSortParams = (sortType, sortValue) => {
     setFilterSortType(sortType);
@@ -141,6 +144,8 @@ console.log('selectedCategories',selectedCategories);
               <div className="col-lg-3 order-1 order-lg-1">
                 {/* shop sidebar */}
                 <ShopSidebar
+                selectedCategories={selectedCategories}
+                setSelectedCategories={setSelectedCategories}
                   products={allProducts}
                   getSortParams={getSortParams}
                   handleSearchSubmit={handleSearchSubmit}

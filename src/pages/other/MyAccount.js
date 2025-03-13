@@ -190,93 +190,6 @@ const MyAccount = ({ location }) => {
                               <h4>My Account Information</h4>
                               <h5>Your Personal Details</h5>
                             </div>
-                            <MDBContainer>
-                              <MDBRow>
-                                <MDBCol>
-                                  {/* <MDBCard> */}
-                                  {/* <div
-                                      className="rounded-top text-white d-flex flex-row"
-                                      style={{
-                                        backgroundColor: "#000",
-                                        height: "200px",
-                                      }}
-                                    > */}
-                                  {imageUrl ? (
-                                    <div
-                                      className="ms-4 mt-5 d-flex flex-column"
-                                      style={{ width: "100px" }}
-                                    >
-                                      <MDBCardImage
-                                        src={imageUrl}
-                                        alt="Profile Image"
-                                        className="mt-2 mb-2 img-thumbnail"
-                                        fluid
-                                        style={{ width: "150px", zIndex: "1" }}
-                                      />
-                                      <MDBBtn
-                                        outline
-                                        color="dark"
-                                        style={{
-                                          height: "36px",
-                                          overflow: "visible",
-                                        }}
-                                        onClick={() => {
-                                          dataForPicture();
-                                          setAttachmentModal(true);
-                                        }}
-                                      >
-                                        Edit
-                                      </MDBBtn>
-                                      <PictureAttachmentModalV3
-                                        moduleId={pictureData.contact_id}
-                                        roomName="profile"
-                                        altTagData="account Data"
-                                        desc="Account Data"
-                                        modelType={pictureData.modelType}
-                                        attachmentModal={attachmentModal}
-                                        setAttachmentModal={() => {
-                                          setAttachmentModal(false);
-                                          reloadPage();
-                                        }}
-                                      />
-                                    </div>
-                                  ) : (
-                                    <div
-                                      className="ms-4 mt-5 d-flex flex-column"
-                                      style={{ width: "80px" }}
-                                    >
-                                      <MDBBtn
-                                        outline
-                                        color="dark"
-                                        style={{
-                                          height: "36px",
-                                          overflow: "visible",
-                                        }}
-                                        onClick={() => {
-                                          dataForPicture();
-                                          setAttachmentModal(true);
-                                        }}
-                                      >
-                                        Add 
-                                      </MDBBtn>
-                                      <PictureAttachmentModalV2
-                                        moduleId={pictureData.contact_id}
-                                        roomName="profile"
-                                        altTagData="account Data"
-                                        desc="Account Data"
-                                        modelType={pictureData.modelType}
-                                        attachmentModal={attachmentModal}
-                                        setAttachmentModal={() => {
-                                          setAttachmentModal(false);
-                                          reloadPage();
-                                        }}
-                                      />
-                                    </div>
-                                  )}
-                          
-                                </MDBCol>
-                              </MDBRow>
-                            </MDBContainer>
                             <div className="row mobile-adjust">
   {/* First Name Field */}
   <div className="col-12 col-md-6">
@@ -352,7 +265,7 @@ const MyAccount = ({ location }) => {
 <div className="billing-back-btn">
   <div className="billing-btn">
     <button type="submit" onClick={updateUserData}>
-      Continue
+      Save
     </button>
   </div>
 </div>
@@ -405,7 +318,7 @@ const MyAccount = ({ location }) => {
                                   type="submit"
                                   onClick={updateUserPassword}
                                 >
-                                  Continue
+                                  Save
                                 </button>
                               </div>
                             </div>
@@ -490,7 +403,7 @@ const MyAccount = ({ location }) => {
                                 </div>
                                 <div className="col-lg-6 col-md-6">
                                   <div className="billing-info">
-                                    <label>Country Code</label>
+                                    <label>Country</label>
                                     <input
                                       type="text"
                                       name="address_country_code"
@@ -506,7 +419,7 @@ const MyAccount = ({ location }) => {
                               <div className="row">
                                 <div className="col-lg-6 col-md-6">
                                   <div className="billing-info">
-                                    <label>PO Code</label>
+                                    <label>Pin Code</label>
                                     <input
                                       type="text"
                                       name="address_po_code"
@@ -525,7 +438,7 @@ const MyAccount = ({ location }) => {
                                   type="submit"
                                   onClick={updateUserAddress}
                                 >
-                                  Continue
+                                  Save
                                 </button>
                               </div>
                             </div>

@@ -246,12 +246,12 @@
         box-shadow: 0 0 12px 0.8px rgba(0, 0, 0, 0.1);
         &:hover {
           color: #fff;
-          background-color: $theme-color;
+          background-color: #1fb0c1;
         }
       }
       a.active {
         color: #fff;
-        background-color: $theme-color;
+        background-color: #1fb0c1;
         box-shadow: none;
         &:hover {
           background-color: #333;
@@ -266,15 +266,15 @@
         box-shadow: none;
         &:hover {
           color: #fff;
-          background-color: $theme-color;
+          background-color: #1fb0c1;
         }
       }
 
       &.page-item {
         &.active {
           .page-link {
-            border-color: $theme-color;
-            background-color: $theme-color;
+            border-color: #1fb0c1;
+            background-color: #1fb0c1;
             box-shadow: 0 0 12px 0.8px rgba(0, 0, 0, 0.1) !important;
             &:focus {
               box-shadow: none;

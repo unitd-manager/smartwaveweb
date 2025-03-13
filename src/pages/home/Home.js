@@ -14,6 +14,7 @@ import api from "../../constants/api";
 import HeroSliderNine from "../../wrappers/hero-slider/HeroSliderNine";
 import TopBrands from "../../components/TopBrands";
 import FeaturesSection from "../../components/FeaturesSection";
+import DiscountModal from "../../components/DiscountModal";
 
 const Home = () => {
   const slideInterval = 3000;
@@ -212,7 +213,7 @@ const Home = () => {
             products={offerProducts}
           />
         )}
-      
+      {/* <DiscountModal/> */}
    
         {/* blog featured */}
         {/* <BlogFeatured spaceBottomClass="pb-55" /> */}

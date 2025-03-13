@@ -261,7 +261,7 @@
   // padding: 0px;
   // margin: 10px;
   width: 15%;
-  background: #8e44ad;
+  background: #0e97a7;
   color: #fff;
   font-weight: bold;
 }
@@ -1526,10 +1526,10 @@
         border: none;
         border-radius: 50px;
         background: none;
-        background-color: $theme-color;
+        background-color: #1fb0c1;
         &:hover,
         &.active {
-          background-color: #fa6bff;
+          background-color: #7ebee9;
         }
       }
       &.product-action-2-red {
@@ -2012,7 +2012,7 @@
           border: none;
           border-radius: 50px;
           background: none;
-          background-color: #a749ff;
+          background-color: #1fb0c1;
           &:hover,
           &.active {
             background-color: #fa6bff;
@@ -2380,7 +2380,7 @@
     text-align: center;
 
     opacity: 1;
-    background: none repeat scroll 0 0 #a749ff;
+    background: none repeat scroll 0 0 #1fb0c1;
     .pro-same-action {
       margin: 0 2px;
       a,
