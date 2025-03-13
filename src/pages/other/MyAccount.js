@@ -51,6 +51,27 @@ const MyAccount = ({ location }) => {
 
   const updateUserData = () => {
     userData.contact_id = user.contact_id;
+    if (!userData.email || userData.email.trim() === '') {
+      addToast("Please enter the email", {
+        appearance: "warning",
+        autoDismiss: true,
+      });
+      return;
+    }
+    if (!userData.first_name || userData.first_name.trim() === '') {
+      addToast("Please enter the first name", {
+        appearance: "warning",
+        autoDismiss: true,
+      });
+      return;
+    }
+    if (!userData.mobile || userData.mobile.trim() === '') {
+      addToast("Please enter the mobile", {
+        appearance: "warning",
+        autoDismiss: true,
+      });
+      return;
+    }
     api
       .post("/contact/editContactData", userData)
       .then((res) => {
@@ -70,6 +91,22 @@ const MyAccount = ({ location }) => {
   };
   const updateUserPassword = () => {
     userData.contact_id = user.contact_id;
+    if (!userData.pass_word || userData.pass_word.trim() === '') {
+      addToast("Please enter the password", {
+        appearance: "warning",
+        autoDismiss: true,
+      });
+      return;
+    }
+
+    if (!userData.confirm_password || userData.confirm_password.trim() === '') {
+      addToast("Please enter the confirm password", {
+        appearance: "warning",
+        autoDismiss: true,
+      });
+      return;
+    }
+
     api
       .post("/contact/editContactPassword", userData)
       .then((res) => {
@@ -89,6 +126,48 @@ const MyAccount = ({ location }) => {
   };
   const updateUserAddress = () => {
     userData.contact_id = user.contact_id;
+    if (!userData.address1 || userData.address1.trim() === '') {
+      addToast("Please enter the address 1", {
+        appearance: "warning",
+        autoDismiss: true,
+      });
+      return;
+    }
+    if (!userData.address2 || userData.address2.trim() === '') {
+      addToast("Please enter the address 2", {
+        appearance: "warning",
+        autoDismiss: true,
+      });
+      return;
+    }
+    if (!userData.address_city || userData.address_city.trim() === '') {
+      addToast("Please enter the city", {
+        appearance: "warning",
+        autoDismiss: true,
+      });
+      return;
+    }
+    if (!userData.address_state || userData.address_state.trim() === '') {
+      addToast("Please enter the state", {
+        appearance: "warning",
+        autoDismiss: true,
+      });
+      return;
+    }
+    if (!userData.address_po_code || userData.address_po_code.trim() === '') {
+      addToast("Please enter the pin code", {
+        appearance: "warning",
+        autoDismiss: true,
+      });
+      return;
+    }
+    if (!userData.address_country_code || userData.address_country_code.trim() === '') {
+      addToast("Please enter the country", {
+        appearance: "warning",
+        autoDismiss: true,
+      });
+      return;
+    }
     api
       .post("/contact/editContactAddress", userData)
       .then((res) => {
@@ -191,85 +270,71 @@ const MyAccount = ({ location }) => {
                               <h5>Your Personal Details</h5>
                             </div>
                             <div className="row mobile-adjust">
-  {/* First Name Field */}
-  <div className="col-12 col-md-6">
-    <div className="billing-info">
-      <label>First Name</label>
-      <input
-        type="text"
-        name="first_name"
-        value={userData && userData.first_name}
-        onChange={handleUserData}
-        className="form-control"
-      />
-    </div>
-  </div>
+                              {/* First Name Field */}
+                              <div className="col-12 col-md-6">
+                                <div className="billing-info">
+                                  <label>First Name</label>
+                                  <input
+                                    type="text"
+                                    name="first_name"
+                                    value={userData && userData.first_name}
+                                    onChange={handleUserData}
+                                    className="form-control"
+                                  />
+                                </div>
+                              </div>
 
-  {/* Last Name Field */}
-  <div className="col-12 col-md-6">
-    <div className="billing-info">
-      <label>Last Name</label>
-      <input
-        type="text"
-        name="last_name"
-        value={userData && userData.last_name}
-        onChange={handleUserData}
-        className="form-control"
-      />
-    </div>
-  </div>
+                              {/* Last Name Field */}
+                              <div className="col-12 col-md-6">
+                                <div className="billing-info">
+                                  <label>Last Name</label>
+                                  <input
+                                    type="text"
+                                    name="last_name"
+                                    value={userData && userData.last_name}
+                                    onChange={handleUserData}
+                                    className="form-control"
+                                  />
+                                </div>
+                              </div>
 
-  {/* Email Address Field */}
-  <div className="col-12">
-    <div className="billing-info">
-      <label>Email Address</label>
-      <input
-        type="email"
-        name="email"
-        value={userData && userData.email}
-        onChange={handleUserData}
-        className="form-control"
-      />
-    </div>
-  </div>
+                              {/* Email Address Field */}
+                              <div className="col-6">
+                                <div className="billing-info">
+                                  <label>Email Address</label>
+                                  <input
+                                    type="email"
+                                    name="email"
+                                    value={userData && userData.email}
+                                    onChange={handleUserData}
+                                    className="form-control"
+                                  />
+                                </div>
+                              </div>
 
-  {/* Telephone Field */}
-  <div className="col-12 col-md-6">
-    <div className="billing-info">
-      <label>Telephone</label>
-      <input
-        type="text"
-        name="phone"
-        value={userData && userData.phone}
-        onChange={handleUserData}
-        className="form-control"
-      />
-    </div>
-  </div>
+                              {/* Telephone Field */}
+                              <div className="col-12 col-md-6">
+                                <div className="billing-info">
+                                  <label>Mobile</label>
+                                  <input
+                                    type="text"
+                                    name="mobile"
+                                    value={userData && userData.mobile}
+                                    onChange={handleUserData}
+                                    className="form-control"
+                                  />
+                                </div>
+                              </div>
+                            </div>
 
-  {/* Fax Field */}
-  <div className="col-12 col-md-6">
-    <div className="billing-info">
-      <label>Fax</label>
-      <input
-        type="text"
-        name="fax"
-        value={userData && userData.fax}
-        onChange={handleUserData}
-        className="form-control"
-      />
-    </div>
-  </div>
-</div>
-
-<div className="billing-back-btn">
-  <div className="billing-btn">
-    <button type="submit" onClick={updateUserData}>
-      Save
-    </button>
-  </div>
-</div>
- </div>
+                            <div className="billing-back-btn">
+                              <div className="billing-btn">
+                                <button type="submit" onClick={updateUserData}>
+                                  Save
+                                </button>
+                              </div>
+                            </div>
+                            </div>
                         </Card.Body>
                       </Accordion.Collapse>
                     </Card>
@@ -306,7 +371,7 @@ const MyAccount = ({ location }) => {
                                   <input
                                     type="password"
                                     name="confirm_password"
-                                    value={userData && userData.pass_word}
+                                    value={userData && userData.confirm_password}
                                     onChange={handleUserData}
                                   />
                                 </div>
