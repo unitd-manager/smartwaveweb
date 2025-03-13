@@ -5,7 +5,6 @@ import LayoutOne from "../../layouts/Layout";
 import api from "../../constants/api";
 import { getUser } from "../../common/user";
 import { Link } from "react-router-dom";
-import moment from "moment";
 
 // const enquiries = [
 //   { id: "#2025-0123", type: "E-ID", date: "Jan 15, 2025", status: "Approved" },
@@ -74,7 +73,6 @@ const EnquiryHistory = () => {
               <div className="card mb-3 mx-2 shadow-lg" style={{ width: "22rem", borderRadius: "15px", cursor: "pointer" }}>
                 <div className="card-body text-center">
                   <h6 className="card-title fw-bold text-primary">{enquiry.enquiry_code}</h6>
-                  <p className="text-muted">{moment(enquiry?.creation_date).format("MMM DD, YYYY")}</p>
                   <div className={getStatusBadge(enquiry.status)}>{enquiry.status}</div>
                 </div>
               </div>

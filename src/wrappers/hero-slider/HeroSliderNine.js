@@ -5,18 +5,42 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import HeroSliderNineSingle from "../../components/hero-slider/HeroSliderSingle.js";
 
+// Custom Arrow Components
+const NextArrow = ({ onClick }) => {
+  return (
+    <div
+      className="custom-arrow custom-next"
+      onClick={onClick}
+    >
+      →
+    </div>
+  );
+};
+
+const PrevArrow = ({ onClick }) => {
+  return (
+    <div
+      className="custom-arrow custom-prev"
+      onClick={onClick}
+    >
+      ←
+    </div>
+  );
+};
+
+
 const HeroSliderNine = ({ spaceLeftClass, spaceRightClass, sliderData }) => {
   const settings = {
-    dots: true,
+    dots: false,
     infinite: true,
-    speed: 5000,
+ 
     autoplay: true,
     autoplaySpeed: 5000,
     fade: true,
     slidesToShow: 1,
     slidesToScroll: 1,
-    nextArrow: <button className="slick-next">→</button>,
-    prevArrow: <button className="slick-prev">←</button>,
+    nextArrow: <NextArrow />,
+    prevArrow: <PrevArrow />,
   };
 
   return (
@@ -25,9 +49,7 @@ const HeroSliderNine = ({ spaceLeftClass, spaceRightClass, sliderData }) => {
         <Slider {...settings}>
           {sliderData &&
             sliderData.map((single, key) => (
-             
-                <HeroSliderNineSingle data={single} key={key} sliderClass="slick-slide" />
-             
+              <HeroSliderNineSingle data={single} key={key} sliderClass="slick-slide" />
             ))}
         </Slider>
       </div>

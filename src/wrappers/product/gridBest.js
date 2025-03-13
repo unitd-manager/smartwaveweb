@@ -39,7 +39,9 @@ const TabProductTwo = ({
                   <div className="col-md-6 col-lg-5 product-card">
                     <div className="product-item">
                       <div className="product-info">
+                         <Link to={process.env.PUBLIC_URL + "/product/" + product.product_id+"/"+formattedTitle}>
                         <h5 className="product-title">{product.title}</h5>
+                        </Link>
                         <p className="product-desc" dangerouslySetInnerHTML={{ 
   __html: product.product_description.split(" ").slice(0, 10).join(" ") + (product.product_description.split(" ").length > 10 ? "..." : "")
 }} />
@@ -88,11 +90,13 @@ const TabProductTwo = ({
             </div>
                       </div>
                       <div className="product-image">
+                      <Link to={process.env.PUBLIC_URL + "/product/" + product.product_id+"/"+formattedTitle}>
+
                         <img
                   className="hover-img"
                   src={`https://smartwaveadmin.unitdtechnologies.com/storage/uploads/${product.images}`}
                   alt={product.title}
-                />
+                /></Link>
                       </div>
                     </div>
                   </div>
