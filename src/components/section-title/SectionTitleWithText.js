@@ -1,21 +1,21 @@
 import PropTypes from "prop-types";
-import React, { useEffect, useState } from "react";
-import ReactHtmlParser from 'react-html-parser';
-import api from "../../constants/api";
+import React from "react";
+// import ReactHtmlParser from 'react-html-parser';
+// import api from "../../constants/api"; 
 
 const SectionTitleWithText = ({ spaceTopClass, spaceBottomClass }) => {
 
-  const [about, setAbout] = useState([])
+  // const [about, setAbout] = useState([])
 
-  const getAboutContent = () =>{
-    api.get('/content/getAboutUsCompany',{recordType:'Record'}).then(res=>{
-      setAbout(res.data.data)
-     })
-  }
+  // const getAboutContent = () =>{
+  //   api.get('/content/getAboutUsCompany').then(res=>{
+  //     setAbout(res.data.data)
+  //    })
+  // }
 
-  useEffect(() => {
-    getAboutContent(); 
-    }, [])
+  // useEffect(() => {
+  //   getAboutContent(); 
+  //   }, [])
 
   return (
     <div
@@ -27,7 +27,7 @@ const SectionTitleWithText = ({ spaceTopClass, spaceBottomClass }) => {
         <div className="welcome-content text-center">
           <h5>Who Are We</h5>
           <h1>Welcome To Smartwave</h1>
-          {about.map((data)=>{ 
+          {/* {about.map((data)=>{ 
    return(
     
         <div class="col-md-12 align-self-center pl-lg-4">
@@ -38,7 +38,7 @@ const SectionTitleWithText = ({ spaceTopClass, spaceBottomClass }) => {
       </div>
     
    )
-      })} 
+      })}  */}
         </div>
       </div>
     </div>

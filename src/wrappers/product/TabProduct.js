@@ -18,7 +18,7 @@ const TabProductTwo = ({ spaceBottomClass, newProducts }) => {
                   products={newProducts}
                   type="new"
                   limit={6}
-                  spaceBottomClass="mb-25"
+                  spaceBottomClass="p-25"
                 />
               </div>
             </Tab.Pane>

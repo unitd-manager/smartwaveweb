@@ -7,13 +7,13 @@ import ProductGridThree from "./ProductGrid";
 
 const TabProductTwo = ({ spaceBottomClass, mostPopularProducts }) => {
   return (
-    <div className={`product-area ${spaceBottomClass ? spaceBottomClass : ""}`}>
-      <div className="container">
+    <div className={`shop-top-bar mt-35 ml-30 ${spaceBottomClass ? spaceBottomClass : ""}`}>
+      <div className="shop-bottom-area mt-35">
         <SectionTitle titleText="Most Popular" positionClass="text-center" />
         <Tab.Container defaultActiveKey="saleItems">
           <Tab.Content>
             <Tab.Pane eventKey="saleItems">
-              <div className="row three-column">
+              <div className="row grid three-column">
                 <ProductGridThree
                   products={mostPopularProducts}
                   type="saleItems"

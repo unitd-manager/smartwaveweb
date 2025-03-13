@@ -64,9 +64,10 @@ const formattedTitle = product.title.replace(/\s+/g, '-');
         }`}
       >
         <div
-          className={`product-wrap-2 ${
+          className={`product-wrap ${
             spaceBottomClass ? spaceBottomClass : ""
           } ${colorClass ? colorClass : ""} `}
+          style={{ padding: "25px" }}
         >
           <div className="product-img">
             <Link to={process.env.PUBLIC_URL + "/product/" + product.product_id+"/"+formattedTitle}>
@@ -88,25 +89,33 @@ const formattedTitle = product.title.replace(/\s+/g, '-');
               )}
               
             </Link>
-            {product.discount_amount || product.latest ? (
-                <div className="product-img-bad">
-              <div className="product-img-badges">
-                {product.discount_percentage ? (
-                  <span className="pink">{product.discount_percentage}%</span>
-                ) : (
-                  ""
-                )}
-                {product.latest ? <span className="purple" ><Badge style={{position:'relative',top:'2px',right:'5px'}}></Badge></span> : ""}
-                {product.top_seller ? <span className="purple" ><Badge style={{position:'relative',top:'5px',right:'2px'}}></Badge></span> : ""}
-                {product.most_popular ? <span className="purple"><Badge style={{position:'relative',top:'5px',right:'2px'}}></Badge></span> : ""}
-              </div>
-              </div>
-             
-            ) : (
-              ""
-            )}
-
-            <div className="product-action-2">
+      
+            <div className="product-action">
+            <div class="pro-same-action pro-wishlist">  <button
+                className={wishlistItem !== undefined ? "active" : ""}
+                disabled={wishlistItem !== undefined}
+                title={
+                  wishlistItems.filter(
+                    wishlistItem => wishlistItem.product_id === product.product_id
+                  )[0]
+                    ? "Added to wishlist"
+                    : "Add to wishlist"
+                }
+                 onClick={() => {
+                                  const isInWishlist = wishlistItems.filter(
+                                    wishlistItem => wishlistItem.product_id === product.product_id
+                                  )[0];
+                                  console.log('wishlistitem',isInWishlist);
+                                  if(isInWishlist) {
+                                    dispatch(removeWishlistData(isInWishlist));
+                                    
+                                  } else {
+                                    onAddToWishlist(product);
+                                  }
+                                }} 
+              >
+                <i className="fa fa-heart-o" />
+              </button></div>
               {product.affiliateLink ? (
                 <a
                   href={product.affiliateLink}
@@ -125,6 +134,7 @@ const formattedTitle = product.title.replace(/\s+/g, '-');
                   <i className="fa fa-cog"></i>
                 </Link>
               ) : product.qty_in_stock && product.qty_in_stock > 0 ? (
+                <div class="pro-same-action pro-cart">
                 <button
                 onClick={ () => { 
                   if(cartItem?.qty>0){
@@ -133,11 +143,7 @@ const formattedTitle = product.title.replace(/\s+/g, '-');
                   onUpdateCart(product,addToast)
                 }else{
                   onAddToCart(product, addToast)}}}
-                  // className={
-                  //   cartItem !== undefined && cartItem.quantity > 0
-                  //     ? "active"
-                  //     : ""
-                  // }
+                
                   className={
                     product !== undefined && product.qt_in_stock > 0
                       ? "active"
@@ -151,31 +157,21 @@ const formattedTitle = product.title.replace(/\s+/g, '-');
                   {" "}
                   <i className="fa fa-shopping-cart"></i>{" "}
                 </button>
+                </div>
               ) : (
                 <button disabled className="active" title="Out of stock">
                   <i className="fa fa-shopping-cart"></i>
                 </button>
               )}
-
+            
+<div class="pro-same-action pro-quickview">
               <button onClick={() => setModalShow(true)} title="Quick View">
                 <i className="fa fa-eye"></i>
               </button>
-     
-              {/* <button
-                className={compareItem !== undefined ? "active" : ""}
-                disabled={compareItem !== undefined}
-                title={
-                  compareItem !== undefined
-                    ? "Added to compare"
-                    : "Add to compare"
-                }
-                onClick={() => {onAddToCompare(product,addToast)}}
-              >
-                <i className="fa fa-retweet"></i>
-              </button> */}
+     </div>
             </div>
           </div>
-          <div className="product-content-2">
+          <div className="product-content text-center">
             <div
               className={`title-price-wrap-2 ${
                 titlePriceClass ? titlePriceClass : ""
