@@ -58,6 +58,9 @@
     }
     .login-register-form {
       form {
+        .error {
+          color: red;
+        }
         input {
           background-color: transparent;
           border: 1px solid #ebebeb;

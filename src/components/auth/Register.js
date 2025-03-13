@@ -199,7 +199,8 @@ function Register() {
     <div className="login-form-container">
       <div className="login-register-form">
         <form>
-          <input
+        {firstNameError && <span className="error">{firstNameError}</span>}
+        <input
             type="text"
             name="first_name"
             placeholder="Firstname"
@@ -208,7 +209,7 @@ function Register() {
               setFirstName(e.target.value);
             }}
           />
-          {firstNameError && <span className="error">{firstNameError}</span>}
+          {lastNameError && <span className="error">{lastNameError}</span>}
           <input
             type="text"
             name="last_name"
@@ -218,7 +219,6 @@ function Register() {
               setLastName(e.target.value);
             }}
           />
-          {lastNameError && <span className="error">{lastNameError}</span>}
           <input
             type="mobile"
             name="mobile"
@@ -228,6 +228,9 @@ function Register() {
               setSignupPassword(e.target.value);
             }}
           />
+          {signUpEmailError && (
+            <span className="error">{signUpEmailError}</span>
+          )}
           <input
             name="email"
             placeholder="Email"
@@ -237,9 +240,9 @@ function Register() {
               setSignupEmail(e.target.value);
             }}
           />
-          {signUpEmailError && (
-            <span className="error">{signUpEmailError}</span>
-          )}
+          {signupPasswordError && (
+            <span className="error">{signupPasswordError}</span>
+          )} 
           <input
             type="password"
             name="password"
@@ -249,9 +252,6 @@ function Register() {
               setSignupPassword(e.target.value);
             }}
           />
-          {signupPasswordError && (
-            <span className="error">{signupPasswordError}</span>
-          )} 
           <input
            type="hidden"
           name="otp_no"
