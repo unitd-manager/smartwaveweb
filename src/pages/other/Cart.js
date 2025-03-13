@@ -21,6 +21,7 @@ import {
 } from "../../redux/actions/cartItemActions";
 import imageBase from "../../constants/imageBase";
 import "../../assets/css/button.css";
+import Swal from "sweetalert2";
 
 const Cart = ({ location }) => {
   const { addToast } = useToasts();
@@ -210,13 +211,28 @@ api
   //   dispatch(clearCartData(user));
   // }, [dispatch, user]);
   const handleClearCart = useCallback(() => {
-    const confirmClear = window.confirm(
-      "Are you sure you want to clear the cart?"
-    );
-    if (confirmClear) {
-      dispatch(clearCartData(user));
-    }
-  }, []);
+    Swal.fire({
+      title: 'Are you sure?',
+      text: "Do you really want to clear the cart?",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, clear it!',
+      cancelButtonText: 'Cancel',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        dispatch(clearCartData(user));
+        Swal.fire({
+          title: 'Cleared!',
+          text: 'Your cart has been cleared.',
+          icon: 'success',
+          confirmButtonColor: '#3085d6',
+        });
+      }
+    });
+  }, [dispatch, user]);
+
 
   useEffect(() => {
     if (user) {
@@ -261,7 +277,7 @@ api
                       {cartItems?.map((item, index) => (
                         <tr key={index}>
                           <td className="product-thumbnail">
-                            <Link to={`/product/${item.product_id}`}>
+                            <Link to={`/product/${item.product_id}/${item.title}`}>
                               <img
                                 src={`${imageBase}${item.images[0]}`}
                                 alt={item.title}
@@ -307,23 +323,34 @@ api
                   <Link onClick={() => generateCode()} className="checkout-btn">
                   Submit Enquiry
                     </Link>
-                    <Link to={''}
-                      onClick={()=>handleClearCart}
+                    <button type="button"
+                      onClick={()=>handleClearCart()}
                       className="clear-btn"
                       style={{ backgroundColor: "red", color: "white" }}
                     >
                       Clear Cart
-                    </Link>
+                    </button>
                   </div>
                 </div>
               </Fragment>
             ) : (
-              <div className="item-empty-area text-center">
-                <i className="pe-7s-cart"></i>
-                <p>No items found in cart</p>
-                <Link to="/shop">Shop Now</Link>
-              </div>
-            )}
+              
+                          <div className="row">
+                            <div className="col-lg-12">
+                              <div className="item-empty-area text-center">
+                                <div className="item-empty-area__icon mb-30">
+                                <i className="pe-7s-cart"></i>
+                                </div>
+                                <div className="item-empty-area__text">
+                                  No items found in cart <br />{" "}
+                                  <Link to={process.env.PUBLIC_URL + "/shop"}>
+                                  Shop Now
+                                  </Link>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        )}
           </div>
         </div>
       </LayoutOne>

@@ -211,7 +211,10 @@ const formattedTitle = product.title.replace(/\s+/g, '-');
                                   }
                                 }} 
               >
-                <i className="fa fa-heart-o" />
+                <i className="fa fa-heart-o" style={{ color:  wishlistItems.filter(
+                    wishlistItem => wishlistItem.product_id === product.product_id
+                  )[0]
+                    ? '#96dbfc' : 'gray' }}/>
               </button>
             </div>
           </div>
