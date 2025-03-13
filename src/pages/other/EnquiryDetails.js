@@ -4,7 +4,6 @@ import { useHistory, useParams } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import LayoutOne from "../../layouts/Layout";
 import api from "../../constants/api";
-import moment from "moment";
 import { useToasts } from "react-toast-notifications";
 import { Alert, Badge, Button, Card, Col, Row } from "reactstrap";
 import { Form } from "react-bootstrap";
@@ -173,7 +172,6 @@ console.log('receiptUrl',receiptUrl)
   };
 
   const generateOrder = () => {
-    enquiries.modification_date = moment().format('DD-MM-YYYY h:mm:ss a');
     enquiries.shipping_address = selectedAddressString;
       api
         .post('/enquiry/updateShipping', enquiries)
@@ -301,9 +299,7 @@ console.log('receiptUrl',receiptUrl)
     <Col md={6}>
       <div>
         <p className="text-muted mb-1">Creation Date:</p>
-        <p className="fw-bold m-0">
-          {enquiries?.creation_date ? moment(enquiries.creation_date).format("MMM DD, YYYY") : 'N/A'}
-        </p>
+       
       </div>
     </Col>
 
