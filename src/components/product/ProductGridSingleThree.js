@@ -183,7 +183,36 @@ const formattedTitle = product.title.replace(/\s+/g, '-');
                 </Link>
               </h3>           
             </div>
-           
+            <div className="pro-wishlist-2">
+              <button
+                className={wishlistItem !== undefined ? "active" : ""}
+                disabled={wishlistItem !== undefined}
+                title={
+                  wishlistItems.filter(
+                    wishlistItem => wishlistItem.product_id === product.product_id
+                  )[0]
+                    ? "Added to wishlist"
+                    : "Add to wishlist"
+                }
+                 onClick={() => {
+                                  const isInWishlist = wishlistItems.filter(
+                                    wishlistItem => wishlistItem.product_id === product.product_id
+                                  )[0];
+                                  console.log('wishlistitem',isInWishlist);
+                                  if(isInWishlist) {
+                                    dispatch(removeWishlistData(isInWishlist));
+                                    
+                                  } else {
+                                    onAddToWishlist(product);
+                                  }
+                                }} 
+              >
+                <i className="fa fa-heart-o" style={{ color:  wishlistItems.filter(
+                    wishlistItem => wishlistItem.product_id === product.product_id
+                  )[0]
+                    ? '#96dbfc' : 'gray' }}/>
+              </button>
+            </div>
           </div>
         </div>
       </div>

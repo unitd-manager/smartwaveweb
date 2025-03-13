@@ -11,12 +11,15 @@ import ProductImageDescription from "../../wrappers/product/ProductImageDescript
 import { useParams } from "react-router-dom/cjs/react-router-dom";
 import api from "../../constants/api";
 import LottieComponent from "../../components/LottieComponent";
+import { getUser } from "../../common/user";
 
 const ProductDetail = ({ location, product }) => {
   const { pathname } = location;
   const { id,title } = useParams();
   const [foundProduct, setFoundProduct] = useState({});
   const [relatedProducts, setRelatedProducts] = useState([]);
+  const [orderedProducts, setOrderedProducts] = useState([]);
+  
   const [comments, setComments] = useState([]);
   const [productImages, setProductImages] = useState([]);
   // const foundProduct = getProductsBySlug(productData, slug);
@@ -49,6 +52,7 @@ const ProductDetail = ({ location, product }) => {
       });
   }, [id]);
   useEffect(() => {
+    const user=getUser();
     api
       .post("/comment/getcommentsByProductId", {
         record_id: id,
@@ -56,6 +60,17 @@ const ProductDetail = ({ location, product }) => {
       })
       .then((res) => {
         setComments(res.data.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+
+      api
+      .post("/enquiry/getEnqProdByContactId", {
+        contact_id: user?.contact_id
+      })
+      .then((res) => {
+        setOrderedProducts(res.data.data);
       })
       .catch((err) => {
         console.log(err);
@@ -100,6 +115,7 @@ const ProductDetail = ({ location, product }) => {
             <ProductDescriptionTab
               spaceBottomClass="pb-90"
               product={foundProduct}
+              orderedProducts={orderedProducts}
               comments={comments}
             />
             {/* related product slider */}

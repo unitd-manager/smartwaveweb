@@ -11,7 +11,7 @@ import Rating from "./sub-components/ProductRating";
 import api from "../../constants/api";
 import { Badge } from "reactstrap";
 import LoginModal from "../LoginModal";
-import { insertCartData,updateCartData } from "../../redux/actions/cartItemActions";
+import { fetchCartData, insertCartData,updateCartData } from "../../redux/actions/cartItemActions";
 import { insertWishlistData, removeWishlistData } from "../../redux/actions/wishlistItemActions";
 import { insertCompareData } from "../../redux/actions/compareItemActions";
 
@@ -30,7 +30,6 @@ const ProductDescriptionInfo = ({
   addToWishlist,
   addToCompare,
   comments,
-  insertCartData,
   updateCartData,
   insertWishlistData,
   insertCompareData
@@ -74,7 +73,13 @@ console.log('cartItemprop detail',cartItem);
   if(user){
   data.contact_id=user.contact_id
   data.qty=quantityCount
- insertCartData(data,addToast) 
+   dispatch(insertCartData(data, addToast)) 
+           .then(() => {
+             dispatch(fetchCartData(user));
+           })
+           .catch((error) => {
+             console.error('Failed to add to cart:', error);
+           });
 }
   else{
     addToast("Please Login", { appearance: "warning", autoDismiss: true })
@@ -330,24 +335,13 @@ const onAddToCompare = (data) => {
                                                                        }
                                                                      }} 
             >
-              <i className="pe-7s-like" />
+              <i className="pe-7s-like" style={{ color:  wishlistItems.filter(
+                    wishlistItem => wishlistItem.product_id === product.product_id
+                  )[0]
+                    ? '#96dbfc' : 'gray' }}/>
             </button>
           </div>
-          <div className="pro-details-compare">
-            <button
-              className={compareItem !== undefined ? "active" : ""}
-              disabled={compareItem !== undefined}
-              title={
-                compareItem !== undefined
-                  ? "Added to compare"
-                  : "Add to compare"
-              }
-              onClick={() => onAddToCompare(product, addToast)}
-            >
-              <i className="pe-7s-shuffle" />
-            </button>
-          </div>
-        </div>
+                 </div>
       )}
       {product.category ? (
         <div className="pro-details-meta">

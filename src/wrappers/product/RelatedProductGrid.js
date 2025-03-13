@@ -1,8 +1,8 @@
 import PropTypes from "prop-types";
 import React, { Fragment,useState,useEffect } from "react";
 import { useToasts } from "react-toast-notifications";
-import { connect } from "react-redux";
-import { insertCartData } from "../../redux/actions/cartItemActions";
+import { connect, useDispatch } from "react-redux";
+import { fetchCartData, insertCartData } from "../../redux/actions/cartItemActions";
 import { insertWishlistData } from "../../redux/actions/wishlistItemActions";
 import { addToCart } from "../../redux/actions/cartActions";
 import { addToWishlist } from "../../redux/actions/wishlistActions";
@@ -24,18 +24,24 @@ const RelatedProductGrid = ({
   spaceBottomClass,
   colorClass,
   titlePriceClass,
-  insertCartData,
   insertWishlistData,
   insertCompareData
   // addToast
 }) => {
   const [user, setUser] = useState();
 const {addToast}=useToasts();
+const dispatch=useDispatch();
   const onAddToCart = (data) => {
     if(user){
   
     data.contact_id=user.contact_id
-   insertCartData(data,addToast)
+     dispatch(insertCartData(data, addToast)) 
+             .then(() => {
+               dispatch(fetchCartData(user));
+             })
+             .catch((error) => {
+               console.error('Failed to add to cart:', error);
+             });
   }
   else{
     addToast("Please Login", { appearance: "warning", autoDismiss: true });

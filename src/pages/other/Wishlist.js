@@ -136,13 +136,7 @@ getWishlistItems(userInfo)
                             return (
                               <tr key={key}>
                                 <td className="product-thumbnail">
-                                  <Link
-                                    to={
-                                      process.env.PUBLIC_URL +
-                                      "/product/" +
-                                      wishlistItem.product_id
-                                    }
-                                  >
+                                <Link to={`/product/${wishlistItem.product_id}/${wishlistItem.title}`}>
                                     <img
                                       className="img-fluid"
                                       src={`${imageBase}${wishlistItem.images[0]}`}
@@ -152,13 +146,8 @@ getWishlistItems(userInfo)
                                 </td>
 
                                 <td className="product-name text-center">
-                                  <Link
-                                    to={
-                                      process.env.PUBLIC_URL +
-                                      "/product/" +
-                                      wishlistItem.product_id
-                                    }
-                                  >
+                                 
+                                        <Link to={`/product/${wishlistItem.product_id}/${wishlistItem.title}`}>
                                     {wishlistItem.title}
                                   </Link>
                                 </td>

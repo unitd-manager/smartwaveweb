@@ -2,7 +2,7 @@ import PropTypes from "prop-types";
 import React, { Fragment,useState,useEffect } from "react";
 import {v4 as uuid} from 'uuid';
 import { useToasts } from "react-toast-notifications";
-import { connect } from "react-redux";
+import { connect, useDispatch } from "react-redux";
 import { addToCart } from "../../redux/actions/cartActions";
 import { addToWishlist, deleteFromWishlist } from "../../redux/actions/wishlistActions";
 import { addToCompare } from "../../redux/actions/compareActions";
@@ -11,7 +11,7 @@ import api from "../../constants/api";
 import LoginModal from "../../components/LoginModal";
 import { useParams } from "react-router-dom";
 import { getUser } from "../../common/user";
-import { insertCartData,updateCartData } from "../../redux/actions/cartItemActions";
+import { fetchCartData, insertCartData,updateCartData } from "../../redux/actions/cartItemActions";
 import { insertWishlistData } from "../../redux/actions/wishlistItemActions";
 import { insertCompareData } from "../../redux/actions/compareItemActions";
 
@@ -37,6 +37,8 @@ const[loginModal,setLoginModal]=useState(false);
 const [sessionId, setSessionId] = useState('');
 const { id } = useParams();
 console.log('user',user)
+const dispatch=useDispatch();
+
   const onUpdateCart = (data) => {
     // if (avaiableQuantity === 0) {
     //   return;
@@ -54,19 +56,24 @@ console.log('user',user)
   };
 
   const onAddToCart = (data) => {
-   
-    if(user){
-      if(data.price){
-    data.contact_id=user.contact_id
-  
-    InsertToCart(data,addToast);}
+    if (user) {
+      if (data.price) {
+        data.contact_id = user.contact_id;
+
+        dispatch(insertCartData(data, addToast)) 
+          .then(() => {
+            dispatch(fetchCartData(user));
+          })
+          .catch((error) => {
+            console.error('Failed to add to cart:', error);
+          });
+      }
+    } else {
+      addToast("Please Login", { appearance: "warning", autoDismiss: true });
+      setLoginModal(true);
     }
-    else{
-      addToast("Please Login", { appearance: "warning", autoDismiss: true })
-      setLoginModal(true)
-    }
-   
   };
+  
   
   const onAddToWishlist = (data) => {
     if(user){

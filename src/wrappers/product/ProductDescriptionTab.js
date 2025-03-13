@@ -6,9 +6,9 @@ import { useParams } from "react-router-dom/cjs/react-router-dom";
 import ProductReviewTab from "../../components/product/ProductReviewTab";
 import api from "../../constants/api";
 
-const ProductDescriptionTab = ({ spaceBottomClass, product,comments }) => {
+const ProductDescriptionTab = ({ spaceBottomClass, orderedProducts,product,comments }) => {
 const {id}=useParams();
- 
+ console.log('orderedProducts',orderedProducts);
   return (
     <div className={`description-review-area ${spaceBottomClass}`}>
       <div className="container">
@@ -39,7 +39,7 @@ const {id}=useParams();
               </Tab.Pane>
               <Tab.Pane eventKey="productReviews">
                 {comments && 
-                  <ProductReviewTab comments={comments}/>
+                  <ProductReviewTab orderedProducts={orderedProducts} comments={comments}/>
                }
               </Tab.Pane>
             </Tab.Content>

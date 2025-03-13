@@ -9,6 +9,7 @@ import ProductModal from "./ProductModal";
 import imageBase from "../../constants/imageBase";
 import { useReducer } from "react";
 import { removeWishlistData } from "../../redux/actions/wishlistItemActions";
+import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 
 const ProductGridSingleTwo = ({
   product,
@@ -33,10 +34,12 @@ const ProductGridSingleTwo = ({
   const [modalShow, setModalShow] = useState(false);
   const { addToast } = useToasts();
 const[loginModal , setLoginModal]=useState(false);
-
+const history = useHistory();
 const dispatch=useDispatch();
 
-
+const handleCardClick = () => {
+  history.push(`/product/${product.product_id}/${formattedTitle}`);
+};
 const wishlistItems=useSelector(state=>state.wishlistItems.wishlistItems);
   const discountedPrice = getDiscountPrice(product.price, product.discount_amount);
   // const finalProductPrice = +(product.price * currency.currencyRate).toFixed(2);
@@ -57,10 +60,12 @@ console.log('cartItem',cartItem);
           sliderClassName ? sliderClassName : ""
         }`}
       >
+          
         <div
           className={`product-wrap-2 ${
             spaceBottomClass ? spaceBottomClass : ""
-          } ${colorClass ? colorClass : ""} `}
+          } ${colorClass ? colorClass : ""} `} 
+          onClick={handleCardClick}
         >
           <div className="product-img">
             <Link to={process.env.PUBLIC_URL + "/product/" + product.product_id+"/"+formattedTitle}>
@@ -113,14 +118,15 @@ console.log('cartItem',cartItem);
                 </a>
               ) : product.variation && product.variation.length >= 1 ? (
                 <Link
-                  to={`${process.env.PUBLIC_URL}/product/${product.product_id}/${formattedTitle}`}
+                to={process.env.PUBLIC_URL + "/product/" + product.product_id+"/"+formattedTitle}
                   title="Select options"
                 >
                   <i className="fa fa-cog"></i>
                 </Link>
               ) : product.qty_in_stock && product.qty_in_stock > 0 ? (
                 <button
-                  onClick={ () => { 
+                  onClick={ (e) => { 
+                    e.stopPropagation(); // Prevent card click
                     if(cartItem?.qty>0){
                     product.qty=parseFloat(cartItem?.qty) +Number(1);
                     product.basket_id=cartItem.basket_id;
@@ -151,7 +157,9 @@ console.log('cartItem',cartItem);
                 </button>
               )}
 
-              <button onClick={() => setModalShow(true)} title="Quick View">
+              <button onClick={(e) => {
+                e.stopPropagation(); // Prevent card click
+                setModalShow(true);}} title="Quick View">
                 <i className="fa fa-eye"></i>
               </button>
      
@@ -193,7 +201,8 @@ console.log('cartItem',cartItem);
                     : "Add to wishlist"
                 }
                 // onClick={() =>{ onAddToWishlist(product,addToast)}}
-                onClick={() => {
+                onClick={(e) => {
+                  e.stopPropagation(); // Prevent card click
                   const isInWishlist = wishlistItems.filter(
                     wishlistItem => wishlistItem.product_id === product.product_id
                   )[0];
@@ -206,11 +215,15 @@ console.log('cartItem',cartItem);
                   }
                 }} 
               >
-                <i className="fa fa-heart-o" />
+                <i className="fa fa-heart-o"  style={{ color:  wishlistItems.filter(
+                    wishlistItem => wishlistItem.product_id === product.product_id
+                  )[0]
+                    ? '#96dbfc' : 'gray' }} />
               </button>
             </div>
           </div>
         </div>
+        
       </div>
       {/* product modal */}
       <ProductModal
