@@ -304,6 +304,9 @@
       position: absolute;
       top: 12px;
       right: 12px;
+      @media #{$xs-layout} {
+        right: 90px;
+      }
       span {
         font-size: 13px;
         font-weight: 500;
@@ -3939,7 +3942,7 @@
     flex-direction: column;
     align-items: center; /* Center images horizontally */
     justify-content: center;
-    width: 100%;
+    width: 90%;
     text-align: center; /* Center text for images */
     margin-bottom: 15px; /* Space between images and product content */
   }

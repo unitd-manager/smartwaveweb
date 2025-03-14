@@ -40,9 +40,9 @@ const ProductGridSingle = ({
         <div className={`product-wrap ${spaceBottomClass || ""}`}>
           <div className="product-img">
             <Link to={`${process.env.PUBLIC_URL}/product/${product.product_id}/${formattedTitle}`}>
-              <img className="default-img" src={`${imageBase}${product.images[0]}`} alt=""  style={{height:'300px',width:'auto'}}/>
+              <img className="default-img" src={`${imageBase}${product.images[0]}`} alt=""  style={{height:'300px'}}/>
               {product.images.length > 1 && (
-                <img className="hover-img" src={`${imageBase}${product.images[1]}`} alt=""  style={{height:'350px',width:'auto'}}/>
+                <img className="hover-img" src={`${imageBase}${product.images[1]}`} alt=""  style={{height:'350px'}}/>
               )}
             </Link>
             {product.discount_amount || product.latest || product.top_seller || product.most_popular ? (
