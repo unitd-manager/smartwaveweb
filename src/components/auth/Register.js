@@ -102,6 +102,8 @@ function Register() {
           signupData.last_name
         );
         signupData.otp_no = otp;
+        signupData.creation_date = new Date().toLocaleString();
+        signupData.date_of_creation = new Date().toLocaleString();
         api
           .post("/api/register", signupData)
           .then((res) => {

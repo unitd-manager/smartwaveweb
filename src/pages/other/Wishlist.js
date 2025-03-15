@@ -222,22 +222,24 @@ getWishlistItems(userInfo)
                   </div>
                 </div>
 
-                <div className="row">
-                  <div className="col-lg-12">
-                    <div className="cart-shiping-update-wrapper">
-                      <div className="cart-shiping-update">
-                        <Link to={process.env.PUBLIC_URL + "/shop"}>
-                          Continue Shopping
-                        </Link>
-                      </div>
-                      <div className="cart-clear">
-                        <button onClick={() => clearWishlistItems(addToast)}>
-                          Clear Wishlist
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+                <div className="row justify-content-center">
+  <div className="col-lg-8"> {/* Adjust '8' to match your table's look */}
+  <div className="cart-shiping-update-wrapper" style={{ marginTop: '1rem' }}>
+
+      <div className="cart-shiping-update">
+        <Link to={process.env.PUBLIC_URL + "/shop"}>
+          Continue Shopping
+        </Link>
+      </div>
+      <div className="cart-clear">
+        <button onClick={() => clearWishlistItems(addToast)}>
+          Clear Wishlist
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
               </Fragment>
             ) : (
               <div className="row">

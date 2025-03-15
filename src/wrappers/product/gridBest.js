@@ -43,7 +43,7 @@ const TabProductTwo = ({
                         <h5 className="product-title">{product.title}</h5>
                         </Link>
                         <p className="product-desc" dangerouslySetInnerHTML={{ 
-  __html: product.product_description.split(" ").slice(0, 10).join(" ") + (product.product_description.split(" ").length > 10 ? "..." : "")
+  __html: product.product_description?.split(" ").slice(0, 10).join(" ") + (product.product_description?.split(" ").length > 10 ? "..." : "")
 }} />
                        
             <div className="pro-wishlist">

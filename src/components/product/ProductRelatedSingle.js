@@ -6,15 +6,21 @@ import { getDiscountPrice } from "../../helpers/product";
 import ProductModal from "./ProductModal";
 import imageBase from "../../constants/imageBase";
 import { Badge } from "reactstrap";
+import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
+import { removeWishlistData } from "../../redux/actions/wishlistItemActions";
+import { useDispatch, useSelector } from "react-redux";
 
 const ProductRelatedSingle = ({
   product,
   currency,
-  addToCart,
-  addToWishlist,
+  onAddToCart,
+  onAddToWishlist,
+  onUpdateCart,
   addToCompare,
-  cartItem,
+  //cartItem,
   wishlistItem,
+  cartItems,
+  wishlistItems,
   compareItem,
   sliderClassName,
   spaceBottomClass,
@@ -23,14 +29,22 @@ const ProductRelatedSingle = ({
 }) => {
   const [modalShow, setModalShow] = useState(false);
   const { addToast } = useToasts();
+  const dispatch=useDispatch();
 
+const history=useHistory();
   const discountedPrice = getDiscountPrice(product.price, product.discount);
   const finalProductPrice = +(product.price);
   const finalDiscountedPrice = +(
     discountedPrice
   );
+  
+  const cartItem=cartItems.filter((cartItem) => cartItem.product_id === product.product_id)[0]
+console.log('cartItems',cartItems);
   product.images= String(product.images).split(',')
   const formattedTitle = product.title.replace(/\s+/g, '-');
+  const handleCardClick = () => {
+    history.push(`/product/${product.product_id}/${formattedTitle}`);
+  };
   return (
     <Fragment>
       <div
@@ -42,6 +56,7 @@ const ProductRelatedSingle = ({
           className={`product-wrap-2 ${
             spaceBottomClass ? spaceBottomClass : ""
           } ${colorClass ? colorClass : ""} `}
+          onClick={handleCardClick}
         >
           <div className="product-img">
           <Link to={process.env.PUBLIC_URL + "/product/" + product.product_id+"/"+formattedTitle}>
@@ -94,13 +109,20 @@ const ProductRelatedSingle = ({
                 </Link>
               ) : product.qty_in_stock && product.qty_in_stock > 0 ? (
                 <button
-                  onClick={() => addToCart(product, addToast)}
+                onClick={ (e) => { 
+                  e.stopPropagation(); // Prevent card click
+                  if(cartItem?.qty>0){
+                  product.qty=parseFloat(cartItem?.qty) +Number(1);
+                  product.basket_id=cartItem.basket_id;
+                  onUpdateCart(product,addToast)
+                }else{
+                  onAddToCart(product, addToast)}}}
                   className={
                     cartItem !== undefined && cartItem.quantity > 0
                       ? "active"
                       : ""
                   }
-                  disabled={cartItem !== undefined && cartItem.quantity > 0}
+                  // disabled={cartItem !== undefined && cartItem.quantity > 0}
                   title={
                     cartItem !== undefined ? "Added to cart" : "Add to cart"
                   }
@@ -114,7 +136,8 @@ const ProductRelatedSingle = ({
                 </button>
               )}
 
-              <button onClick={() => setModalShow(true)} title="Quick View">
+              <button onClick={(e) =>{ e.stopPropagation(); 
+               setModalShow(true);}} title="Quick View">
                 <i className="fa fa-eye"></i>
               </button>
 
@@ -134,18 +157,36 @@ const ProductRelatedSingle = ({
               </h3>
             </div>
             <div className="pro-wishlist-2">
-              <button
-                className={wishlistItem !== undefined ? "active" : ""}
-                disabled={wishlistItem !== undefined}
-                title={
-                  wishlistItem !== undefined
-                    ? "Added to wishlist"
-                    : "Add to wishlist"
-                }
-                onClick={() => addToWishlist(product, addToast)}
-              >
-                <i className="fa fa-heart-o" />
-              </button>
+               <button
+                              className={wishlistItem !== undefined ? "active" : ""}
+                              disabled={wishlistItem !== undefined}
+                              title={
+                                wishlistItems.filter(
+                                  wishlistItem => wishlistItem.product_id === product.product_id
+                                )[0]
+                                  ? "Added to wishlist"
+                                  : "Add to wishlist"
+                              }
+                              // onClick={() =>{ onAddToWishlist(product,addToast)}}
+                              onClick={(e) => {
+                                e.stopPropagation(); // Prevent card click
+                                const isInWishlist = wishlistItems.filter(
+                                  wishlistItem => wishlistItem.product_id === product.product_id
+                                )[0];
+                                console.log('wishlistitem',isInWishlist);
+                                if(isInWishlist) {
+                                  dispatch(removeWishlistData(isInWishlist));
+                                  
+                                } else {
+                                  onAddToWishlist(product);
+                                }
+                              }} 
+                            >
+                              <i className="fa fa-heart-o"  style={{ color:  wishlistItems.filter(
+                                  wishlistItem => wishlistItem.product_id === product.product_id
+                                )[0]
+                                  ? '#96dbfc' : 'gray' }} />
+                            </button>
             </div>
           </div>
         </div>
@@ -162,8 +203,8 @@ const ProductRelatedSingle = ({
         cartitem={cartItem}
         wishlistitem={wishlistItem}
         compareitem={compareItem}
-        addtocart={addToCart}
-        addtowishlist={addToWishlist}
+        addtocart={onAddToCart}
+        addtowishlist={onAddToWishlist}
         addtocompare={addToCompare}
         addtoast={addToast}
       />
@@ -176,6 +217,7 @@ ProductRelatedSingle.propTypes = {
   addToCompare: PropTypes.func,
   addToWishlist: PropTypes.func,
   cartItem: PropTypes.object,
+  cartItems: PropTypes.array,
   compareItem: PropTypes.object,
   currency: PropTypes.object,
   product: PropTypes.object,
