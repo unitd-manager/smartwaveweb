@@ -89,6 +89,9 @@ const dispatch = useDispatch();
                           <div className="login-form-container">
                             <div className="login-register-form">
                               <form>
+                              {emailError && (
+                                  <span className="error">{emailError}</span>
+                                )}
                                 <input
                                   type="text"
                                   name="email"
@@ -98,8 +101,8 @@ const dispatch = useDispatch();
                                     setEmail(e.target.value);
                                   }}
                                 />
-                                {emailError && (
-                                  <span className="error">{emailError}</span>
+                                {passwordError && (
+                                  <span className="error">{passwordError}</span>
                                 )}
                                 <input
                                   type="password"
@@ -110,9 +113,6 @@ const dispatch = useDispatch();
                                     setPassword(e.target.value);
                                   }}
                                 />
-                                {passwordError && (
-                                  <span className="error">{passwordError}</span>
-                                )}
                                 <div className="button-box">
                                   <div className="login-toggle-btn">
                                     <input type="checkbox" />

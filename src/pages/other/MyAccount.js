@@ -107,6 +107,14 @@ const MyAccount = ({ location }) => {
       return;
     }
 
+    if (userData.pass_word !== userData.confirm_password) {
+      addToast("Password and Confirm Password do not match", {
+        appearance: "error",
+        autoDismiss: true,
+      });
+      return;
+    }
+
     api
       .post("/contact/editContactPassword", userData)
       .then((res) => {
