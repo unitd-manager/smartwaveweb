@@ -32,7 +32,7 @@ const ProductGridThree = ({
   insertWishlistData,
   insertCompareData,
   // addToast
-  updateCartData,
+  //updateCartData,
   InsertToCart
 }) => {
   const [user, setUser] = useState();
@@ -47,7 +47,7 @@ const onUpdateCart = (data) => {
 if(user){
   console.log('user',user);
   data.contact_id=user.contact_id
-  updateCartData(data,addToast)
+  dispatch(updateCartData(data,addToast));
 }
 else{
   setLoginModal(true)

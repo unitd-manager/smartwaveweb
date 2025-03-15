@@ -149,7 +149,7 @@ const formattedTitle = product.title.replace(/\s+/g, '-');
                       ? "active"
                       : ""
                   }
-                  disabled={cartItem !== undefined && cartItem.quantity > 0}
+                  // disabled={cartItem !== undefined && cartItem.quantity > 0}
                   title={
                     cartItem !== undefined ? "Added to cart" : "Add to cart"
                   }
