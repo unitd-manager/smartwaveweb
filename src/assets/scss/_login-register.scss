@@ -73,8 +73,6 @@
         .error {
           color: red; // Make error text red
           font-size: 13px; // Optional: Adjust size for neatness
-          margin-top: -25px; // Adjust vertical spacing to position closer to input
-          margin-bottom: 20px; // Keep some space before next input
           display: block; // Ensure it takes full line
         }
         input[type="checkbox"] {

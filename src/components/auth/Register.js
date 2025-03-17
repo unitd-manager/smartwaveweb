@@ -7,11 +7,11 @@ function Register() {
   const history = useHistory();
   const { addToast } = useToasts();
   const [firstNameError, setFirstNameError] = useState("");
-  const [lastNameError, setLastNameError] = useState("");
+  const [mobileError, setMobileError] = useState("");
   const [signUpEmailError, setSignUpEmailError] = useState("");
   const [signupPasswordError, setSignupPasswordError] = useState("");
   const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
+  const [mobile, setMobile] = useState("");
   const [signupEmail, setSignupEmail] = useState("");
   const [RegisterEmail, setRegisterEmail] = useState("");
   const [signupPassword, setSignupPassword] = useState("");
@@ -50,11 +50,11 @@ function Register() {
     const firstNamePattern = /^[a-zA-Z]+(([',. -][a-zA-Z ])?[a-zA-Z]*)*$/;
     return firstNamePattern.test(first_name);
   };
-  const validateLastName = (last_name) => {
-    // name validation regex pattern
-    const lastNamePattern = /^[a-zA-Z]+(([',. -][a-zA-Z ])?[a-zA-Z]*)*$/;
-    return lastNamePattern.test(last_name);
-  };
+  const validateMobile = (mobile) => {
+    // Mobile number validation pattern (10-digit numbers)
+    const mobilePattern = /^[6-9]\d{9}$/;
+    return mobilePattern.test(mobile);
+  };  
 
   const validateEmail = (email) => {
     // Email validation regex pattern
@@ -73,17 +73,17 @@ function Register() {
     {
       event.preventDefault();
       setFirstNameError("");
-      setLastNameError("");
+      setMobileError("");
       setSignUpEmailError("");
       setSignupPasswordError("");
 
       if (!validateFirstName(firstName)) {
-        setFirstNameError("Invalid First Name");
+        setFirstNameError("Invalid Name");
       }
-      if (!validateLastName(lastName)) {
-        setLastNameError("Invalid Last Name");
+      if (!validateMobile(mobile)) {
+        setMobileError("Invalid Mobile Number");
       }
-
+      
       // Perform email and password validation
       if (!validateEmail(signupEmail)) {
         setSignUpEmailError("Invalid email");
@@ -91,7 +91,7 @@ function Register() {
 
       if (!validatePassword(signupPassword)) {
         setSignupPasswordError(
-          "Password must contain at least 8 characters, including one UpperCase letter,one LowerCase letter,special characer and one number"
+          "Password must contain at least 8 characters, including UpperCase, LowerCase,Special character & numbers."
         );
       }
 
@@ -205,31 +205,25 @@ function Register() {
         <input
             type="text"
             name="first_name"
-            placeholder="Firstname"
+            placeholder="Name"
             onChange={(e) => {
               handleSignupData(e);
               setFirstName(e.target.value);
             }}
           />
-          {lastNameError && <span className="error">{lastNameError}</span>}
-          <input
-            type="text"
-            name="last_name"
-            placeholder="Lastname"
-            onChange={(e) => {
-              handleSignupData(e);
-              setLastName(e.target.value);
-            }}
-          />
-          <input
-            type="mobile"
-            name="mobile"
-            placeholder="Mobile"
-            onChange={(e) => {
-              handleSignupData(e);
-              setSignupPassword(e.target.value);
-            }}
-          />
+        {mobileError && <span className="error">{mobileError}</span>}
+        <input
+          type="text"
+          name="mobile"
+          placeholder="Mobile"
+          value={mobile}
+          onChange={(e) => {
+            setMobile(e.target.value);  // Update mobile state
+            handleSignupData(e);        // Update signupData state
+          }}
+        />
+
+
           {signUpEmailError && (
             <span className="error">{signUpEmailError}</span>
           )}

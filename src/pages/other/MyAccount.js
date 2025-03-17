@@ -281,25 +281,11 @@ const MyAccount = ({ location }) => {
                               {/* First Name Field */}
                               <div className="col-12 col-md-6">
                                 <div className="billing-info">
-                                  <label>First Name</label>
+                                  <label>Name</label>
                                   <input
                                     type="text"
                                     name="first_name"
                                     value={userData && userData.first_name}
-                                    onChange={handleUserData}
-                                    className="form-control"
-                                  />
-                                </div>
-                              </div>
-
-                              {/* Last Name Field */}
-                              <div className="col-12 col-md-6">
-                                <div className="billing-info">
-                                  <label>Last Name</label>
-                                  <input
-                                    type="text"
-                                    name="last_name"
-                                    value={userData && userData.last_name}
                                     onChange={handleUserData}
                                     className="form-control"
                                   />
