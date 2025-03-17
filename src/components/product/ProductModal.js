@@ -14,6 +14,7 @@ import LoginModal from "../LoginModal";
 import { insertCartData, updateCartData } from "../../redux/actions/cartItemActions";
 import { insertWishlistData, removeWishlistData } from "../../redux/actions/wishlistItemActions";
 import { insertCompareData } from "../../redux/actions/compareItemActions";
+import ProductImagesGallery from "./ProductImagesGallery";
 
 const ProductModal = ({
   product,
@@ -190,44 +191,11 @@ const wishlistItems=useSelector(state=>state.wishlistItems.wishlistItems);
         <div className="modal-body">
           <div className="row">
             <div className="col-md-5 col-sm-12 col-xs-12">
+           
               <div className="product-large-image-wrapper">
-                <Swiper {...gallerySwiperParams}>
-                  {product.images &&
-                    product.images.map((single, index) => {
-                      return (
-                        <div key={index}>
-                          <div className="single-image">
-                            <img
-                              src={`${imageBase}${single}`}
-                              className="img-fluid"
-                              alt=""
-                              style={{ maxWidth: "500px", maxHeight: "500px" }}
-                            />
-                          </div>
-                        </div>
-                      );
-                    })}
-                </Swiper>
+              {product.images &&<ProductImagesGallery product={product} productImages={product?.images} />}
               </div>
-              <div className="product-small-image-wrapper mt-15">
-                <Swiper {...thumbnailSwiperParams}>
-                  {product.images &&
-                    product.images.map((single, index) => {
-                      return (
-                        <div key={index}>
-                          <div className="single-image">
-                            <img
-                              src={`${imageBase}${single}`}
-                              className="img-fluid"
-                              alt=""
-                              style={{ width: "70px", height: "70px" }}
-                            />
-                          </div>
-                        </div>
-                      );
-                    })}
-                </Swiper>
-              </div>
+            
             </div>
             <div className="col-md-7 col-sm-12 col-xs-12">
               <div className="product-details-content quickview-content">
