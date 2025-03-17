@@ -33,7 +33,7 @@ const ProductGridThree = ({
   insertCompareData,
   // addToast
   //updateCartData,
-  InsertToCart
+  //InsertToCart
 }) => {
   const [user, setUser] = useState();
   const [loginModal,setLoginModal]=useState(false);
@@ -56,11 +56,11 @@ else{
 };
 
 const onAddToCart = (data) => {
- 
+  console.log('insertcart',data);
   if(user){
-    if(data.price){
+    // if(data.price){
   data.contact_id=user.contact_id
-
+  console.log('insertingcart',data);
   dispatch(insertCartData(data, addToast)) 
             .then(() => {
               dispatch(fetchCartData(user));
@@ -68,7 +68,7 @@ const onAddToCart = (data) => {
             .catch((error) => {
               console.error('Failed to add to cart:', error);
             });
-}
+//}
   }
   else{
     addToast("Please Login", { appearance: "warning", autoDismiss: true })
@@ -201,12 +201,12 @@ const mapDispatchToProps = (dispatch) => {
     addToCompare: (item, addToast) => {
       dispatch(addToCompare(item, addToast));
     },
-    insertCartData: (item, addToast) => {
-      dispatch(insertCartData(item, addToast));
-    },
-    InsertToCart: (item, addToast) => {
-      dispatch(insertCartData(item, addToast));
-    },
+    // insertCartData: (item, addToast) => {
+    //   dispatch(insertCartData(item, addToast));
+    // },
+    // InsertToCart: (item, addToast) => {
+    //   dispatch(insertCartData(item, addToast));
+    // },
     updateCartData: (item, addToast) => {
       dispatch(updateCartData(item, addToast));
     },

@@ -175,7 +175,7 @@ console.log('cartItems',cartItems);
                                 )[0];
                                 console.log('wishlistitem',isInWishlist);
                                 if(isInWishlist) {
-                                  dispatch(removeWishlistData(isInWishlist));
+                                  dispatch(removeWishlistData(isInWishlist,addToast));
                                   
                                 } else {
                                   onAddToWishlist(product);

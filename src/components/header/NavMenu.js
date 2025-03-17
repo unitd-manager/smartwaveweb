@@ -54,7 +54,7 @@ const NavMenu = ({ strings, menuWhiteClass, sidebarMenu, categories }) => {
                       <Link
                         to={
                           process.env.PUBLIC_URL +
-                          `/shop?category=${el.category_id}`
+                          `/shop?category=${el.category_id}&&category_title=${el.category_title}`
                         }
                       >
                         {el.category_title}

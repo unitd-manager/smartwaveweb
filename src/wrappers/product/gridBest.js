@@ -79,7 +79,7 @@ const TabProductTwo = ({
                 onClick={() => {
                   const isInWishlist = wishlistItems.some(item => item.product_id === product.product_id);
                   if (isInWishlist) {
-                    dispatch(removeWishlistData(product));
+                    dispatch(removeWishlistData(product,addToast));
                   } else {
                     onAddToWishlist(product);
                   }

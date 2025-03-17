@@ -415,7 +415,7 @@ const wishlistItems=useSelector(state=>state.wishlistItems.wishlistItems);
                                                          )[0];
                                                          console.log('wishlistitem',isInWishlist);
                                                          if(isInWishlist) {
-                                                           dispatch(removeWishlistData(isInWishlist));
+                                                           dispatch(removeWishlistData(isInWishlist,addToast));
                                                            
                                                          } else {
                                                            onAddToWishlist(product);
