@@ -190,36 +190,39 @@ console.log('cartItem',cartItem);
               </h3>           
             </div>
             <div className="pro-wishlist-2">
-              <button
-                className={wishlistItem !== undefined ? "active" : ""}
-                disabled={wishlistItem !== undefined}
-                title={
-                  wishlistItems.filter(
-                    wishlistItem => wishlistItem.product_id === product.product_id
-                  )[0]
-                    ? "Added to wishlist"
-                    : "Add to wishlist"
-                }
-                // onClick={() =>{ onAddToWishlist(product,addToast)}}
-                onClick={(e) => {
-                  e.stopPropagation(); // Prevent card click
-                  const isInWishlist = wishlistItems.filter(
-                    wishlistItem => wishlistItem.product_id === product.product_id
-                  )[0];
-                  console.log('wishlistitem',isInWishlist);
-                  if(isInWishlist) {
-                    dispatch(removeWishlistData(isInWishlist,addToast));
-                    
-                  } else {
-                    onAddToWishlist(product);
-                  }
-                }} 
-              >
-                <i className="fa fa-heart-o"  style={{ color:  wishlistItems.filter(
-                    wishlistItem => wishlistItem.product_id === product.product_id
-                  )[0]
-                    ? '#96dbfc' : 'gray' }} />
-              </button>
+            <button
+  className={wishlistItems.some(wishlistItem => wishlistItem.product_id === product.product_id) ? "active" : ""}
+  title={
+    wishlistItems.some(wishlistItem => wishlistItem.product_id === product.product_id)
+      ? "Added to wishlist"
+      : "Add to wishlist"
+  }
+  onClick={(e) => {
+    e.stopPropagation(); // Prevent card click
+    const isInWishlist = wishlistItems.find(
+      wishlistItem => wishlistItem.product_id === product.product_id
+    );
+    if (isInWishlist) {
+      dispatch(removeWishlistData(isInWishlist, addToast));
+    } else {
+      onAddToWishlist(product);
+    }
+  }}
+>
+  <i
+    className={`fa ${
+      wishlistItems.some(wishlistItem => wishlistItem.product_id === product.product_id)
+        ? "fa-heart"
+        : "fa-heart-o"
+    }`}
+    style={{
+      color: wishlistItems.some(wishlistItem => wishlistItem.product_id === product.product_id)
+        ? "#96dbfc"
+        : "gray"
+    }}
+  />
+</button>
+
             </div>
           </div>
         </div>

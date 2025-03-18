@@ -117,7 +117,7 @@ const App = (props) => {
     }
   }, [user, dispatch]);
   return (
-    <ToastProvider placement="bottom-left">
+    <ToastProvider placement="top-right">
       <BreadcrumbsProvider>
         <HashRouter>
           <ScrollToTop>

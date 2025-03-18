@@ -439,3 +439,38 @@
     }
   }
 }
+.wishlist-btn {
+  background-color: transparent;
+  color: #fff;
+  border: 1px solid #ccc;
+  transition: all 0.3s ease-in-out;
+  padding: 8px 12px;
+  border-radius: 5px;
+  cursor: pointer;
+
+  i {
+    font-size: 16px;
+    color: #fff;
+    transition: color 0.3s ease-in-out;
+  }
+
+  &:hover {
+    border-color: #124157;
+    color: #124157;
+
+    i {
+      color: #124157;
+    }
+  }
+
+  &.active {
+    background-color: #124157;
+    color: white;
+    border: 1px solid #124157;
+
+    i {
+      color: white;
+    }
+  }
+}
+

@@ -53,10 +53,52 @@ const ProductDescriptionInfo = ({
   );
   // const {addToast}=useToasts();
  
+const productGrades = [
+  {
+    grade: "A+",
+    description: "Like new condition with no visible scratches or dents",
+    color: "Green",
+    priceAdjustment: 0, // No change in price
+    stock: 10
+  },
+  {
+    grade: "A",
+    description: "Excellent condition with minimal signs of use",
+    color: "Blue",
+    priceAdjustment: -10, // $10 discount
+    stock: 15
+  },
+  {
+    grade: "B+",
+    description: "Very good condition with slight scratches or signs of use",
+    color: "Yellow",
+    priceAdjustment: -20, // $20 discount
+    stock: 20
+  },
+  {
+    grade: "B",
+    description: "Good condition with visible scratches but fully functional",
+    color: "Orange",
+    priceAdjustment: -30, // $30 discount
+    stock: 25
+  },
+  {
+    grade: "C",
+    description: "Fair condition with noticeable wear and tear",
+    color: "Red",
+    priceAdjustment: -50, // $50 discount
+    stock: 30
+  }
+];
+
  const[user,setUser]=useState();
   const [sessionId, setSessionId] = useState('');
  const[loginModal,setLoginModal]=useState(false);
  const[proRating,setProRating]=useState(0);
+ const [selectedProductGrade, setSelectedProductGrade] = useState(
+  productGrades[0]?.grade
+);
+
 
 // console.log('cartItems detail',cartItems);
 const dispatch=useDispatch();
@@ -335,14 +377,51 @@ const onAddToCompare = (data) => {
                                                                        }
                                                                      }} 
             >
-              <i className="pe-7s-like" style={{ color:  wishlistItems.filter(
-                    wishlistItem => wishlistItem.product_id === product.product_id
-                  )[0]
-                    ? '#96dbfc' : 'gray' }}/>
+              <i
+    className={`fa ${
+      wishlistItems.some(wishlistItem => wishlistItem.product_id === product.product_id)
+        ? "fa-heart"
+        : "fa-heart-o"
+    }`}
+    style={{
+      color: wishlistItems.some(wishlistItem => wishlistItem.product_id === product.product_id)
+        ? "#96dbfc"
+        : "gray"
+    }}
+  />
             </button>
           </div>
                  </div>
       )}
+      {product.grades && product.grades.length > 0 && (
+  <div className="pro-details-meta">
+    <span>Grade</span>
+    <div className="pro-details-meta-content">
+      {productGrades?.map((grade, index) => (
+        <label
+          key={index}
+          className={`pro-details-grade-content--single ${
+            grade.grade === selectedProductGrade ? "active" : ""
+          }`}
+        >
+          <input
+            type="radio"
+            value={grade.grade}
+            name="product-grade"
+            checked={grade.grade === selectedProductGrade}
+            onChange={() => {
+              setSelectedProductGrade(grade.grade);
+              setProductStock(grade.stock);
+              setQuantityCount(1);
+            }}
+          />
+          <span className="grade-name">{grade.grade}</span>
+        </label>
+      ))}
+    </div>
+  </div>
+)}
+
       {product.category ? (
         <div className="pro-details-meta">
           <span>Categories :</span>

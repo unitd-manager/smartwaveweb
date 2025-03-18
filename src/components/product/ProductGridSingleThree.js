@@ -91,31 +91,34 @@ const formattedTitle = product.title.replace(/\s+/g, '-');
             </Link>
       
             <div className="product-action">
-            <div class="pro-same-action pro-wishlist">  <button
-                className={wishlistItem !== undefined ? "active" : ""}
-                disabled={wishlistItem !== undefined}
-                title={
-                  wishlistItems.filter(
-                    wishlistItem => wishlistItem.product_id === product.product_id
-                  )[0]
-                    ? "Added to wishlist"
-                    : "Add to wishlist"
-                }
-                 onClick={() => {
-                                  const isInWishlist = wishlistItems.filter(
-                                    wishlistItem => wishlistItem.product_id === product.product_id
-                                  )[0];
-                                  console.log('wishlistitem',isInWishlist);
-                                  if(isInWishlist) {
-                                    dispatch(removeWishlistData(isInWishlist,addToast));
-                                    
-                                  } else {
-                                    onAddToWishlist(product);
-                                  }
-                                }} 
-              >
-                <i className="fa fa-heart-o" />
-              </button></div>
+            <div className="pro-same-action pro-wishlist">
+  <button
+    className={`wishlist-btn ${wishlistItem !== undefined ? "active" : ""}`}
+    title={
+      wishlistItems.some(
+        (wishlistItem) => wishlistItem.product_id === product.product_id
+      )
+        ? "Added to wishlist"
+        : "Add to wishlist"
+    }
+    onClick={() => {
+      const isInWishlist = wishlistItems.some(
+        (wishlistItem) => wishlistItem.product_id === product.product_id
+      );
+
+      console.log("wishlistitem", isInWishlist);
+
+      if (isInWishlist) {
+        dispatch(removeWishlistData(product, addToast));
+      } else {
+        onAddToWishlist(product);
+      }
+    }}
+  >
+    <i className={`fa ${wishlistItems.some((item) => item.product_id === product.product_id) ? "fa-heart" : "fa-heart-o"}`} />
+  </button>
+</div>
+
               {product.affiliateLink ? (
                 <a
                   href={product.affiliateLink}

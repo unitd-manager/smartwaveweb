@@ -7,6 +7,7 @@ import { addToCart } from "../../redux/actions/cartActions";
 import { addToWishlist, deleteFromWishlist } from "../../redux/actions/wishlistActions";
 import { addToCompare } from "../../redux/actions/compareActions";
 import ProductGridSingleTwo from "../../components/product/ProductGridSingleTwo";
+import ProductGridSingleThree from "../../components/product/ProductGridSingleThree";
 import api from "../../constants/api";
 import LoginModal from "../../components/LoginModal";
 import { useParams } from "react-router-dom";
@@ -120,7 +121,7 @@ const dispatch=useDispatch();
     <Fragment>
       {products.map(product => {
         return (
-          <ProductGridSingleTwo
+          <ProductGridSingleThree
             sliderClassName={sliderClassName}
             spaceBottomClass={spaceBottomClass}
             product={product}

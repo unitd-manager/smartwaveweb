@@ -219,7 +219,7 @@ console.log('receiptUrl',receiptUrl)
     <button className="btn btn-outline-primary me-3" onClick={() => history.goBack()}>
       <FaArrowLeft className="me-2" /> Back
     </button>
-    <h4 className="m-0">Enquiry Details</h4>
+    <h4 className="m-4">Enquiry Details</h4>
   </div>
   <div>
     {productsLinked && <ProductsLinkedModal productsLinked={productsLinked} />}

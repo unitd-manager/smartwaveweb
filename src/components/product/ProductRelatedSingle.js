@@ -182,10 +182,18 @@ console.log('cartItems',cartItems);
                                 }
                               }} 
                             >
-                              <i className="fa fa-heart-o"  style={{ color:  wishlistItems.filter(
-                                  wishlistItem => wishlistItem.product_id === product.product_id
-                                )[0]
-                                  ? '#96dbfc' : 'gray' }} />
+                              <i
+    className={`fa ${
+      wishlistItems.some(wishlistItem => wishlistItem.product_id === product.product_id)
+        ? "fa-heart"
+        : "fa-heart-o"
+    }`}
+    style={{
+      color: wishlistItems.some(wishlistItem => wishlistItem.product_id === product.product_id)
+        ? "#96dbfc"
+        : "gray"
+    }}
+  />
                             </button>
             </div>
           </div>
