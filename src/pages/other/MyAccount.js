@@ -10,6 +10,8 @@ import Breadcrumb from "../../wrappers/breadcrumb/Breadcrumb";
 import PictureAttachmentModalV2 from "../../components/ReturnOrder/PictureAttachmentModalV2";
 import PictureAttachmentModalV3 from "../../components/ReturnOrder/PictureAttachmentModalV3";
 import api from "../../constants/api";
+import { Input } from "reactstrap";
+
 import {
   MDBCol,
   MDBContainer,
@@ -29,6 +31,7 @@ const MyAccount = ({ location }) => {
   const [userData, setUserData] = useState();
   const [profile, setProfile] = useState();
   const { addToast } = useToasts();
+  const [allcountries, setallCountries] = useState();
   const [attachmentModal, setAttachmentModal] = useState(false);
   const [imageUrl, setImageUrl] = useState("");
   const [pictureData, setDataForPicture] = useState({
@@ -36,6 +39,16 @@ const MyAccount = ({ location }) => {
   });
   const handleUserData = (e) => {
     setUserData({ ...userData, [e.target.name]: e.target.value });
+  };
+
+  const getAllCountries = () => {
+    api
+      .get('/commonApi/getCountry')
+      .then((res) => {
+        setallCountries(res.data.data);
+      })
+      .catch(() => {
+         });
   };
 
   const getUser = () => {
@@ -225,6 +238,7 @@ const MyAccount = ({ location }) => {
       : null;
     const userInfo = JSON.parse(userData);
     setUser(userInfo);
+    getAllCountries();
   }, []);
   useEffect(() => {
     api
@@ -262,7 +276,7 @@ const MyAccount = ({ location }) => {
               <div className="ml-auto mr-auto col-lg-9">
                 <div className="myaccount-wrapper">
                   <Accordion defaultActiveKey="0">
-                    <Card className="single-my-account mb-20">
+                    <div className="single-my-account mb-20">
                       <Card.Header className="panel-heading">
                         <Accordion.Toggle variant="link" eventKey="0">
                           <h3 className="panel-title">
@@ -277,7 +291,7 @@ const MyAccount = ({ location }) => {
                               <h4>My Account Information</h4>
                               <h5>Your Personal Details</h5>
                             </div>
-                            <div className="row mobile-adjust">
+                            <div className="row">
                               {/* First Name Field */}
                               <div className="col-12 col-md-6">
                                 <div className="billing-info">
@@ -293,7 +307,7 @@ const MyAccount = ({ location }) => {
                               </div>
 
                               {/* Email Address Field */}
-                              <div className="col-6">
+                              <div className="col-12 col-md-6">
                                 <div className="billing-info">
                                   <label>Email Address</label>
                                   <input
@@ -331,8 +345,8 @@ const MyAccount = ({ location }) => {
                             </div>
                         </Card.Body>
                       </Accordion.Collapse>
-                    </Card>
-                    <Card className="single-my-account mb-20">
+                    </div>
+                    <div className="single-my-account mb-20">
                       <Card.Header className="panel-heading">
                         <Accordion.Toggle variant="link" eventKey="1">
                           <h3 className="panel-title">
@@ -384,8 +398,8 @@ const MyAccount = ({ location }) => {
                           </div>
                         </Card.Body>
                       </Accordion.Collapse>
-                    </Card>
-                    <Card className="single-my-account mb-20">
+                    </div>
+                    <div className="single-my-account mb-20">
                       <Card.Header className="panel-heading">
                         <Accordion.Toggle variant="link" eventKey="2">
                           <h3 className="panel-title">
@@ -399,7 +413,7 @@ const MyAccount = ({ location }) => {
                             <div className="account-info-wrapper">
                               <h4>Address Book Entries</h4>
                             </div>
-                            <div className="entries-wrapper">
+                            <div className="">
                               <div className="row">
                                 <div className="col-lg-6 col-md-6">
                                   <div className="billing-info">
@@ -463,15 +477,25 @@ const MyAccount = ({ location }) => {
                                 <div className="col-lg-6 col-md-6">
                                   <div className="billing-info">
                                     <label>Country</label>
-                                    <input
-                                      type="text"
+                                    <Input
+                                      type="select"
                                       name="address_country_code"
                                       value={
                                         userData &&
                                         userData.address_country_code
                                       }
                                       onChange={handleUserData}
-                                    />
+                                    >
+                                      <option defaultValue="selected" value="">
+                                        Please Select
+                                      </option>
+                                      {allcountries &&
+                                        allcountries.map((country) => (
+                                          <option key={country.country_code} value={country.country_code}>
+                                            {country.name}
+                                          </option>
+                                        ))}
+                                    </Input>
                                   </div>
                                 </div>
                               </div>
@@ -504,7 +528,7 @@ const MyAccount = ({ location }) => {
                           </div>
                         </Card.Body>
                       </Accordion.Collapse>
-                    </Card>
+                    </div>
                   </Accordion>
                 </div>
               </div>
