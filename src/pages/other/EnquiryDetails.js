@@ -173,6 +173,7 @@ console.log('receiptUrl',receiptUrl)
   };
 
   const generateOrder = () => {
+    if(selectedAddressString){
     enquiries.modification_date = moment().format('DD-MM-YYYY h:mm:ss a');
     enquiries.shipping_address = selectedAddressString;
       api
@@ -187,12 +188,19 @@ console.log('receiptUrl',receiptUrl)
           // }, 300);
         })
         .catch(() => {
-          addToast("Unable to update order", {
+          addToast("Unable to update shipping address", {
             appearance: "error",
             autoDismiss: true,
           })
         
         });
+      }else{
+        addToast("Please Select the shipping address", {
+          appearance: "error",
+          autoDismiss: true,
+        })
+      
+      }
    
   };
 
@@ -220,6 +228,7 @@ console.log('receiptUrl',receiptUrl)
       <FaArrowLeft className="me-2" /> Back
     </button>
     <h4 className="m-4">Enquiry Details</h4>
+    <p className="m-4">Creation Date : {enquiries?.creation_date?.toLocaleString()}</p>
   </div>
   <div>
     {productsLinked && <ProductsLinkedModal productsLinked={productsLinked} />}
@@ -316,7 +325,7 @@ console.log('receiptUrl',receiptUrl)
   </Row>
 </Card>
 
-  <h5 className="mb-4 mt-4 fw-bold">Select Address</h5>
+  <h5 className="mb-4 mt-4 fw-bold">Select Shipping Address</h5>
 
   {combinedAddressList?.map((addr) => (
   <Card

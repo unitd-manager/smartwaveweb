@@ -474,3 +474,14 @@
   }
 }
 
+.product-name {
+  display: -webkit-box;
+  -webkit-line-clamp: 2; /* Limits to 2 lines */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-height: 48px; /* Adjust based on font size */
+  line-height: 24px; /* Adjust based on design */
+  font-size: 16px; /* Adjust as needed */
+  word-break: break-word;
+}
