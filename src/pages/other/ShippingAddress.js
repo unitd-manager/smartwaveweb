@@ -13,6 +13,7 @@ const EnquiryHistory = () => {
   const [selectedAddressId, setSelectedAddressId] = useState(null);
   const [newAddress, setNewAddress] = useState({
     shipper_name: "",
+    address_type: "Shipping",
     address_flat: "",
     address_street: "",
     address_town: "",
@@ -107,6 +108,7 @@ const EnquiryHistory = () => {
             onClick={() => {
               setNewAddress({
                 shipper_name: "",
+                address_type: "Shipping",
                 address_flat: "",
                 address_street: "",
                 address_town: "",
@@ -198,6 +200,12 @@ const EnquiryHistory = () => {
                     />
                   </div>
                 ))}
+                <div className="mb-2">
+                  <select className="form-control" name="address_type" value={newAddress.address_type} onChange={handleInputChange}>
+                    <option value="Shipping">Shipping</option>
+                    <option value="Delivery">Delivery</option>
+                  </select>
+                </div>
               </div>
               <div className="modal-footer">
                 <button

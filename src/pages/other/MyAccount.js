@@ -32,7 +32,10 @@ const MyAccount = ({ location }) => {
   const [stateError, setStateError] = useState("");
   const [countryError, setCountryError] = useState("");
   const [pinCodeError, setPinCodeError] = useState("");
-    const [attachmentModal, setAttachmentModal] = useState(false);
+  const [panError, setPanError] = useState("");
+  const [iecError, setIecError] = useState("");
+  const [fssaiError, setFssaiError] = useState("");
+  const [attachmentModal, setAttachmentModal] = useState(false);
   const [imageUrl, setImageUrl] = useState("");
   const [pictureData, setDataForPicture] = useState({
     modelType: "",
@@ -75,6 +78,21 @@ const MyAccount = ({ location }) => {
     return passwordPattern.test(password);
   };
 
+  const validatePan = (pan) => {
+    const panPattern = /^[A-Z]{5}[0-9]{4}[A-Z]{1}$/;
+    return panPattern.test(pan);
+  };  
+
+  const validateIec = (iec) => {
+    const iecPattern = /^[A-Z0-9]{10}$/i;
+    return iecPattern.test(iec);
+  };  
+
+  const validateFssai = (fssai) => {
+    const fssaiPattern = /^[A-Za-z0-9]{14}$/;
+    return fssaiPattern.test(fssai);
+  };
+
   const validateAddress = (address) => {
     return address.trim().length >= 1; // Minimum 1 character required
   };  
@@ -111,6 +129,9 @@ const MyAccount = ({ location }) => {
     setFirstNameError("");
     setMobileError("");
     setSignUpEmailError("");
+    setPanError("");
+    setIecError("");
+    setFssaiError("");
   
     let isValid = true;
   
@@ -126,7 +147,22 @@ const MyAccount = ({ location }) => {
       setSignUpEmailError("Invalid Email");
       isValid = false;
     }
-  
+
+    if (!validatePan(userData.pan)) {
+      setPanError("Invalid PAN Number");
+      isValid = false;
+    }
+
+    if (!validateIec(userData.iec)) {
+      setIecError("Invalid IEC Number");
+      isValid = false;
+    }
+
+    if (!validateFssai(userData.fssai)) {
+      setFssaiError("Invalid FSSAI Number");
+      isValid = false;
+    }
+
     // Stop execution if validation fails
     if (!isValid) {
       return;
@@ -373,6 +409,61 @@ const MyAccount = ({ location }) => {
                                     type="text"
                                     name="mobile"
                                     value={userData && userData.mobile}
+                                    onChange={handleUserData}
+                                    className="form-control"
+                                  />
+                                </div>
+                              </div>
+
+                            <div className="col-12 col-md-6">
+                              {panError && <span className="error">{panError}</span>}
+                              <div className="billing-info">
+                                  <label>PAN</label>
+                                  <input
+                                    type="text"
+                                    name="pan"
+                                    value={userData && userData.pan}
+                                    onChange={handleUserData}
+                                    className="form-control"
+                                  />
+                                </div>
+                              </div>
+
+                              <div className="col-12 col-md-6">
+                              {iecError && <span className="error">{iecError}</span>}
+                              <div className="billing-info">
+                                  <label>IEC</label>
+                                  <input
+                                    type="text"
+                                    name="iec"
+                                    value={userData && userData.iec}
+                                    onChange={handleUserData}
+                                    className="form-control"
+                                  />
+                                </div>
+                              </div>
+
+                              <div className="col-12 col-md-6">
+                              {fssaiError && <span className="error">{fssaiError}</span>}
+                              <div className="billing-info">
+                                  <label>FSSAI</label>
+                                  <input
+                                    type="text"
+                                    name="fssai"
+                                    value={userData && userData.fssai}
+                                    onChange={handleUserData}
+                                    className="form-control"
+                                  />
+                                </div>
+                              </div>
+
+                              <div className="col-12 col-md-6">
+                              <div className="billing-info">
+                                  <label>GST</label>
+                                  <input
+                                    type="text"
+                                    name="gst"
+                                    value={userData && userData.gst}
                                     onChange={handleUserData}
                                     className="form-control"
                                   />
