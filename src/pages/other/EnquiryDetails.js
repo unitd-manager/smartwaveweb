@@ -444,75 +444,40 @@ console.log('receiptUrl',receiptUrl)
 
             <Col md={6}>
               <div className="mb-3">
-                <p className="text-muted mr-3 pull-left">Tracking Number :</p>
-                <p className="fw-bold m-0 pull-left">{tracking?.tracking_number || 'N/A'}</p>
+                <p className="text-muted mr-3 pull-left">Container Number :</p>
+                <p className="fw-bold m-0 pull-left">{tracking?.container_no || 'N/A'}</p>
               </div>
             </Col>
 
             <Col md={6}>
               <div className="mb-3">
-                <p className="text-muted mr-3 pull-left">Tracking Link :</p>
-                <p className="fw-bold m-0 pull-left">{tracking?.tracking_link || 'N/A'}</p>
+                <p className="text-muted mr-3 pull-left">Bill of Loading :</p>
+                <p className="fw-bold m-0 pull-left">{tracking?.bill_of_loading || 'N/A'}</p>
               </div>
             </Col>
 
             <Col md={6}>
               <div className="mb-3">
-                <p className="text-muted mr-3 pull-left">Shipment ID :</p>
-                <p className="fw-bold m-0 pull-left">{tracking?.shipment_id || 'N/A'}</p>
+                <p className="text-muted mr-3 pull-left">Order Number :</p>
+                <p className="fw-bold m-0 pull-left">{tracking?.order_no || 'N/A'}</p>
               </div>
             </Col>
 
             <Col md={6}>
               <div className="mb-3">
-                <p className="text-muted mr-3 pull-left">Shipment Date :</p>
-                <p className="fw-bold m-0 pull-left">{tracking?.shipment_date || 'N/A'}</p>
+                <p className="text-muted mr-3 pull-left">ETA :</p>
+                <p className="fw-bold m-0 pull-left">{tracking?.expected_delivery_date || 'N/A'}</p>
               </div>
             </Col>
 
             <Col md={6}>
               <div className="mb-3">
-                <p className="text-muted mr-3 pull-left">Delivery Date :</p>
+                <p className="text-muted mr-3 pull-left">ETD :</p>
                 <p className="fw-bold m-0 pull-left">{tracking?.actual_delivery_date || 'N/A'}</p>
               </div>
             </Col>
-
-            <Col md={6}>
-              <div className="mb-3">
-                <p className="text-muted mr-3 pull-left">Shipment Status :</p>
-                <p className="fw-bold m-0 pull-left">{tracking?.shipment_status || 'N/A'}</p>
-              </div>
-            </Col>
-
-            <Col md={6}>
-              <div className="mb-3">
-                <p className="text-muted mr-3 pull-left">Package Weight :</p>
-                <p className="fw-bold m-0 pull-left">{tracking?.package_weight || 'N/A'}</p>
-              </div>
-            </Col>
-
-            <Col md={6}>
-              <div className="mb-3">
-                <p className="text-muted mr-3 pull-left">Package Height :</p>
-                <p className="fw-bold m-0 pull-left">{tracking?.package_height || 'N/A'}</p>
-              </div>
-            </Col>
-
-            <Col md={6}>
-              <div className="mb-3">
-                <p className="text-muted mr-3 pull-left">Package Length :</p>
-                <p className="fw-bold m-0 pull-left">{tracking?.package_length || 'N/A'}</p>
-              </div>
-            </Col>
-
-            <Col md={6}>
-              <div className="mb-3">
-                <p className="text-muted mr-3 pull-left">Package Width :</p>
-                <p className="fw-bold m-0 pull-left">{tracking?.package_width || 'N/A'}</p>
-              </div>
-            </Col>
-
           </Row>
+          
         </Card>
       </div>
     </LayoutOne>
