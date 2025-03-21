@@ -33,7 +33,9 @@ const EnquiryHistory = () => {
         contact_id: userData?.contact_id,
       })
       .then((res) => {
-        setEnquiries(res.data.data);
+        const sortedEnquiries = res.data.data?.sort((a, b) => b.enquiry_id - a.enquiry_id);
+
+        setEnquiries(sortedEnquiries);
       })
       .catch((err) => {
         console.log(err);
@@ -65,7 +67,7 @@ const EnquiryHistory = () => {
           </div>
           <div
             className="col-md-5 p-3 rounded text-center shadow-sm custom-summary-card"
-            style={{ backgroundColor: "#96dbfc", color: "white" }}
+            style={{ backgroundColor: "#1da6aa", color: "white" }}
           >
             <p style={{ color: "white" }}>Orders</p>
             <h5 style={{ color: "white" }}>

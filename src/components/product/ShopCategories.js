@@ -2,11 +2,40 @@ import PropTypes from "prop-types";
 import React, { useState } from "react";
 import { setActiveSort } from "../../helpers/product";
 import { Link, useHistory } from "react-router-dom/cjs/react-router-dom.min";
+import SubcategoriesTree from "./ShopSubCategories";
 
-const ShopCategories = ({ categories, selectedCategories,setSelectedCategories,getSortParams }) => {
+const ShopCategories = ({ 
+  categories,
+  selectedCategories,setSelectedCategories,getSortParams,
+  setSelectedCategory
+  ,selectedCategory
+   }) => {
   // const [selectedCategories, setSelectedCategories] = useState([]);
+  // const [selectedCategory, setSelectedCategory] = useState(null);
 console.log('selectedCategories',selectedCategories);
 const history=useHistory();
+// const categories = [
+//   { category_id: "1", category_title: "Electronics" },
+//   { category_id: "2", category_title: "Clothing" },
+// ];
+
+// const subcategories = [
+//   { subcategory_id: "101", subcategory_title: "Mobile Phones", parent_id: "1" },
+//   { subcategory_id: "102", subcategory_title: "Laptops", parent_id: "1" },
+//   { subcategory_id: "201", subcategory_title: "Men's Wear", parent_id: "2" },
+//   { subcategory_id: "202", subcategory_title: "Women's Wear", parent_id: "2" },
+// ];
+
+// const subcategoryTypes = [
+//   { type_id: "1001", type_title: "Android Phones", subcategory_id: "101" },
+//   { type_id: "1002", type_title: "iPhones", subcategory_id: "101" },
+//   { type_id: "2001", type_title: "Gaming Laptops", subcategory_id: "102" },
+//   { type_id: "2002", type_title: "Ultrabooks", subcategory_id: "102" },
+//   { type_id: "3001", type_title: "Casual Wear", subcategory_id: "201" },
+//   { type_id: "3002", type_title: "Formal Wear", subcategory_id: "201" },
+// ];
+
+
   const handleCategorySelection = (categoryId) => {
     let updatedCategories = [...selectedCategories];
 
@@ -23,6 +52,7 @@ const history=useHistory();
       }
     }
 
+    // setSelectedCategory(categoryId);
     setSelectedCategories(updatedCategories);
     getSortParams("category", updatedCategories,updatedCategories); // Pass selected categories array
   };
@@ -103,6 +133,14 @@ console.log('selectedCategories',selectedCategories);
           "No categories found"
         )}
       </div>
+      {/* {selectedCategories.length > 0 && (
+  <SubcategoriesTree
+    categories={categories.filter(cat => selectedCategories.includes(cat.category_id))}
+    subcategories={subcategories}
+    subcategoryTypes={subcategoryTypes}
+  />
+)} */}
+
     </div>
   );
 };

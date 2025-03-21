@@ -183,11 +183,11 @@ const formattedTitle = product.title.replace(/\s+/g, '-');
                 titlePriceClass ? titlePriceClass : ""
               }`}
             >
-              <h3>
-                <Link to={process.env.PUBLIC_URL + "/product/" + product.product_id+"/"+formattedTitle}>
-                  <span className="product-name">{product.title}</span>
-                </Link>
-              </h3>           
+             <h3 style={{ minHeight: "60px", display: "flex", alignItems: "center" }}>
+  <Link to={process.env.PUBLIC_URL + "/product/" + product.product_id + "/" + formattedTitle}>
+    <span className="product-name">{product.title}</span>
+  </Link>
+</h3>
             </div>
           
           </div>

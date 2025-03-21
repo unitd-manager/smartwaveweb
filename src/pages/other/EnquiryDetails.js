@@ -173,6 +173,7 @@ console.log('receiptUrl',receiptUrl)
   };
 
   const generateOrder = () => {
+    if(selectedAddressString){
     enquiries.modification_date = moment().format('DD-MM-YYYY h:mm:ss a');
     enquiries.shipping_address = selectedAddressString;
       api
@@ -187,12 +188,19 @@ console.log('receiptUrl',receiptUrl)
           // }, 300);
         })
         .catch(() => {
-          addToast("Unable to update order", {
+          addToast("Unable to update shipping address", {
             appearance: "error",
             autoDismiss: true,
           })
         
         });
+      }else{
+        addToast("Please Select the shipping address", {
+          appearance: "error",
+          autoDismiss: true,
+        })
+      
+      }
    
   };
 
@@ -220,6 +228,7 @@ console.log('receiptUrl',receiptUrl)
               <FaArrowLeft className="me-2" /> Back
             </button>
             <h4 className="m-4">Enquiry Details</h4>
+            <p className="m-4">Creation Date : {enquiries?.creation_date?.toLocaleString()}</p>
           </div>
           <div>
             {productsLinked && <ProductsLinkedModal productsLinked={productsLinked} />}
@@ -328,6 +337,82 @@ console.log('receiptUrl',receiptUrl)
             Save Address
         </button>
       </div>
+    </Col>
+
+    {/* Address */}
+    <Col md={6}>
+      <div className="mb-3">
+        <p className="text-muted mb-1">Address:</p>
+        <p className="fw-bold m-0">{enquiries?.shipping_address || 'N/A'}</p>
+      </div>
+    </Col>
+
+    {/* Creation Date */}
+    <Col md={6}>
+      <div>
+        <p className="text-muted mb-1">Creation Date:</p>
+        <p className="fw-bold m-0">
+          {enquiries?.creation_date ? moment(enquiries.creation_date).format("MMM DD, YYYY") : 'N/A'}
+        </p>
+      </div>
+    </Col>
+
+    <Col md={6}>
+      <div>
+        <p className="text-muted mb-1">Order Code:</p>
+        <p className="fw-bold m-0">{enquiries?.order_code || 'N/A'}</p>
+      </div>
+    </Col>
+  </Row>
+</Card>
+
+  <h5 className="mb-4 mt-4 fw-bold">Select Shipping Address</h5>
+
+  {combinedAddressList?.map((addr) => (
+  <Card
+    key={addr.customer_address_id}
+    className={`mb-3 p-3 shadow-sm ${selectedAddress === addr.customer_address_id ? 'border-primary' : ''}`}
+    style={{ borderRadius: '15px' }}
+  >
+    <Row>
+      <Col xs={10}>
+        <div className="d-flex align-items-center mb-2">
+          <Badge bg="secondary" className="me-2">
+            {/* <h6 className="m-0 fw-bold text-white">{addr.shipper_name || "Address"}</h6> */}
+            <h6 className="m-0 fw-bold text-white">
+  {addr.customer_address_id === 'profile' ? 'Profile Address' : (addr.shipper_name || 'Address')}
+</h6>
+
+          </Badge>        
+        </div>
+        <div className="text-muted small">
+          {addr.address_flat}, {addr.address_street}<br />
+          {addr.address_city}, {addr.address_town} - {addr.address_po_code}<br />
+          {addr.address_state}, {addr.address_country}
+        </div>
+        {addr.phone && (
+          <p className="m-0 text-muted small mt-1"><b>Phone:</b> {addr.phone}</p>
+        )}
+      </Col>
+      <Col xs={2} className="text-end">
+        <Form.Check
+          type="radio"
+          name="addressSelect"
+          checked={selectedAddress === addr.customer_address_id}
+          onChange={() => handleSelect(addr.customer_address_id)}
+          style={{ transform: 'scale(0.5)' }}
+        />
+      </Col>
+    </Row>
+  </Card>
+))}
+
+<button className="btn btn-primary mt-2" onClick={()=>generateOrder()}>
+          Save Address
+          </button>
+ 
+</div>
+
 
         {/* Stylish File Upload Section */}
         <h6 className="fw-bold mt-4">Payment Receipt</h6>

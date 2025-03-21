@@ -137,7 +137,7 @@ const onUpdateCart = (data) => {
     
     updateCartData(data, addToast);
   } else {
-    addToast("Please Login", { appearance: "warning", autoDismiss: true });
+    // addToast("Please Login", { appearance: "warning", autoDismiss: true });
     setLoginModal(true);
   }
 };
@@ -150,7 +150,7 @@ const onAddToWishlist = (data) => {
 insertWishlistData(data,addToast)   
 }
   else{
-    addToast("Please Login", { appearance: "warning", autoDismiss: true })
+    // addToast("Please Login", { appearance: "warning", autoDismiss: true })
     setLoginModal(true)
   }
 };
@@ -163,7 +163,7 @@ const onAddToCompare = (data) => {
   insertCompareData(data,addToast) 
 }
   else{
-    addToast("Please Login", { appearance: "warning", autoDismiss: true })
+    // addToast("Please Login", { appearance: "warning", autoDismiss: true })
     setLoginModal(true)
   }
 };
@@ -293,7 +293,7 @@ const onAddToCompare = (data) => {
         </div>
       ) : (
         <div className="pro-details-quality">
-          <div className="cart-plus-minus">
+          {/* <div className="cart-plus-minus">
             <button
               onClick={() =>
                 setQuantityCount(quantityCount > 1 ? quantityCount - 1 : 1)
@@ -328,7 +328,7 @@ const onAddToCompare = (data) => {
             >
               +
             </button>
-          </div>
+          </div> */}
           <div className="pro-details-cart btn-hover">
             {product && product.qty_in_stock > 0 ? (
               <button
@@ -393,34 +393,32 @@ const onAddToCompare = (data) => {
           </div>
                  </div>
       )}
-      {product.grades && product.grades.length > 0 && (
-  <div className="pro-details-meta">
-    <span>Grade</span>
-    <div className="pro-details-meta-content">
-      {productGrades?.map((grade, index) => (
-        <label
-          key={index}
-          className={`pro-details-grade-content--single ${
-            grade.grade === selectedProductGrade ? "active" : ""
-          }`}
-        >
-          <input
-            type="radio"
-            value={grade.grade}
-            name="product-grade"
-            checked={grade.grade === selectedProductGrade}
-            onChange={() => {
-              setSelectedProductGrade(grade.grade);
-              setProductStock(grade.stock);
-              setQuantityCount(1);
-            }}
-          />
-          <span className="grade-name">{grade.grade}</span>
+      { product?.grades && product?.grades?.length > 0 && (
+      <div className="p-4 bg-white rounded-lg">
+        <label htmlFor="grade-select" className="text-lg font-semibold text-gray-700">
+          Select Grade
         </label>
-      ))}
-    </div>
-  </div>
-)}
+        <select
+          id="grade-select"
+          className="mt-2 w-full p-2 border rounded-lg text-gray-700 focus:ring-2 focus:ring-pink-500"
+          value={selectedProductGrade}
+          onChange={(e) => {
+            const selectedGrade = e.target.value;
+            const selectedData = product.grades.find((g) => g === selectedGrade);
+            setSelectedProductGrade(selectedGrade);
+            setProductStock(selectedData?.stock || 0);
+            setQuantityCount(1);
+          }}
+        >
+          <option value="">Select a grade</option>
+          {product?.grades?.map((grade, index) => (
+            <option key={index} value={grade}>
+              {grade}
+            </option>
+          ))}
+        </select>
+      </div>
+    )}
 
       {product.category ? (
         <div className="pro-details-meta">
