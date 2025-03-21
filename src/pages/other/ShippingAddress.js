@@ -40,21 +40,27 @@ const EnquiryHistory = () => {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setNewAddress({ ...newAddress, [name]: value });
+    setNewAddress((prevState) => ({
+      ...prevState,
+      [name]: value ? String(value).trim() : "",
+    }));
   };
-
+  
   const validateFields = () => {
-    return Object.values(newAddress).every((value) => value.trim() !== "");
+    console.log("Validating fields:", newAddress); // Debugging
+    return Object.values(newAddress).every((value) => 
+      typeof value === "string" && value.trim() !== ""
+    );
   };
-
+    
   const handleSaveAddress = () => {
-    if (!validateFields()) {
-      alert("All fields are required.");
-      return;
-    }
+    // if (!validateFields()) {
+    //   alert("All fields are required.");
+    //   return;
+    // }
 
     const apiEndpoint = editMode
-      ? `/address/updateQuoteItems`
+      ? `/address/editEquipmentRequestItem`
       : `/address/insertQuoteItems`;
 
     const addressData = { ...newAddress, contact_id: userData.contact_id };
@@ -72,7 +78,7 @@ const EnquiryHistory = () => {
 
   const handleEditAddress = (address) => {
     setNewAddress(address);
-    setSelectedAddressId(address.company_address_id);
+    setSelectedAddressId(address.customer_address_id);
     setEditMode(true);
     setShowModal(true);
   };
@@ -81,7 +87,7 @@ const EnquiryHistory = () => {
     if (!window.confirm("Are you sure you want to delete this address?")) return;
 
     api
-      .post("/address/deleteQuoteItems", { company_address_id: addressId })
+      .post("/address/deleteTrackEditItem", { customer_address_id: addressId })
       .then(() => {
         alert("Address Deleted Successfully");
         fetchAddresses();
@@ -117,34 +123,41 @@ const EnquiryHistory = () => {
         </div>
 
         {/* Enquiries List */}
-        <div className="d-flex flex-column align-items-center">
-          {enquiries?.map((enquiry, index) => (
-            <div key={index} className="card mb-3 w-75 shadow-sm">
-              <div className="card-body">
-                <h6 className="card-title">{enquiry.shipper_name}</h6>
-                <p className="text-muted">
-                  {enquiry.address_flat}, {enquiry.address_street}, {enquiry.address_town}
-                </p>
-                <p className="text-muted">
-                  {enquiry.address_state}, {enquiry.address_country} {enquiry.address_po_code}
-                </p>
-                <div className="d-flex justify-content-end">
-                  <button
-                    className="btn btn-sm btn-info me-2 mr-3"
-                    onClick={() => handleEditAddress(enquiry)}
-                  >
-                    Edit
-                  </button>
-                  <button
-                    className="btn btn-sm btn-danger"
-                    onClick={() => handleDeleteAddress(enquiry.company_address_id)}
-                  >
-                    Delete
-                  </button>
+        <div className="container">
+          <div className="row shippingAddress">
+          {enquiries?.map((enquiry, index) => {
+              return (
+                <div key={index} className="col-md-6 mb-3">
+                  <div className="card shadow-sm">
+                    <div className="card-body">
+                      <h6 className="card-title">{enquiry.shipper_name}</h6>
+                      <p className="text-muted">
+                        {enquiry.address_flat}, {enquiry.address_street}, {enquiry.address_town}
+                      </p>
+                      <p className="text-muted">
+                        {enquiry.address_state}, {enquiry.address_country} {enquiry.address_po_code}
+                      </p>
+                      <div className="d-flex justify-content-end">
+                        <button
+                          className="btn btn-sm btn-info me-2"
+                          onClick={() => handleEditAddress(enquiry)}
+                        >
+                          Edit
+                        </button>
+                        <button
+                          className="btn btn-sm btn-danger ml-3"
+                          onClick={() => handleDeleteAddress(enquiry.customer_address_id)}
+                        >
+                          Delete
+                        </button>
+                      </div>
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </div>
-          ))}
+              );
+            })}
+
+          </div>
         </div>
       </div>
 

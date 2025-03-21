@@ -12,17 +12,6 @@ import PictureAttachmentModalV3 from "../../components/ReturnOrder/PictureAttach
 import api from "../../constants/api";
 import { Input } from "reactstrap";
 
-import {
-  MDBCol,
-  MDBContainer,
-  MDBRow,
-  MDBCard,
-  MDBCardText,
-  MDBCardBody,
-  MDBCardImage,
-  MDBBtn,
-  MDBTypography,
-} from "mdb-react-ui-kit";
 import imageBase from "../../constants/imageBase";
 
 const MyAccount = ({ location }) => {
@@ -32,7 +21,18 @@ const MyAccount = ({ location }) => {
   const [profile, setProfile] = useState();
   const { addToast } = useToasts();
   const [allcountries, setallCountries] = useState();
-  const [attachmentModal, setAttachmentModal] = useState(false);
+  const [firstName, setFirstName] = useState("");
+  const [mobileError, setMobileError] = useState("");
+  const [firstNameError, setFirstNameError] = useState("");
+  const [signUpEmailError, setSignUpEmailError] = useState("");
+  const [signupPasswordError, setSignupPasswordError] = useState("");
+  const [confirmPasswordError, setConfirmPasswordError] = useState("");
+  const [addressError, setAddressError] = useState("");
+  const [cityError, setCityError] = useState("");
+  const [stateError, setStateError] = useState("");
+  const [countryError, setCountryError] = useState("");
+  const [pinCodeError, setPinCodeError] = useState("");
+    const [attachmentModal, setAttachmentModal] = useState(false);
   const [imageUrl, setImageUrl] = useState("");
   const [pictureData, setDataForPicture] = useState({
     modelType: "",
@@ -51,6 +51,50 @@ const MyAccount = ({ location }) => {
          });
   };
 
+  const validateFirstName = (first_name) => {
+    // name validation regex pattern
+    const firstNamePattern = /^[a-zA-Z]+(([',. -][a-zA-Z ])?[a-zA-Z]*)*$/;
+    return firstNamePattern.test(first_name);
+  };
+  const validateMobile = (mobile) => {
+    // Mobile number validation pattern (10-digit numbers)
+    const mobilePattern = /^[6-9]\d{9}$/;
+    return mobilePattern.test(mobile);
+  };  
+
+  const validateEmail = (email) => {
+    // Email validation regex pattern
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailPattern.test(email);
+  };
+
+  const validatePassword = (password) => {
+    // Password validation regex pattern
+    const passwordPattern =
+      /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*]).{8,}$/;
+    return passwordPattern.test(password);
+  };
+
+  const validateAddress = (address) => {
+    return address.trim().length >= 1; // Minimum 1 character required
+  };  
+  
+  const validateCity = (city) => {
+    return /^[a-zA-Z\s]+$/.test(city); // Only alphabets and spaces
+  };
+  
+  const validateState = (state) => {
+    return /^[a-zA-Z\s]+$/.test(state);
+  };
+  
+  const validateCountry = (country) => {
+    return country !== "";
+  };
+  
+  const validatePinCode = (pinCode) => {
+    return /^[0-9]{5,6}$/.test(pinCode); // 5-6 digit numbers only
+  };
+  
   const getUser = () => {
     api
       .post("/contact/getContactsById", { contact_id: user.contact_id })
@@ -61,30 +105,33 @@ const MyAccount = ({ location }) => {
         console.log(err);
       });
   };
-
+                             
   const updateUserData = () => {
     userData.contact_id = user.contact_id;
-    if (!userData.email || userData.email.trim() === '') {
-      addToast("Please enter the email", {
-        appearance: "warning",
-        autoDismiss: true,
-      });
+    setFirstNameError("");
+    setMobileError("");
+    setSignUpEmailError("");
+  
+    let isValid = true;
+  
+    if (!validateMobile(userData.mobile)) {
+      setMobileError("Invalid Mobile Number");
+      isValid = false;
+    }
+    if (!validateFirstName(userData.first_name)) {
+      setFirstNameError("Invalid Name");
+      isValid = false;
+    }
+    if (!validateEmail(userData.email)) {
+      setSignUpEmailError("Invalid Email");
+      isValid = false;
+    }
+  
+    // Stop execution if validation fails
+    if (!isValid) {
       return;
     }
-    if (!userData.first_name || userData.first_name.trim() === '') {
-      addToast("Please enter the first name", {
-        appearance: "warning",
-        autoDismiss: true,
-      });
-      return;
-    }
-    if (!userData.mobile || userData.mobile.trim() === '') {
-      addToast("Please enter the mobile", {
-        appearance: "warning",
-        autoDismiss: true,
-      });
-      return;
-    }
+  
     api
       .post("/contact/editContactData", userData)
       .then((res) => {
@@ -102,32 +149,30 @@ const MyAccount = ({ location }) => {
         });
       });
   };
+  
   const updateUserPassword = () => {
     userData.contact_id = user.contact_id;
-    if (!userData.pass_word || userData.pass_word.trim() === '') {
-      addToast("Please enter the password", {
-        appearance: "warning",
-        autoDismiss: true,
-      });
-      return;
+    setSignupPasswordError("");
+    setConfirmPasswordError("");
+  
+    let isValid = true;
+  
+    if (!validatePassword(userData.pass_word)) {
+      setSignupPasswordError(
+        "Password must contain at least 8 characters, including uppercase, lowercase, special character & numbers."
+      );
+      isValid = false;
     }
-
-    if (!userData.confirm_password || userData.confirm_password.trim() === '') {
-      addToast("Please enter the confirm password", {
-        appearance: "warning",
-        autoDismiss: true,
-      });
-      return;
-    }
-
     if (userData.pass_word !== userData.confirm_password) {
-      addToast("Password and Confirm Password do not match", {
-        appearance: "error",
-        autoDismiss: true,
-      });
+      setConfirmPasswordError("Passwords do not match");
+      isValid = false;
+    }
+  
+    // Stop execution if validation fails
+    if (!isValid) {
       return;
     }
-
+  
     api
       .post("/contact/editContactPassword", userData)
       .then((res) => {
@@ -145,67 +190,59 @@ const MyAccount = ({ location }) => {
         });
       });
   };
+  
   const updateUserAddress = () => {
-    userData.contact_id = user.contact_id;
-    if (!userData.address1 || userData.address1.trim() === '') {
-      addToast("Please enter the address 1", {
-        appearance: "warning",
-        autoDismiss: true,
-      });
+    setAddressError("");
+    setCityError("");
+    setStateError("");
+    setCountryError("");
+    setPinCodeError("");
+  
+    let isValid = true;
+  
+    if (!validateAddress(userData.address1)) {
+      setAddressError("Invalid Address");
+      isValid = false;
+    }
+    if (!validateCity(userData.address_city)) {
+      setCityError("Invalid city name.");
+      isValid = false;
+    }
+    if (!validateState(userData.address_state)) {
+      setStateError("Invalid state name.");
+      isValid = false;
+    }
+    if (!validateCountry(userData.address_country_code)) {
+      setCountryError("Please select a country.");
+      isValid = false;
+    }
+    if (!validatePinCode(userData.address_po_code)) {
+      setPinCodeError("Invalid Pin Code.");
+      isValid = false;
+    }
+  
+    if (!isValid) {
       return;
     }
-    if (!userData.address2 || userData.address2.trim() === '') {
-      addToast("Please enter the address 2", {
-        appearance: "warning",
-        autoDismiss: true,
-      });
-      return;
-    }
-    if (!userData.address_city || userData.address_city.trim() === '') {
-      addToast("Please enter the city", {
-        appearance: "warning",
-        autoDismiss: true,
-      });
-      return;
-    }
-    if (!userData.address_state || userData.address_state.trim() === '') {
-      addToast("Please enter the state", {
-        appearance: "warning",
-        autoDismiss: true,
-      });
-      return;
-    }
-    if (!userData.address_po_code || userData.address_po_code.trim() === '') {
-      addToast("Please enter the pin code", {
-        appearance: "warning",
-        autoDismiss: true,
-      });
-      return;
-    }
-    if (!userData.address_country_code || userData.address_country_code.trim() === '') {
-      addToast("Please enter the country", {
-        appearance: "warning",
-        autoDismiss: true,
-      });
-      return;
-    }
+  
+    // Proceed with API call if all validations pass
     api
       .post("/contact/editContactAddress", userData)
-      .then((res) => {
-        addToast("Account Info Updated successfully", {
+      .then(() => {
+        addToast("Address updated successfully", {
           appearance: "success",
           autoDismiss: true,
         });
         getUser();
       })
-      .catch((err) => {
-        console.log(err);
-        addToast("Unable to Edit the Account Info", {
+      .catch(() => {
+        addToast("Unable to update the address", {
           appearance: "error",
           autoDismiss: true,
         });
       });
   };
+  
   const dataForPicture = () => {
     setDataForPicture({
       modelType: "picture",
@@ -294,13 +331,17 @@ const MyAccount = ({ location }) => {
                             <div className="row">
                               {/* First Name Field */}
                               <div className="col-12 col-md-6">
-                                <div className="billing-info">
+                              {firstNameError && <span className="error">{firstNameError}</span>}
+                              <div className="billing-info">
                                   <label>Name</label>
                                   <input
                                     type="text"
                                     name="first_name"
                                     value={userData && userData.first_name}
-                                    onChange={handleUserData}
+                                    onChange={(e) => {
+                                      handleUserData(e);
+                                      setFirstName(e.target.value);
+                                    }}
                                     className="form-control"
                                   />
                                 </div>
@@ -308,6 +349,9 @@ const MyAccount = ({ location }) => {
 
                               {/* Email Address Field */}
                               <div className="col-12 col-md-6">
+                                {signUpEmailError && (
+                                  <span className="error">{signUpEmailError}</span>
+                                )}
                                 <div className="billing-info">
                                   <label>Email Address</label>
                                   <input
@@ -322,8 +366,9 @@ const MyAccount = ({ location }) => {
 
                               {/* Telephone Field */}
                               <div className="col-12 col-md-6">
-                                <div className="billing-info">
-                                  <label>Mobile</label>
+                              {mobileError && <span className="error">{mobileError}</span>}
+                              <div className="billing-info">
+                                <label>Mobile</label>
                                   <input
                                     type="text"
                                     name="mobile"
@@ -363,6 +408,9 @@ const MyAccount = ({ location }) => {
                             </div>
                             <div className="row">
                               <div className="col-lg-12 col-md-12">
+                                {signupPasswordError && (
+                                  <span className="error">{signupPasswordError}</span>
+                                )} 
                                 <div className="billing-info">
                                   <label>Password</label>
                                   <input
@@ -374,6 +422,9 @@ const MyAccount = ({ location }) => {
                                 </div>
                               </div>
                               <div className="col-lg-12 col-md-12">
+                                {confirmPasswordError && (
+                                  <span className="error">{confirmPasswordError}</span>
+                                )} 
                                 <div className="billing-info">
                                   <label>Password Confirm</label>
                                   <input
@@ -416,6 +467,7 @@ const MyAccount = ({ location }) => {
                             <div className="">
                               <div className="row">
                                 <div className="col-lg-6 col-md-6">
+                                {addressError && <span className="error">{addressError}</span>}
                                   <div className="billing-info">
                                     <label>Address1</label>
                                     <input
@@ -451,6 +503,7 @@ const MyAccount = ({ location }) => {
                                   </div>
                                 </div>
                                 <div className="col-lg-6 col-md-6">
+                                {cityError && <span className="error">{cityError}</span>}
                                   <div className="billing-info">
                                     <label>City</label>
                                     <input
@@ -464,6 +517,7 @@ const MyAccount = ({ location }) => {
                               </div>
                               <div className="row">
                                 <div className="col-lg-6 col-md-6">
+                                {stateError && <span className="error">{stateError}</span>}
                                   <div className="billing-info">
                                     <label>State</label>
                                     <input
@@ -475,6 +529,7 @@ const MyAccount = ({ location }) => {
                                   </div>
                                 </div>
                                 <div className="col-lg-6 col-md-6">
+                                {countryError && <span className="error">{countryError}</span>}
                                   <div className="billing-info">
                                     <label>Country</label>
                                     <Input
@@ -501,6 +556,7 @@ const MyAccount = ({ location }) => {
                               </div>
                               <div className="row">
                                 <div className="col-lg-6 col-md-6">
+                                {pinCodeError && <span className="error">{pinCodeError}</span>}
                                   <div className="billing-info">
                                     <label>Pin Code</label>
                                     <input
