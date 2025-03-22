@@ -425,7 +425,7 @@ console.log('receiptUrl',receiptUrl)
 
             <Col md={6}>
               <div className="mb-3">
-                <p className="text-muted mr-3 pull-left">Bill of Loading :</p>
+                <p className="text-muted mr-3 pull-left">Bill of Lading :</p>
                 <p className="fw-bold m-0 pull-left">{tracking?.bill_of_loading || 'N/A'}</p>
               </div>
             </Col>

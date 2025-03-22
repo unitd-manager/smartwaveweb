@@ -70,33 +70,42 @@ function Register() {
   };
 
   const signup = (event) => {
-    {
       event.preventDefault();
       setFirstNameError("");
       setMobileError("");
       setSignUpEmailError("");
       setSignupPasswordError("");
 
+      let hasError = false;
+
       if (!validateFirstName(firstName)) {
         setFirstNameError("Invalid Name");
+        hasError = true;
       }
+
       if (!validateMobile(mobile)) {
         setMobileError("Invalid Mobile Number");
+        hasError = true;
       }
       
       // Perform email and password validation
       if (!validateEmail(signupEmail)) {
         setSignUpEmailError("Invalid email");
+        hasError = true;
       }
 
       if (!validatePassword(signupPassword)) {
         setSignupPasswordError(
           "Password must contain at least 8 characters, including UpperCase, LowerCase,Special character & numbers."
         );
+        hasError = true;
+      }
+
+      if (hasError) {
+        return;
       }
 
       // If both email and password are valid, proceed with form submission
-      if (validateEmail(signupEmail) && validatePassword(signupPassword)) {
         signupData.name = signupData.first_name.concat(
           " ",
           signupData.last_name
@@ -132,8 +141,6 @@ function Register() {
               autoDismiss: true,
             });
           });
-      }
-    }
   };
   const sendMail = () => {
     {
