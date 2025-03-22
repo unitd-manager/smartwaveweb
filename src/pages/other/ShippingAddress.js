@@ -46,19 +46,28 @@ const EnquiryHistory = () => {
       [name]: value ? String(value).trim() : "",
     }));
   };
+
+  const [errors, setErrors] = useState({});
   
   const validateFields = () => {
-    console.log("Validating fields:", newAddress); // Debugging
-    return Object.values(newAddress).every((value) => 
-      typeof value === "string" && value.trim() !== ""
-    );
+    let validationErrors = {};
+  
+    if (!newAddress.shipper_name.trim()) validationErrors.shipper_name = "Shipper Name is required";
+    if (!newAddress.address_flat.trim()) validationErrors.address_flat = "Flat/House No. is required";
+    if (!newAddress.address_town.trim()) validationErrors.address_town = "Town/City is required";
+    if (!newAddress.address_country.trim()) validationErrors.address_country = "Country is required";
+    if (!newAddress.address_po_code.trim()) {
+      validationErrors.address_po_code = "Postal Code is required";
+    } else if (!/^\d+$/.test(newAddress.address_po_code)) {
+      validationErrors.address_po_code = "Postal Code must be numeric";
+    }
+  
+    setErrors(validationErrors);
+    return Object.keys(validationErrors).length === 0;
   };
     
   const handleSaveAddress = () => {
-    // if (!validateFields()) {
-    //   alert("All fields are required.");
-    //   return;
-    // }
+    if (!validateFields()) return;
 
     const apiEndpoint = editMode
       ? `/address/editEquipmentRequestItem`
@@ -82,6 +91,17 @@ const EnquiryHistory = () => {
     setSelectedAddressId(address.customer_address_id);
     setEditMode(true);
     setShowModal(true);
+  };
+
+  const modalStyles = {
+    maxHeight: "90vh",
+    display: "flex",
+    flexDirection: "column",
+  };
+  
+  const modalBodyStyles = {
+    overflowY: "auto",
+    maxHeight: "60vh",
   };
 
   const handleDeleteAddress = (addressId) => {
@@ -165,7 +185,7 @@ const EnquiryHistory = () => {
 
       {showModal && (
         <div className="modal d-block" tabIndex="-1" role="dialog">
-          <div className="modal-dialog" role="document">
+          <div className="modal-dialog" style={modalStyles} role="document">
             <div className="modal-content">
               <div className="modal-header">
                 <h5 className="modal-title">
@@ -179,7 +199,7 @@ const EnquiryHistory = () => {
                   X
                 </button>
               </div>
-              <div className="modal-body">
+              <div className="modal-body" style={modalBodyStyles}>
                 {[
                   { name: "shipper_name", placeholder: "Shipper Name" },
                   { name: "address_flat", placeholder: "Flat/House No." },
@@ -190,6 +210,7 @@ const EnquiryHistory = () => {
                   { name: "address_po_code", placeholder: "Postal Code" },
                 ].map((field) => (
                   <div key={field.name} className="mb-2">
+                    {errors[field.name] && <small className="text-danger">{errors[field.name]}</small>}
                     <input
                       type="text"
                       className="form-control"
