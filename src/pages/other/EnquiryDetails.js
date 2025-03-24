@@ -222,156 +222,121 @@ console.log('receiptUrl',receiptUrl)
   return (
     <LayoutOne headerTop="visible">
       <div className="container mt-4">
-      <div className="d-flex align-items-center justify-content-between mb-3 w-100">
-  <div className="d-flex align-items-center">
-    <button className="btn btn-outline-primary me-3" onClick={() => history.goBack()}>
-      <FaArrowLeft className="me-2" /> Back
-    </button>
-    <h4 className="m-4">Enquiry Details</h4>
-    <p className="m-4">Creation Date : {enquiries?.creation_date?.toLocaleString()}</p>
-  </div>
-  <div>
-    {productsLinked && <ProductsLinkedModal productsLinked={productsLinked} />}
-  </div>
-</div>
-
-
-
-{/* 
-        <div className="card p-4 shadow-sm rounded-3">
-          <h6 className="fw-bold">
-            Enquiry ID: <span className="text-primary mr-3">{enquiries?.enquiry_code}</span>
-            <span className="badge bg-success ms-2 text-white">Active</span>
-          </h6>
-
-          <div className="row mt-3">
-            <div className="col-md-6">
-              <p className="mb-1 text-muted">Created Date:</p>
-              <p className="fw-bold">{moment(enquiries?.creation_date).format("MMM DD, YYYY")}</p>
-            </div>
-            <div className="col-md-6">
-              <p className="mb-1 text-muted">Expected Date:</p>
-              <p className="fw-bold text-danger">Jan 25, 2025</p>
-            </div>
-            <div className="col-md-6">
-              <p className="mb-1 text-muted">Budget Range:</p>
-              <p className="fw-bold text-primary">$50.00 - $60.00</p>
-            </div>
-            <div className="col-md-6">
-              <p className="mb-1 text-muted">Preferred Contact:</p>
-              <p className="fw-bold">
-                WhatsApp <FaWhatsapp className="text-success" />
-              </p>
-            </div>
+        <div className="d-flex align-items-center justify-content-between mb-3 w-100">
+          <div className="d-flex align-items-center">
+            <button className="btn btn-outline-primary me-3" onClick={() => history.goBack()}>
+              <FaArrowLeft className="me-2" /> Back
+            </button>
+            <h4 className="m-4">Enquiry Details</h4>
+            <p className="m-4">Creation Date : {enquiries?.creation_date?.toLocaleString()}</p>
           </div>
-        </div> */}
-
+          <div>
+            {productsLinked && <ProductsLinkedModal productsLinked={productsLinked} />}
+          </div>
+        </div>
         <div>
-        <Card className="p-4 shadow-sm rounded-3">
-  {/* Enquiry Code & Status */}
-  <h5 className="fw-bold mb-4">
-    Enquiry Code: <span className="text-primary">{enquiries?.enquiry_code || 'N/A'}</span>
-    {enquiries?.status && (
-      <Badge
-        bg={enquiries.status === "Active" ? "success" : "secondary"}
-        className="ms-2 text-white ml-3"
-      >
-        {enquiries.status}
-      </Badge>
-    )}
-  </h5>
+          <Card className="p-4 shadow-sm rounded-3">
+            {/* Enquiry Code & Status */}
+            <h5 className="fw-bold mb-4">
+              Enquiry Code: <span className="text-primary">{enquiries?.enquiry_code || 'N/A'}</span>
+              {enquiries?.status && (
+                <Badge
+                  bg={enquiries.status === "Active" ? "success" : "secondary"}
+                  className="ms-2 text-white ml-3"
+                >
+                  {enquiries.status}
+                </Badge>
+              )}
+            </h5>
 
-  <Row className="gy-3">
-    {/* Title */}
-    <Col md={6}>
-      <div className="mb-3">
-        <p className="text-muted mb-1">Title:</p>
-        <p className="fw-bold m-0">{enquiries?.title || 'N/A'}</p>
+            <Row className="gy-3">
+              {/* Title */}
+              <Col md={6}>
+                <div className="mb-3">
+                  <p className="text-muted mb-1">Title:</p>
+                  <p className="fw-bold m-0">{enquiries?.title || 'N/A'}</p>
+                </div>
+              </Col>
+
+              {/* Enquiry Type */}
+              <Col md={6}>
+                <div className="mb-3">
+                  <p className="text-muted mb-1">Enquiry Type:</p>
+                  <p className="fw-bold m-0">{enquiries?.enquiry_type || 'N/A'}</p>
+                </div>
+              </Col>
+
+              {/* Address */}
+              <Col md={6}>
+                <div className="mb-3">
+                  <p className="text-muted mb-1">Address:</p>
+                  <p className="fw-bold m-0">{enquiries?.shipping_address || 'N/A'}</p>
+                </div>
+              </Col>
+
+              {/* Creation Date */}
+              <Col md={6}>
+                <div>
+                  <p className="text-muted mb-1">Creation Date:</p>
+                  <p className="fw-bold m-0">
+                    {enquiries?.creation_date ? moment(enquiries.creation_date).format("MMM DD, YYYY") : 'N/A'}
+                  </p>
+                </div>
+              </Col>
+
+              <Col md={6}>
+                <div>
+                  <p className="text-muted mb-1">Order Code:</p>
+                  <p className="fw-bold m-0">{enquiries?.order_code || 'N/A'}</p>
+                </div>
+              </Col>
+            </Row>
+          </Card>
+
+          <h5 className="mb-4 mt-4 fw-bold">Select Address</h5>
+
+          {combinedAddressList?.map((addr) => (
+          <Card
+            key={addr.customer_address_id}
+            className={`mb-3 p-3 shadow-sm ${selectedAddress === addr.customer_address_id ? 'border-primary' : ''}`}
+            style={{ borderRadius: '15px' }}
+          >
+            <Row>
+              <Col xs={10}>
+                <div className="d-flex align-items-center mb-2">
+                  <Badge bg="secondary" className="me-2">
+                    {/* <h6 className="m-0 fw-bold text-white">{addr.shipper_name || "Address"}</h6> */}
+                    <h6 className="m-0 fw-bold text-white">
+                      {addr.customer_address_id === 'profile' ? 'Profile Address' : (addr.shipper_name || 'Address')}
+                    </h6>
+                  </Badge>        
+                </div>
+                <div className="text-muted small">
+                  {addr.address_flat}, {addr.address_street}<br />
+                  {addr.address_city}, {addr.address_town} - {addr.address_po_code}<br />
+                  {addr.address_state}, {addr.address_country}
+                </div>
+                {addr.phone && (
+                  <p className="m-0 text-muted small mt-1"><b>Phone:</b> {addr.phone}</p>
+                )}
+              </Col>
+              <Col xs={2} className="text-end">
+                <Form.Check
+                  type="radio"
+                  name="addressSelect"
+                  checked={selectedAddress === addr.customer_address_id}
+                  onChange={() => handleSelect(addr.customer_address_id)}
+                  style={{ transform: 'scale(0.5)' }}
+                />
+              </Col>
+            </Row>
+          </Card>
+        ))}
+
+        <button className="btn btn-primary mt-2" onClick={()=>generateOrder()}>
+            Save Address
+        </button>
       </div>
-    </Col>
-
-    {/* Enquiry Type */}
-    <Col md={6}>
-      <div className="mb-3">
-        <p className="text-muted mb-1">Enquiry Type:</p>
-        <p className="fw-bold m-0">{enquiries?.enquiry_type || 'N/A'}</p>
-      </div>
-    </Col>
-
-    {/* Address */}
-    <Col md={6}>
-      <div className="mb-3">
-        <p className="text-muted mb-1">Address:</p>
-        <p className="fw-bold m-0">{enquiries?.shipping_address || 'N/A'}</p>
-      </div>
-    </Col>
-
-    {/* Creation Date */}
-    <Col md={6}>
-      <div>
-        <p className="text-muted mb-1">Creation Date:</p>
-        <p className="fw-bold m-0">
-          {enquiries?.creation_date ? moment(enquiries.creation_date).format("MMM DD, YYYY") : 'N/A'}
-        </p>
-      </div>
-    </Col>
-
-    <Col md={6}>
-      <div>
-        <p className="text-muted mb-1">Order Code:</p>
-        <p className="fw-bold m-0">{enquiries?.order_code || 'N/A'}</p>
-      </div>
-    </Col>
-  </Row>
-</Card>
-
-  <h5 className="mb-4 mt-4 fw-bold">Select Shipping Address</h5>
-
-  {combinedAddressList?.map((addr) => (
-  <Card
-    key={addr.customer_address_id}
-    className={`mb-3 p-3 shadow-sm ${selectedAddress === addr.customer_address_id ? 'border-primary' : ''}`}
-    style={{ borderRadius: '15px' }}
-  >
-    <Row>
-      <Col xs={10}>
-        <div className="d-flex align-items-center mb-2">
-          <Badge bg="secondary" className="me-2">
-            {/* <h6 className="m-0 fw-bold text-white">{addr.shipper_name || "Address"}</h6> */}
-            <h6 className="m-0 fw-bold text-white">
-  {addr.customer_address_id === 'profile' ? 'Profile Address' : (addr.shipper_name || 'Address')}
-</h6>
-
-          </Badge>        
-        </div>
-        <div className="text-muted small">
-          {addr.address_flat}, {addr.address_street}<br />
-          {addr.address_city}, {addr.address_town} - {addr.address_po_code}<br />
-          {addr.address_state}, {addr.address_country}
-        </div>
-        {addr.phone && (
-          <p className="m-0 text-muted small mt-1"><b>Phone:</b> {addr.phone}</p>
-        )}
-      </Col>
-      <Col xs={2} className="text-end">
-        <Form.Check
-          type="radio"
-          name="addressSelect"
-          checked={selectedAddress === addr.customer_address_id}
-          onChange={() => handleSelect(addr.customer_address_id)}
-          style={{ transform: 'scale(0.5)' }}
-        />
-      </Col>
-    </Row>
-  </Card>
-))}
-
-<button className="btn btn-primary mt-2" onClick={()=>generateOrder()}>
-          Save Address
-          </button>
- 
-</div>
-
 
         {/* Stylish File Upload Section */}
         <h6 className="fw-bold mt-4">Payment Receipt</h6>
@@ -395,45 +360,45 @@ console.log('receiptUrl',receiptUrl)
               {receiptFile.name}
             </p>
           )}
-{ uploaded &&  <div className='progress mt-2'>
-                    <div className="progress-bar h-4" role='progressbar'
-                    aria-valuenow={uploaded}
-                    aria-valuemin='0'
-                    aria-valuemax='100'
-                    style={{width:`${uploaded}%`}}>
-                      {`${uploaded}% uploaded`}
-                    </div>
-                </div>}
-                {receiptFile && (<button className="btn btn-primary mt-2" onClick={handleUpload} disabled={!receiptFile}>
+          { uploaded &&  <div className='progress mt-2'>
+            <div className="progress-bar h-4" role='progressbar'
+              aria-valuenow={uploaded}
+              aria-valuemin='0'
+              aria-valuemax='100'
+              style={{width:`${uploaded}%`}}>
+                {`${uploaded}% uploaded`}
+            </div>
+          </div>}
+          {receiptFile && (<button className="btn btn-primary mt-2" onClick={handleUpload} disabled={!receiptFile}>
             <FaUpload className="me-2" /> Upload Receipt
           </button>)}
         </div>
 
         {/* Show Uploaded Receipt */}
         {receiptUrl && receiptUrl.length > 0 && receiptUrl.map((res, index) => (
-  <div
-    key={index}
-    className="d-flex justify-content-between align-items-center my-2"
-  >
-    <a
-      href={`https://smartwave.unitdtechnologies.com:2014/category/download/${res.name}`}
-      target="_blank"
-      rel="noopener noreferrer"
-      className="text-decoration-none d-flex align-items-center text-primary"
-    >
-      <FaFileDownload className="me-2" />
-      {res.name}
-    </a>
+        <div
+          key={index}
+          className="d-flex justify-content-between align-items-center my-2"
+        >
+          <a
+            href={`https://smartwave.unitdtechnologies.com:2014/category/download/${res.name}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-decoration-none d-flex align-items-center text-primary"
+          >
+            <FaFileDownload className="me-2" />
+            {res.name}
+          </a>
     
-    <button
-      type="button"
-      className="btn btn-sm btn-light shadow-none"
-      onClick={() => deleteFile(res.media_id)}
-    >
-      <FaTrash />
-    </button>
-  </div>
-))}
+          <button
+            type="button"
+            className="btn btn-sm btn-light shadow-none"
+            onClick={() => deleteFile(res.media_id)}
+          >
+            <FaTrash />
+          </button>
+        </div>
+        ))}
 
 
         <Card className="p-4 shadow-sm rounded-3 mb-4">
@@ -460,7 +425,7 @@ console.log('receiptUrl',receiptUrl)
 
             <Col md={6}>
               <div className="mb-3">
-                <p className="text-muted mr-3 pull-left">Bill of Loading :</p>
+                <p className="text-muted mr-3 pull-left">Bill of Lading :</p>
                 <p className="fw-bold m-0 pull-left">{tracking?.bill_of_loading || 'N/A'}</p>
               </div>
             </Col>
