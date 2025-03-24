@@ -8,54 +8,31 @@ const ShopCategories = ({
   categories,
   selectedCategories,setSelectedCategories,getSortParams,
   setSelectedCategory
-  ,selectedCategory
+  ,selectedCategory,
+  subcategories,subcategoryTypes
    }) => {
   // const [selectedCategories, setSelectedCategories] = useState([]);
-  // const [selectedCategory, setSelectedCategory] = useState(null);
+
 console.log('selectedCategories',selectedCategories);
 const history=useHistory();
-// const categories = [
-//   { category_id: "1", category_title: "Electronics" },
-//   { category_id: "2", category_title: "Clothing" },
-// ];
-
-// const subcategories = [
-//   { subcategory_id: "101", subcategory_title: "Mobile Phones", parent_id: "1" },
-//   { subcategory_id: "102", subcategory_title: "Laptops", parent_id: "1" },
-//   { subcategory_id: "201", subcategory_title: "Men's Wear", parent_id: "2" },
-//   { subcategory_id: "202", subcategory_title: "Women's Wear", parent_id: "2" },
-// ];
-
-// const subcategoryTypes = [
-//   { type_id: "1001", type_title: "Android Phones", subcategory_id: "101" },
-//   { type_id: "1002", type_title: "iPhones", subcategory_id: "101" },
-//   { type_id: "2001", type_title: "Gaming Laptops", subcategory_id: "102" },
-//   { type_id: "2002", type_title: "Ultrabooks", subcategory_id: "102" },
-//   { type_id: "3001", type_title: "Casual Wear", subcategory_id: "201" },
-//   { type_id: "3002", type_title: "Formal Wear", subcategory_id: "201" },
-// ];
 
 
-  const handleCategorySelection = (categoryId) => {
-    let updatedCategories = [...selectedCategories];
+  
 
-    if (categoryId === "") {
-      // If "All Categories" is clicked, reset selection
-      updatedCategories = [];
-    } else {
-      if (updatedCategories.includes(categoryId)) {
-        // Remove category if already selected
-        updatedCategories = updatedCategories.filter(id => id !== categoryId);
-      } else {
-        // Add category to selection
-        updatedCategories.push(categoryId);
-      }
-    }
+const handleCategorySelection = (categoryId) => {
+  if (selectedCategories === categoryId) {
+    // If the same category is clicked, unselect it
+    //setSelectedCategory('');
+    setSelectedCategories("");
+    getSortParams("category", "");
+  } else {
+    // Select only the new category
+    setSelectedCategories(categoryId);
+    //setSelectedCategory(categoryId);
+    getSortParams("category", categoryId);
+  }
+};
 
-    // setSelectedCategory(categoryId);
-    setSelectedCategories(updatedCategories);
-    getSortParams("category", updatedCategories,updatedCategories); // Pass selected categories array
-  };
   // const handleCategorySelection = (categoryId) => {
   //   let updatedCategories = [...selectedCategories];
   
@@ -88,44 +65,35 @@ console.log('selectedCategories',selectedCategories);
                     setActiveSort(e);
                     history.push('/shop')
                   }}
-                  className={selectedCategories.length === 0 ? "active" : ""}
+                
                 >
                  Clear All
                 </button>
               </div>
             </li>
-            
-            {/* {categories.map((category) => {
-  const isSelected = selectedCategories.includes(category.category_id); // Ensure selection is checked
-  return (
-    <li key={category.category_id}>
-      <div className="sidebar-widget-list-left">
-        <button
-          onClick={e => {
-            handleCategorySelection(category.category_id);
-            setActiveSort(e);
-          }}
-           className={isSelected ? "active" : ""}
-        
-        >
-          <span className="checkmark" /> {category.category_title}
-        </button>
-      </div>
-    </li>
-  );
-})} */}
+          
 {categories.map((category) => (
+  <div key={category.category_id}>
   <label key={category.category_id} className="custom-checkbox">
     <input
       type="checkbox"
       value={category.category_id}
-      checked={selectedCategories.includes(String(category.category_id))}
-     // checked={selectedCategories.includes(category.category_id)}
+      checked={selectedCategories === String(category.category_id)}
       onChange={() => handleCategorySelection(String(category.category_id))}
     />
     <span className="checkmark"></span> {category.category_title}
   </label>
+       {selectedCategories ===  String(category.category_id) && (
+        <SubcategoriesTree
+          categoryId={category.category_id}
+          subcategories={subcategories}
+          subcategoryTypes={subcategoryTypes}
+          getSortParams={getSortParams}
+        />
+      )}
+      </div>
 ))}
+
 
 
           </ul>
@@ -133,14 +101,7 @@ console.log('selectedCategories',selectedCategories);
           "No categories found"
         )}
       </div>
-      {/* {selectedCategories.length > 0 && (
-  <SubcategoriesTree
-    categories={categories.filter(cat => selectedCategories.includes(cat.category_id))}
-    subcategories={subcategories}
-    subcategoryTypes={subcategoryTypes}
-  />
-)} */}
-
+    
     </div>
   );
 };

@@ -1,61 +1,67 @@
 import PropTypes from "prop-types";
 import React, { useState } from "react";
 
-const SubcategoriesTree = ({ categories, subcategories, subcategoryTypes }) => {
-  const [expanded, setExpanded] = useState({});
+const SubcategoriesTree = ({ categoryId, subcategories, subcategoryTypes,getSortParams }) => {
+  const [selectedSubcategory, setSelectedSubcategory] = useState(null);
+  const [selectedType, setSelectedType] = useState(null);
 
-  const toggleExpand = (id) => {
-    setExpanded((prev) => ({ ...prev, [id]: !prev[id] }));
+  const handleSubcategorySelection = (subcategoryId) => {
+    setSelectedSubcategory(subcategoryId === selectedSubcategory ? null : subcategoryId);
+    setSelectedType(null); 
+    getSortParams("subcategory", subcategoryId);
+  };
+
+  const handleTypeSelection = (typeId) => {
+    setSelectedType(typeId === selectedType ? null : typeId);
+    getSortParams("subcategorytype", typeId);
   };
 
   return (
-    <div className="sidebar-widget">
-      <h4 className="pro-sidebar-title">Category Tree</h4>
-      <div className="sidebar-widget-list mt-30">
-        {categories?.map((category) => (
-          <div key={category.category_id}>
-            <div className="category-item">
-              <button onClick={() => toggleExpand(category.category_id)}>
-                {expanded[category.category_id] ? "▼" : "▶"} {category.category_title}
-              </button>
-            </div>
+    <ul style={{ marginLeft: "20px", listStyle: "none" }}>
+      {subcategories
+        .filter(sub => sub.category_id=== categoryId) // Show only subcategories of selected category
+        .map(sub => (
+          <li key={sub.sub_category_id}>
+            <label className="custom-checkbox">
+              <input
+                type="radio"
+                name="subcategory"
+                value={sub.sub_category_id}
+                checked={selectedSubcategory === sub.sub_category_id}
+                onChange={() => handleSubcategorySelection(sub.sub_category_id)}
+              />
+              <span className="checkmark"></span> {sub.sub_category_title}
+            </label>
 
-            {expanded[category.category_id] && (
-              <ul className="subcategory-list">
-                {subcategories
-                  .filter((sub) => sub.parent_id === category.category_id)
-                  .map((subcategory) => (
-                    <li key={subcategory.subcategory_id}>
-                      <div className="subcategory-item">
-                        <button onClick={() => toggleExpand(subcategory.subcategory_id)}>
-                          {expanded[subcategory.subcategory_id] ? "▼" : "▶"} {subcategory.subcategory_title}
-                        </button>
-                      </div>
-
-                      {expanded[subcategory.subcategory_id] && (
-                        <ul className="subcategory-type-list">
-                          {subcategoryTypes
-                            .filter((type) => type.subcategory_id === subcategory.subcategory_id)
-                            .map((type) => (
-                              <li key={type.type_id} className="subcategory-type-item">
-                                {type.type_title}
-                              </li>
-                            ))}
-                        </ul>
-                      )}
+            {/* Show Subcategory Types if subcategory is selected */}
+            {selectedSubcategory === sub.sub_category_id && (
+              <ul style={{ marginLeft: "20px", listStyle: "none" }}>
+                {subcategoryTypes
+                  .filter(type => type.sub_category_id === sub.sub_category_id)
+                  .map(type => (
+                    <li key={type.sub_category_type_id}>
+                      <label className="custom-checkbox">
+                        <input
+                          type="radio"
+                          name="subcategoryType"
+                          value={type.sub_category_type_id}
+                          checked={selectedType === type.sub_category_type_id}
+                          onChange={() => handleTypeSelection(type.sub_category_type_id)}
+                        />
+                        <span className="checkmark"></span> {type.type_title}
+                      </label>
                     </li>
                   ))}
               </ul>
             )}
-          </div>
+          </li>
         ))}
-      </div>
-    </div>
+    </ul>
   );
 };
 
 SubcategoriesTree.propTypes = {
-  categories: PropTypes.array.isRequired,
+  categoryId: PropTypes.string.isRequired,
   subcategories: PropTypes.array.isRequired,
   subcategoryTypes: PropTypes.array.isRequired,
 };

@@ -17,7 +17,7 @@ const Shop = ({}) => {
   const [layout, setLayout] = useState('grid three-column');
   const [sortType, setSortType] = useState("");
   const [sortValue, setSortValue] = useState("");
-  const [selectedCategories, setSelectedCategories] = useState([]);
+  const [selectedCategories, setSelectedCategories] = useState();
   const [filterSortType, setFilterSortType] = useState("");
   const [filterSortValue, setFilterSortValue] = useState("");
   const [offset, setOffset] = useState(0);
@@ -51,8 +51,8 @@ const Shop = ({}) => {
         });
     } else if (cate) {
       // If category exists, set it as selected category
-      setSelectedCategories([cate]); // <-- this line adds category to selectedCategories
-      getSortParams("category", cate, [cate]); // Pass to getSortParams as well
+      setSelectedCategories(cate); // <-- this line adds category to selectedCategories
+      getSortParams("category", cate); // Pass to getSortParams as well
     } else {
       api
         .get("/product/getAllProducts")
@@ -78,11 +78,11 @@ const Shop = ({}) => {
     setLayout(layout);
   };
 
-  const getSortParams = (sortType, sortValue, selectedCats = selectedCategories) => {
-    console.log('selectedCategories getparams', selectedCats);
+  const getSortParams = (sortType, sortValue) => {
+    console.log('selectedCategories getparams');
     setSortType(sortType);
     setSortValue(sortValue);
-    setSelectedCategories(selectedCats);
+    setSelectedCategories(sortValue);
     console.log("sortType", sortType);
     console.log("sortvalue", sortValue);
   };
@@ -95,17 +95,17 @@ const Shop = ({}) => {
 console.log('selectedCategories',selectedCategories);
   useEffect(() => {
     const filter = async () => {
-      let sortedProducts = getSortedProducts(products, sortType, sortValue,selectedCategories);
+      let sortedProducts = getSortedProducts(products, sortType, sortValue);
       const filterSortedProducts = await getSortedProducts(
         sortedProducts,
         filterSortType,
-        filterSortValue,selectedCategories
+        filterSortValue
       );
       console.log("sortedpros", sortedProducts);
       sortedProducts = filterSortedProducts;
       console.log("sorted", sortedProducts);
       setSortedProducts(sortedProducts);
-      setCurrentData(sortedProducts.slice(offset, offset + pageLimit));
+      setCurrentData(sortedProducts?.slice(offset, offset + pageLimit));
     };
     filter();
   }, [offset, products, sortType, sortValue, selectedCategories,filterSortType, filterSortValue]);
@@ -158,8 +158,8 @@ console.log('selectedCategories',selectedCategories);
                 <ShopTopbar
                   getLayout={getLayout}
                   getFilterSortParams={getFilterSortParams}
-                  productCount={products.length}
-                  sortedProductCount={currentData.length}
+                  productCount={products?.length}
+                  sortedProductCount={currentData?.length}
                 />
                 {/* shop page content default */}
                 <ShopProducts layout={layout} products={currentData} />
@@ -167,7 +167,7 @@ console.log('selectedCategories',selectedCategories);
                 {/* shop product pagination */}
                 <div className="pro-pagination-style text-center mt-30">
                   <Paginator
-                    totalRecords={sortedProducts.length}
+                    totalRecords={sortedProducts?.length}
                     pageLimit={pageLimit}
                     pageNeighbours={2}
                     setOffset={setOffset}
