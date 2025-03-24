@@ -67,7 +67,7 @@ const formattedTitle = product.title.replace(/\s+/g, '-');
           className={`product-wrap ${
             spaceBottomClass ? spaceBottomClass : ""
           } ${colorClass ? colorClass : ""} `}
-          style={{ padding: "25px" }}
+          style={{ padding: "10px" }}
         >
           <div className="product-img">
             <Link to={process.env.PUBLIC_URL + "/product/" + product.product_id+"/"+formattedTitle}>
