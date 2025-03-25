@@ -17,6 +17,7 @@ const Shop = ({}) => {
   const [layout, setLayout] = useState('grid three-column');
   const [sortType, setSortType] = useState("");
   const [sortValue, setSortValue] = useState("");
+  const [sortarray, setSortArray] = useState([]);
   const [selectedCategories, setSelectedCategories] = useState();
   const [filterSortType, setFilterSortType] = useState("");
   const [filterSortValue, setFilterSortValue] = useState("");
@@ -78,11 +79,12 @@ const Shop = ({}) => {
     setLayout(layout);
   };
 
-  const getSortParams = (sortType, sortValue) => {
+  const getSortParams = (sortType, sortValue,sortarray) => {
     console.log('selectedCategories getparams');
     setSortType(sortType);
     setSortValue(sortValue);
     setSelectedCategories(sortValue);
+    setSortArray(sortarray);
     console.log("sortType", sortType);
     console.log("sortvalue", sortValue);
   };
@@ -95,11 +97,11 @@ const Shop = ({}) => {
 console.log('selectedCategories',selectedCategories);
   useEffect(() => {
     const filter = async () => {
-      let sortedProducts = getSortedProducts(products, sortType, sortValue);
+      let sortedProducts = getSortedProducts(products, sortType, sortValue,sortarray);
       const filterSortedProducts = await getSortedProducts(
         sortedProducts,
         filterSortType,
-        filterSortValue
+        filterSortValue,sortarray
       );
       console.log("sortedpros", sortedProducts);
       sortedProducts = filterSortedProducts;

@@ -12,6 +12,8 @@ const ShopSidebar = ({ products, getSortParams, selectedCategories,setSelectedCa
 const[categories,setCategories]=useState([]);
 const[subCategories,setSubCategories]=useState([]);
 const[subCategoryTypes,setSubCategoryTypes]=useState([]);
+const[selectedSubCategory,setSelectedSubCategory]=useState([]);
+const[selectedSubCategoryTypes,setSelectedSubCategoryTypes]=useState([]);
 console.log('products',products)
 console.log('tags',uniqueTags);
   useEffect(()=>{
@@ -37,6 +39,10 @@ console.log('tags',uniqueTags);
       <ShopCategories
       selectedCategories={selectedCategories}
       setSelectedCategories={setSelectedCategories} 
+      setSelectedSubCategory={setSelectedSubCategory}
+      selectedSubCategory={selectedSubCategory}
+      selectedSubCategoryTypes={selectedSubCategoryTypes}
+      setSelectedSubCategoryTypes={setSelectedSubCategoryTypes}
         categories={categories}
         getSortParams={getSortParams}
         subcategories={subCategories}

@@ -156,7 +156,7 @@ export const getProductCartQuantity = (cartItems, product, color, size) => {
 //   return products;
 // };
 
-export const getSortedProducts = async (products, sortType, sortValue) => {
+export const getSortedProducts = async (products, sortType, sortValue,sortarray) => {
   if (sortType && sortValue) {
     console.log('Selected filter:', sortType, sortValue);
 
@@ -166,13 +166,13 @@ export const getSortedProducts = async (products, sortType, sortValue) => {
         return response.data.data;
       }
 
-      if (sortType === "subcategory" && sortValue !== '') {
-        const response = await api.post('/category/getProductBySubcategory', { sub_category_id: sortValue });
+      if (sortType === "subcategory" && sortValue !== '' && sortarray.length>0) {
+        const response = await api.post('/category/getProductBySubcategory', { sub_category_ids: sortarray });
         return response.data.data;
       }
 
-      if (sortType === "subcategorytype" && sortValue !== '') {
-        const response = await api.post('/category/getProductBySubCategoryType', { sub_category_type_id: sortValue });
+      if (sortType === "subcategorytype" && sortValue !== '' && sortarray.length>0) {
+        const response = await api.post('/category/getProductBySubCategoryType', { sub_category_type_ids: sortarray });
         return response.data.data;
       }
 
