@@ -17,6 +17,7 @@ const EnquiryDetails = () => {
   const [tracking, setTracking] = useState({});
   const [profile, setProfile] = useState({});
   const [receiptFile, setReceiptFile] = useState(null);
+  const [receiptFileDoc, setReceiptFileDoc] = useState(null);
   const [receiptUrl, setReceiptUrl] = useState("");
   const [addressList, setAddressList] = useState([]);
   const [productsLinked, setProductsLinked] = useState([]);
@@ -146,30 +147,70 @@ console.log('receiptUrl',receiptUrl)
     formData.append("enquiry_id", id);
     formData.append('record_id', id)
     formData.append('room_name', 'PaymentReceipt')
-                formData.append('alt_tag_data', 'PaymentReceipt')
-                formData.append('description', 'PaymentReceipt')
-                api.post('/file/uploadFiles',formData,{onUploadProgress:(filedata)=>{
-                  console.log( Math.round((filedata.loaded/filedata.total)*100))
-                  setUploaded( Math.round((filedata.loaded/filedata.total)*100))
-                 
-              }}).then(()=>{
-   
-                  addToast("Files Uploaded Successfully", {
-                    appearance: "success",
-                    autoDismiss: true,
-                  })
-                  setTimeout(() => {
-                      window.location.reload()
-                  }, 400);
-              }).catch(()=>{
-                  
-                addToast("Unable to upload file", {
-                  appearance: "error",
-                  autoDismiss: true,
-                })
-              
-                  
-              })
+    formData.append('alt_tag_data', 'PaymentReceipt')
+    formData.append('description', 'PaymentReceipt')
+    api.post('/file/uploadFiles',formData,{onUploadProgress:(filedata)=>{
+      console.log( Math.round((filedata.loaded/filedata.total)*100))
+      setUploaded( Math.round((filedata.loaded/filedata.total)*100))                 
+    }}).then(()=>{
+      addToast("Files Uploaded Successfully", {
+        appearance: "success",
+        autoDismiss: true,
+      })
+      setTimeout(() => {
+          window.location.reload()
+      }, 400);
+    }).catch(()=>{                  
+      addToast("Unable to upload file", {
+        appearance: "error",
+        autoDismiss: true,
+      })                                
+    })
+  };
+
+  const handleFileDocChange = (e) => {
+    const file = e.target.files[0];
+
+    if (file) {
+      if (file.type !== "application/pdf") {
+        alert("Only PDF files are allowed!");
+        e.target.value = "";
+        return;
+      }
+      setReceiptFileDoc(file);
+    }
+  };
+
+  const handleUploadOnDoc = async () => {
+    if (!receiptFileDoc) {
+      alert("Please select a PDF file first.");
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("files", receiptFileDoc);
+    formData.append("enquiry_id", id);
+    formData.append('record_id', id)
+    formData.append('room_name', 'OnDocPayment')
+    formData.append('alt_tag_data', 'OnDocPayment')
+    formData.append('description', 'OnDocPayment')
+    api.post('/file/uploadFiles',formData,{onUploadProgress:(filedata)=>{
+      console.log( Math.round((filedata.loaded/filedata.total)*100))
+      setUploaded( Math.round((filedata.loaded/filedata.total)*100))                 
+    }}).then(()=>{
+      addToast("Files Uploaded Successfully", {
+        appearance: "success",
+        autoDismiss: true,
+      })
+      setTimeout(() => {
+          window.location.reload()
+      }, 400);
+    }).catch(()=>{                  
+      addToast("Unable to upload file", {
+        appearance: "error",
+        autoDismiss: true,
+      })                                
+    })
   };
 
   const generateOrder = () => {
@@ -400,6 +441,67 @@ console.log('receiptUrl',receiptUrl)
         </div>
         ))}
 
+        {/* 2. On documents payment Upload Section */}
+        {/* <h6 className="fw-bold mt-4">On documents payment</h6>
+        <div className="card p-4 text-center border-dashed mb-3">
+          <div className="custom-file-upload">
+            <input
+              type="file"
+              id="fileInputDoc"
+              className="d-none"
+              accept="application/pdf"
+              onChange={handleFileDocChange}
+            />
+            <label htmlFor="fileInputDoc" className="btn btn-outline-primary">
+              <FaUpload className="me-2" /> Choose PDF File
+            </label>
+          </div>
+
+          {receiptFileDoc && (
+            <p className="mt-2 text-success">
+              <FaFilePdf className="me-2" />
+              {receiptFileDoc.name}
+            </p>
+          )}
+          { uploaded &&  <div className='progress mt-2'>
+            <div className="progress-bar h-4" role='progressbar'
+              aria-valuenow={uploaded}
+              aria-valuemin='0'
+              aria-valuemax='100'
+              style={{width:`${uploaded}%`}}>
+                {`${uploaded}% uploaded`}
+            </div>
+          </div>}
+          {receiptFileDoc && (<button className="btn btn-primary mt-2" onClick={handleUploadOnDoc} disabled={!receiptFileDoc}>
+            <FaUpload className="me-2" /> Upload Receipt
+          </button>)}
+        </div>
+
+        {receiptUrl && receiptUrl.length > 0 && receiptUrl.map((res, index) => (
+        <div
+          key={index}
+          className="d-flex justify-content-between align-items-center my-2"
+        >
+          <a
+            href={`https://smartwave.unitdtechnologies.com:2014/category/download/${res.name}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-decoration-none d-flex align-items-center text-primary"
+          >
+            <FaFileDownload className="me-2" />
+            {res.name}
+          </a>
+    
+          <button
+            type="button"
+            className="btn btn-sm btn-light shadow-none"
+            onClick={() => deleteFile(res.media_id)}
+          >
+            <FaTrash />
+          </button>
+        </div>
+        ))} */}
+
 
         <Card className="p-4 shadow-sm rounded-3 mb-4">
           {/* Enquiry Code & Status */}
@@ -439,17 +541,17 @@ console.log('receiptUrl',receiptUrl)
 
             <Col md={6}>
               <div className="mb-3">
-                <p className="text-muted mr-3 pull-left">ETA :</p>
-                <p className="fw-bold m-0 pull-left">{tracking?.expected_delivery_date || 'N/A'}</p>
+                <p className="text-muted mr-3 pull-left">ETD :</p>
+                <p className="fw-bold m-0 pull-left">{tracking?.actual_delivery_date || 'N/A'}</p>
               </div>
             </Col>
 
             <Col md={6}>
               <div className="mb-3">
-                <p className="text-muted mr-3 pull-left">ETD :</p>
-                <p className="fw-bold m-0 pull-left">{tracking?.actual_delivery_date || 'N/A'}</p>
+                <p className="text-muted mr-3 pull-left">ETA :</p>
+                <p className="fw-bold m-0 pull-left">{tracking?.expected_delivery_date || 'N/A'}</p>
               </div>
-            </Col>
+            </Col>          
           </Row>
           
         </Card>
