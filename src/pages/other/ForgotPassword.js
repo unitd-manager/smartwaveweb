@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useState,useEffect } from "react";
 import MetaTags from "react-meta-tags";
 import { Link, useHistory } from "react-router-dom";
 import { BreadcrumbsItem } from "react-breadcrumbs-dynamic";
@@ -14,6 +14,7 @@ const ForgotPassword = ({ location }) => {
   const { pathname } = location;
 
   const [email, setEmail] = useState("");
+  const [contactMails, setContactMails] = useState([]);
 
   const { addToast } = useToasts();
   const history = useHistory();
@@ -24,17 +25,38 @@ const ForgotPassword = ({ location }) => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-
+    if (!email) {
+      addToast("Please enter your email.", { appearance: "error" });
+      return;
+    }
+  
+    // Extract email values from contactMails
+    const emailList = contactMails.map((contact) => contact.email);
+  
+    if (!emailList.includes(email)) {
+      addToast("This email is not registered.", { appearance: "error" });
+      return;
+    }
     api
       .post("api/forgot", { email: email })
       .then((res) => {
-        res.json({});
+        addToast("A Link to reset password is sent to the mail.", { appearance: "success" });
       })
       .catch(() => {
         console.log("error");
       });
   };
+useEffect(()=>{
 
+  api
+  .get("api/getAllContactMails")
+  .then((res) => {
+    setContactMails(res.data.data)
+  })
+  .catch(() => {
+    console.log("error");
+  });
+},[])
   const signin = (event) => {};
   return (
     <Fragment>
