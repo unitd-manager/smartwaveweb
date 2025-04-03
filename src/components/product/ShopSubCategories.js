@@ -13,8 +13,15 @@ const SubcategoriesTree = ({
       : [...selectedSubCategories, subcategoryId]; // Add if not selected
 
     setSelectedSubCategories(updatedSubCategories);
+    if(updatedSubCategories.length >0){
     getSortParams("subcategory", subcategoryId,updatedSubCategories);
+    }
+    if(updatedSubCategories.length=== 0){
+      setSelectedSubCategoryTypes([]);
+      getSortParams("category", categoryId);
+    }
   };
+
 
   const handleTypeSelection = (typeId) => {
     let updatedTypes = selectedSubCategoryTypes.includes(typeId)
@@ -22,7 +29,14 @@ const SubcategoriesTree = ({
       : [...selectedSubCategoryTypes, typeId]; // Add if not selected
 
     setSelectedSubCategoryTypes(updatedTypes);
-    getSortParams("subcategorytype",typeId ,updatedTypes);
+    // getSortParams("subcategorytype",typeId ,updatedTypes);
+
+    if(updatedTypes.length >0){
+      getSortParams("subcategorytype",typeId ,updatedTypes);
+      }
+      if(updatedTypes.length=== 0){
+        getSortParams("subcategory", typeId,selectedSubCategories);
+      }
   };
 
   return (

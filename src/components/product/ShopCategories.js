@@ -173,6 +173,7 @@ const ShopCategories = ({
         <div className="mt-3"> 
         <SubcategoriesTree
           categoryId={selectedCategory}
+          selectedCategory={selectedCategory}
           subcategories={subcategories}
           subcategoryTypes={subcategoryTypes}
           selectedSubCategories={selectedSubCategories}
