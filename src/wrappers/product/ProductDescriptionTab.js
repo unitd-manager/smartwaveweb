@@ -9,6 +9,8 @@ import api from "../../constants/api";
 const ProductDescriptionTab = ({ spaceBottomClass, orderedProducts,product,comments }) => {
 const {id}=useParams();
  console.log('orderedProducts',orderedProducts);
+  product.product_description = product?.product_description?.replace(/<[^>]*>/g, '');
+  product.description = product?.description?.replace(/<[^>]*>/g, '');
   return (
     <div className={`description-review-area ${spaceBottomClass}`}>
       <div className="container">
@@ -23,9 +25,9 @@ const {id}=useParams();
               <Nav.Item>
                 <Nav.Link eventKey="productDescription">Description</Nav.Link>
               </Nav.Item>
-              <Nav.Item>
+              {/* <Nav.Item>
                 <Nav.Link eventKey="productReviews">Reviews({comments&& comments.length})</Nav.Link>
-              </Nav.Item>
+              </Nav.Item> */}
             </Nav>
             <Tab.Content className="description-review-bottom">
               <Tab.Pane eventKey="additionalInfo">
@@ -37,11 +39,11 @@ const {id}=useParams();
               <Tab.Pane eventKey="productDescription">
                 {product.description}
               </Tab.Pane>
-              <Tab.Pane eventKey="productReviews">
+              {/* <Tab.Pane eventKey="productReviews">
                 {comments && 
                   <ProductReviewTab orderedProducts={orderedProducts} comments={comments}/>
                }
-              </Tab.Pane>
+              </Tab.Pane> */}
             </Tab.Content>
           </Tab.Container>
         </div>

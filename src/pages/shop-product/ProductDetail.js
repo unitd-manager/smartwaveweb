@@ -32,6 +32,7 @@ const ProductDetail = ({ location, product }) => {
       .post("/product/getProductbyproductId", { product_id: id })
       .then((res) => {
         res.data.data[0].tag = String(res.data.data[0].tag).split(",");
+        res.data.data[0].grades = String(res.data.data[0].grades).split(",");
         res.data.data[0].images = String(res.data.data[0].images).split(",");
         setFoundProduct(res.data.data[0]);
         api
