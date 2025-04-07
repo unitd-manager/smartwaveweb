@@ -59,9 +59,7 @@ const formattedTitle = product.title.replace(/\s+/g, '-');
   return (
     <Fragment>
       <div
-        className={`${
-          sliderClassName ? sliderClassName : ""
-        }`}
+        className="col-md-3"
       >
         <div
           className={`product-wrap ${

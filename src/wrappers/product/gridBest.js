@@ -92,11 +92,12 @@ const TabProductTwo = ({
                       <div className="product-image">
                       <Link to={process.env.PUBLIC_URL + "/product/" + product.product_id+"/"+formattedTitle}>
 
-                        <img
-                  className="hover-img"
-                  src={`https://smartwaveadmin.unitdtechnologies.com/storage/uploads/${product.images}`}
-                  alt={product.title}
-                /></Link>
+                      <img
+  className="hover-img"
+  src={`https://smartwaveadmin.unitdtechnologies.com/storage/uploads/${product.images[0]}`}
+  alt={product.title}
+/>
+</Link>
                       </div>
                     </div>
                   </div>
