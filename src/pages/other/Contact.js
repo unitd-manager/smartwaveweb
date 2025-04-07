@@ -129,7 +129,7 @@ export default function Contact({ location }) {
   };
   
   const sendMail = () => {
-    if (window.confirm("Are you sure you want to send Mail?")) {
+    if (window.confirm("Are you sure you want to send Email?")) {
       const to = mailId.email;
       const text = user.comments;
       const subject = user.email;

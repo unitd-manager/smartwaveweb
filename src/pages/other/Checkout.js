@@ -189,13 +189,13 @@ stripeToken && makeRequest();
     api
       .post('/commonApi/sendgmail',{to,dynamic_template_data})
       .then(() => {
-        addToast("Send Mail Successfully", {
+        addToast("Email Sent Successfully", {
           appearance: "success",
           autoDismiss: true,
         })
       })
       .catch(() => {
-        addToast("Send Mail Successfully", {
+        addToast("Email Sent Successfully", {
           appearance: "success",
           autoDismiss: true,
         })
