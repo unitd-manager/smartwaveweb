@@ -147,7 +147,7 @@ const Home = () => {
           bestSellingProducts={bestSellingProducts}
           mostPopularProducts={mostPopularProducts}
         />
-        <TopBrands/>
+        {/* <TopBrands/> */}
         <TabProductThree
           spaceBottomClass="pb-100"
           category="furniture"

@@ -12,8 +12,22 @@ const HeroSliderSingle = ({ data, sliderClass }) => {
     >
       <div className="container">
         <div className="row">
-          <div className="col-xl-6 col-lg-6 col-md-7 ml-auto">
-            <div className="slider-content-2 slider-animated-1"></div>
+          <div className="col-xl-6 col-lg-7 col-md-8 col-12">
+            <div className="slider-content-2 slider-animated-1">
+              <h3 className="animated no-style">{data.title}</h3>
+              <h1
+                className="animated"
+                dangerouslySetInnerHTML={{ __html: data.description }}
+              />
+              <div className="slider-btn slider-btn--style2 btn-hover">
+                <Link
+                  className="animated rounden-btn"
+                  to={process.env.PUBLIC_URL + "/shop"}
+                >
+                  SHOP NOW
+                </Link>
+              </div>
+            </div>
           </div>
         </div>
       </div>

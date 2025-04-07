@@ -19,10 +19,12 @@ const EnquiryDetails = () => {
   const [receiptFile, setReceiptFile] = useState(null);
   const [receiptFileDoc, setReceiptFileDoc] = useState(null);
   const [receiptUrl, setReceiptUrl] = useState("");
+  const [receiptUrl1, setReceiptUrl1] = useState("");
   const [addressList, setAddressList] = useState([]);
   const [productsLinked, setProductsLinked] = useState([]);
   const [selectedAddress, setSelectedAddress] = useState(null); // State for selected address
   const[uploaded, setUploaded]=useState(null);
+  const[uploaded1, setUploaded1]=useState(null);
 
   const [selectedAddressString, setSelectedAddressString] = useState('');
   console.log('selectedAddressString',selectedAddressString);
@@ -69,6 +71,9 @@ console.log('profile',profile);
 
     api.post('/file/getListOfFiles', { record_id: id, room_name: 'PaymentReceipt' }).then((res) => {
       setReceiptUrl(res.data);
+    });
+    api.post('/file/getListOfFiles', { record_id: id, room_name: 'OnDocPayment' }).then((res) => {
+      setReceiptUrl1(res.data);
     });
 if(user){
     api
@@ -196,7 +201,7 @@ console.log('receiptUrl',receiptUrl)
     formData.append('description', 'OnDocPayment')
     api.post('/file/uploadFiles',formData,{onUploadProgress:(filedata)=>{
       console.log( Math.round((filedata.loaded/filedata.total)*100))
-      setUploaded( Math.round((filedata.loaded/filedata.total)*100))                 
+      setUploaded1( Math.round((filedata.loaded/filedata.total)*100))                 
     }}).then(()=>{
       addToast("Files Uploaded Successfully", {
         appearance: "success",
@@ -442,7 +447,7 @@ console.log('receiptUrl',receiptUrl)
         ))}
 
         {/* 2. On documents payment Upload Section */}
-        {/* <h6 className="fw-bold mt-4">On documents payment</h6>
+        <h6 className="fw-bold mt-4">On documents payment</h6>
         <div className="card p-4 text-center border-dashed mb-3">
           <div className="custom-file-upload">
             <input
@@ -463,13 +468,13 @@ console.log('receiptUrl',receiptUrl)
               {receiptFileDoc.name}
             </p>
           )}
-          { uploaded &&  <div className='progress mt-2'>
+          { uploaded1 &&  <div className='progress mt-2'>
             <div className="progress-bar h-4" role='progressbar'
-              aria-valuenow={uploaded}
+              aria-valuenow={uploaded1}
               aria-valuemin='0'
               aria-valuemax='100'
-              style={{width:`${uploaded}%`}}>
-                {`${uploaded}% uploaded`}
+              style={{width:`${uploaded1}%`}}>
+                {`${uploaded1}% uploaded`}
             </div>
           </div>}
           {receiptFileDoc && (<button className="btn btn-primary mt-2" onClick={handleUploadOnDoc} disabled={!receiptFileDoc}>
@@ -477,30 +482,30 @@ console.log('receiptUrl',receiptUrl)
           </button>)}
         </div>
 
-        {receiptUrl && receiptUrl.length > 0 && receiptUrl.map((res, index) => (
+        {receiptUrl1 && receiptUrl1.length > 0 && receiptUrl1.map((res1, index) => (
         <div
           key={index}
           className="d-flex justify-content-between align-items-center my-2"
         >
           <a
-            href={`https://smartwave.unitdtechnologies.com:2014/category/download/${res.name}`}
+            href={`https://smartwave.unitdtechnologies.com:2014/category/download/${res1.name}`}
             target="_blank"
             rel="noopener noreferrer"
             className="text-decoration-none d-flex align-items-center text-primary"
           >
             <FaFileDownload className="me-2" />
-            {res.name}
+            {res1.name}
           </a>
     
           <button
             type="button"
             className="btn btn-sm btn-light shadow-none"
-            onClick={() => deleteFile(res.media_id)}
+            onClick={() => deleteFile(res1.media_id)}
           >
             <FaTrash />
           </button>
         </div>
-        ))} */}
+        ))}
 
 
         <Card className="p-4 shadow-sm rounded-3 mb-4">
