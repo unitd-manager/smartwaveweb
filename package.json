@@ -17,6 +17,7 @@
     "instamojo-nodejs": "^0.0.5",
     "instamojo-payment-nodejs": "^3.0.0",
     "mdb-react-ui-kit": "^6.1.0",
+    "moment": "^2.30.1",
     "number-to-words": "^1.2.4",
     "prop-types": "^15.7.2",
     "razorpay": "^2.9.0",
