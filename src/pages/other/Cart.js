@@ -326,9 +326,9 @@ api
                     <button type="button"
                       onClick={()=>handleClearCart()}
                       className="clear-btn"
-                      style={{ backgroundColor: "red", color: "white" }}
+                      style={{ backgroundColor: "red", color: "white", borderRadius: 50 }}
                     >
-                      Clear Cart
+                      CLEAR CART
                     </button>
                   </div>
                 </div>
