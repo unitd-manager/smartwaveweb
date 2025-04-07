@@ -3,7 +3,6 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { animateScroll } from "react-scroll";
 import FooterCopyright from "../../components/footer/FooterCopyright";
-import FooterNewsletter from "../../components/footer/FooterNewsletter";
 
 const Footer = ({
   backgroundColorClass,
@@ -36,141 +35,130 @@ const Footer = ({
 
   return (
     <footer
-      className={`footer-area ${
-        backgroundColorClass ? backgroundColorClass : ""
-      } ${spaceTopClass ? spaceTopClass : ""} ${
-        spaceBottomClass ? spaceBottomClass : ""
-      } ${extraFooterClass ? extraFooterClass : ""} ${
-        spaceLeftClass ? spaceLeftClass : ""
-      } ${spaceRightClass ? spaceRightClass : ""}`}
+      className={`footer-area ${backgroundColorClass || ""} ${spaceTopClass || ""} ${spaceBottomClass || ""} ${extraFooterClass || ""} ${spaceLeftClass || ""} ${spaceRightClass || ""}`}
+      style={{ backgroundColor: "#6f42c1", color: "white" }} // Smartwave violet
     >
-      <div className={`${containerClass ? containerClass : "container"}`}>
-        <div className="row">
+      <div className={containerClass || "container"}>
+        <div className="row" style={{ paddingBottom: "30px" }}>
+          {/* Logo in Circle */}
           <div
-            className={`${
-              sideMenu ? "col-xl-5 col-sm-7" : "col-lg-4 col-sm-6"
-            }`}
-          > 
-            {/* footer copyright */}
-            <FooterCopyright
-              footerLogo="/images/Smartwave_logo.png"
-              spaceBottomClass="mb-30"
-            />
-          </div>
-          <div
-            className={`${
-              sideMenu ? "col-xl-4 col-sm-6" : "col-lg-4 col-sm-6"
-            }`}
+            className={`${sideMenu ? "col-xl-5 col-sm-7" : "col-lg-4 col-sm-6"}`}
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center"
+            }}
           >
+            <div
+              style={{
+                backgroundColor: "#fff",
+                borderRadius: "50%",
+                width: "220px",
+                height: "220px",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                boxShadow: "0 6px 25px rgba(0, 0, 0, 0.15)"
+              }}
+            >
+              <img
+                src="/images/Smartwave_logo.png"
+                alt="Smartwave Logo"
+                style={{
+                  width: "160px",
+                  height: "160px",
+                  objectFit: "contain"
+                }}
+              />
+            </div>
+          </div>
+
+          {/* Quick Links */}
+          <div className={`${sideMenu ? "col-xl-4 col-sm-6" : "col-lg-4 col-sm-6"}`}>
             <div className="footer-widget mb-30 ml-30">
               <div className="footer-title">
-                <h3>QUICK LINKS</h3>
+                <h3 style={{ color: "white" }}>QUICK LINKS</h3>
               </div>
               <div className="footer-list">
-                <ul>
-                  <li>
-                    <Link to={process.env.PUBLIC_URL + "/"}>Home</Link>
-                  </li>
-                  <li>
-                    <Link to={process.env.PUBLIC_URL + "/about"}>
-                      About Us
-                    </Link>
-                  </li>
-                  <li>
-                    <Link to={process.env.PUBLIC_URL + "/shop"}>
-                      Shop
-                    </Link>
-                  </li>
-                  <li>
-                    <Link to={process.env.PUBLIC_URL + "/shop"}>
-                      Collection
-                    </Link>
-                  </li>
-                  <li>
-                    <Link to={process.env.PUBLIC_URL + "/contact"}>
-                      Contact
-                    </Link>
-                  </li>
-                 
+                <ul style={{ listStyle: "none", padding: 0 }}>
+                  {["/", "/about", "/shop", "/shop", "/contact"].map((path, idx) => {
+                    const labels = ["Home", "About Us", "Shop", "Collection", "Contact"];
+                    return (
+                      <li key={idx} style={{ marginBottom: "8px" }}>
+                        <Link
+                          to={process.env.PUBLIC_URL + path}
+                          style={{
+                            color: "white",
+                            textDecoration: "none"
+                          }}
+                          onMouseEnter={(e) => (e.target.style.textDecoration = "underline")}
+                          onMouseLeave={(e) => (e.target.style.textDecoration = "none")}
+                        >
+                          {labels[idx]}
+                        </Link>
+                      </li>
+                    );
+                  })}
                 </ul>
               </div>
             </div>
           </div>
-           {/* <div
-            className={`${
-              sideMenu ? "col-xl-3 col-sm-8" : "col-lg-4 col-sm-6"
-            }`}
-          >
-            <FooterNewsletter
-              spaceBottomClass="mb-30"
-              spaceLeftClass="ml-70"
-              sideMenu={sideMenu}
-            />
-          </div> */}
-      
-            <div
-            className={`${
-              sideMenu ? "col-xl-4 col-sm-8" : "col-lg-4 col-sm-6"
-            }`}
-          >
-            <div
-              className={`${
-                sideMenu
-                  ? "footer-widget mb-30 ml-145"
-                  : "footer-widget mb-30 ml-75"
-              }`}
-            >
+
+          {/* Follow Us */}
+          <div className={`${sideMenu ? "col-xl-4 col-sm-8" : "col-lg-4 col-sm-6"}`}>
+            <div className={`${sideMenu ? "footer-widget mb-30 ml-145" : "footer-widget mb-30 ml-75"}`}>
               <div className="footer-title">
-                <h3>FOLLOW US</h3>
+                <h3 style={{ color: "white" }}>FOLLOW US</h3>
               </div>
               <div className="footer-list">
-                <ul>
-                  <li>
-                    <a
-                      href="//www.facebook.com"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      Facebook
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      href="//www.twitter.com"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      Twitter
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      href="//www.instagram.com"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      Instagram
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      href="//www.youtube.com"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      Youtube
-                    </a>
-                  </li>
+                <ul style={{ listStyle: "none", padding: 0 }}>
+                  {["facebook", "twitter", "instagram", "youtube"].map((platform) => (
+                    <li key={platform} style={{ marginBottom: "8px" }}>
+                      <a
+                        href={`//www.${platform}.com`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        style={{
+                          color: "white",
+                          textDecoration: "none"
+                        }}
+                        onMouseEnter={(e) => (e.target.style.textDecoration = "underline")}
+                        onMouseLeave={(e) => (e.target.style.textDecoration = "none")}
+                      >
+                        {platform.charAt(0).toUpperCase() + platform.slice(1)}
+                      </a>
+                    </li>
+                  ))}
                 </ul>
               </div>
             </div>
           </div>
-        
         </div>
+
+        {/* FooterCopyright at the bottom */}
+        <div >
+  <FooterCopyright />
+</div>
       </div>
+
+      {/* Scroll to top */}
       <button
         className={`scroll-top ${scroll > top ? "show" : ""}`}
-        onClick={() => scrollToTop()}
+        onClick={scrollToTop}
+        style={{
+          backgroundColor: "white",
+          color: "#673AB7",
+          border: "none",
+          borderRadius: "50%",
+          padding: "10px 15px",
+          fontSize: "18px",
+          cursor: "pointer",
+          position: "fixed",
+          bottom: "30px",
+          right: "30px",
+          boxShadow: "0 4px 10px rgba(0,0,0,0.3)",
+          display: scroll > top ? "inline-block" : "none"
+        }}
       >
         <i className="fa fa-angle-double-up"></i>
       </button>
