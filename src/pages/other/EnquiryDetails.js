@@ -18,6 +18,7 @@ const EnquiryDetails = () => {
   const [profile, setProfile] = useState({});
   const [receiptFile, setReceiptFile] = useState(null);
   const [receiptFileDoc, setReceiptFileDoc] = useState(null);
+  const [receiptArrival, setReceiptArrival] = useState(null);
   const [receiptUrl, setReceiptUrl] = useState("");
   const [receiptUrl1, setReceiptUrl1] = useState("");
   const [receiptUrl2, setReceiptUrl2] = useState("");
@@ -26,6 +27,8 @@ const EnquiryDetails = () => {
   const [selectedAddress, setSelectedAddress] = useState(null); // State for selected address
   const[uploaded, setUploaded]=useState(null);
   const[uploaded1, setUploaded1]=useState(null);
+  const[uploaded2, setUploaded2]=useState(null);
+
 
   const [selectedAddressString, setSelectedAddressString] = useState('');
   console.log('selectedAddressString',selectedAddressString);
@@ -206,6 +209,51 @@ console.log('receiptUrl',receiptUrl)
     api.post('/file/uploadFiles',formData,{onUploadProgress:(filedata)=>{
       console.log( Math.round((filedata.loaded/filedata.total)*100))
       setUploaded1( Math.round((filedata.loaded/filedata.total)*100))                 
+    }}).then(()=>{
+      addToast("Files Uploaded Successfully", {
+        appearance: "success",
+        autoDismiss: true,
+      })
+      setTimeout(() => {
+          window.location.reload()
+      }, 400);
+    }).catch(()=>{                  
+      addToast("Unable to upload file", {
+        appearance: "error",
+        autoDismiss: true,
+      })                                
+    })
+  }; 
+
+  const handleArrival = (e) => {
+    const file = e.target.files[0];
+
+    if (file) {
+      if (file.type !== "application/pdf") {
+        alert("Only PDF files are allowed!");
+        e.target.value = "";
+        return;
+      }
+      setReceiptArrival(file);
+    }
+  };
+
+  const handleUploadArrival = async () => {
+    if (!receiptArrival) {
+      alert("Please select a PDF file first.");
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("files", receiptArrival);
+    formData.append("enquiry_id", id);
+    formData.append('record_id', id)
+    formData.append('room_name', 'AfterArrival')
+    formData.append('alt_tag_data', 'AfterArrival')
+    formData.append('description', 'AfterArrival')
+    api.post('/file/uploadFiles',formData,{onUploadProgress:(filedata)=>{
+      console.log( Math.round((filedata.loaded/filedata.total)*100))
+      setUploaded2( Math.round((filedata.loaded/filedata.total)*100))                 
     }}).then(()=>{
       addToast("Files Uploaded Successfully", {
         appearance: "success",
@@ -519,32 +567,32 @@ console.log('receiptUrl',receiptUrl)
           <div className="custom-file-upload">
             <input
               type="file"
-              id="fileInputDoc"
+              id="fileInputArrival"
               className="d-none"
               accept="application/pdf"
-              onChange={handleFileDocChange}
+              onChange={handleArrival}
             />
-            <label htmlFor="fileInputDoc" className="btn btn-outline-primary">
+            <label htmlFor="fileInputArrival" className="btn btn-outline-primary">
               <FaUpload className="me-2" /> Choose PDF File
             </label>
           </div>
 
-          {receiptFileDoc && (
+          {receiptArrival && (
             <p className="mt-2 text-success">
               <FaFilePdf className="me-2" />
-              {receiptFileDoc.name}
+              {receiptArrival.name}
             </p>
           )}
-          { uploaded1 &&  <div className='progress mt-2'>
+          { uploaded2 &&  <div className='progress mt-2'>
             <div className="progress-bar h-4" role='progressbar'
-              aria-valuenow={uploaded1}
+              aria-valuenow={uploaded2}
               aria-valuemin='0'
               aria-valuemax='100'
-              style={{width:`${uploaded1}%`}}>
-                {`${uploaded1}% uploaded`}
+              style={{width:`${uploaded2}%`}}>
+                {`${uploaded2}% uploaded`}
             </div>
           </div>}
-          {receiptFileDoc && (<button className="btn btn-primary mt-2" onClick={handleUploadOnDoc} disabled={!receiptFileDoc}>
+          {receiptArrival && (<button className="btn btn-primary mt-2" onClick={handleUploadArrival} disabled={!receiptArrival}>
             <FaUpload className="me-2" /> Upload Arrival Receipt
           </button>)}
         </div>
