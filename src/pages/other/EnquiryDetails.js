@@ -511,66 +511,7 @@ console.log('receiptUrl',receiptUrl)
         </div>
         ))}
 
-       {/* 2. On documents payment Upload Section */}
-        <h6 className="fw-bold mt-4">On documents payment</h6>
-        <div className="card p-4 text-center border-dashed mb-3">
-          <div className="custom-file-upload">
-            <input
-              type="file"
-              id="fileInputDoc"
-              className="d-none"
-              accept="application/pdf"
-              onChange={handleFileDocChange}
-            />
-            <label htmlFor="fileInputDoc" className="btn btn-outline-primary">
-              <FaUpload className="me-2" /> Choose PDF File
-            </label>
-          </div>
-
-          {receiptFileDoc && (
-            <p className="mt-2 text-success">
-              <FaFilePdf className="me-2" />
-              {receiptFileDoc.name}
-            </p>
-          )}
-          { uploaded1 &&  <div className='progress mt-2'>
-            <div className="progress-bar h-4" role='progressbar'
-              aria-valuenow={uploaded1}
-              aria-valuemin='0'
-              aria-valuemax='100'
-              style={{width:`${uploaded1}%`}}>
-                {`${uploaded1}% uploaded`}
-            </div>
-          </div>}
-          {receiptFileDoc && (<button className="btn btn-primary mt-2" onClick={handleUploadOnDoc} disabled={!receiptFileDoc}>
-            <FaUpload className="me-2" /> Upload Receipt
-          </button>)}
-        </div>
-
-        {receiptUrl1 && receiptUrl1.length > 0 && receiptUrl1.map((res1, index) => (
-        <div
-          key={index}
-          className="d-flex justify-content-between align-items-center my-2"
-        >
-          <a
-            href={`https://smartwave.unitdtechnologies.com:2014/category/download/${res1.name}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-decoration-none d-flex align-items-center text-primary"
-          >
-            <FaFileDownload className="me-2" />
-            {res1.name}
-          </a>
-    
-          <button
-            type="button"
-            className="btn btn-sm btn-light shadow-none"
-            onClick={() => deleteFile(res1.media_id)}
-          >
-            <FaTrash />
-          </button>
-        </div>
-        ))}
+  
 
        {/* 2. On documents payment Upload Section */}
        <h6 className="fw-bold mt-4">After Arrival</h6>
