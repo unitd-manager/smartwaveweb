@@ -36,7 +36,7 @@ const Footer = ({
   return (
     <footer
       className={`footer-area ${backgroundColorClass || ""} ${spaceTopClass || ""} ${spaceBottomClass || ""} ${extraFooterClass || ""} ${spaceLeftClass || ""} ${spaceRightClass || ""}`}
-      style={{ backgroundColor: "#6f42c1", color: "white" }} // Smartwave violet
+      style={{ backgroundColor: "#1fb0c1", color: "white" }} // Smartwave violet
     >
       <div className={containerClass || "container"}>
         <div className="row" style={{ paddingBottom: "30px" }}>
