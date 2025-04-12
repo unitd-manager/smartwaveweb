@@ -6,8 +6,6 @@ import { getDiscountPrice } from "../../helpers/product";
 // import ProductImageGallery from "../../components/product/ProductImageGallery";
 import ProductImagesGallery from "../../components/product/ProductImagesGallery";
 import ProductDescriptionInfo from "../../components/product/ProductDescriptionInfo";
-import ProductImageGallerySideThumb from "../../components/product/ProductImageGallerySideThumbnew";
-import ProductImageFixed from "../../components/product/ProductImageFixed";
 
 const ProductImageDescription = ({
   spaceTopClass,
