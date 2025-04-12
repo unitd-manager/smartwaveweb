@@ -107,6 +107,7 @@ const Cart = ({ location }) => {
             item.product_id = item.product_id;
             item.category_id = item.category_id;
             item.created_by = user.first_name;
+            item.grades = item.grades;
             api
               .post("/enquiry/insertQuoteItems", item)
               .then(() => {
