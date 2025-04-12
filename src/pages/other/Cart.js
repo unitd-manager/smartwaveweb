@@ -96,7 +96,9 @@ const Cart = ({ location }) => {
         enquiry_code: code,
         creation_date : new Date().toISOString().split('T')[0],
         created_by: user.first_name,
-      };
+        first_name: user.first_name,
+        email: user.email,
+        grades: cartItems.map(item => item.grades).join(', '),      };
       api
         .post("/enquiry/insertEnquiry", enquiryDetails)
         .then((res) => {
@@ -107,7 +109,10 @@ const Cart = ({ location }) => {
             item.product_id = item.product_id;
             item.category_id = item.category_id;
             item.created_by = user.first_name;
+            item.first_name = user.first_name;
+            item.email = user.email;
             item.grades = item.grades;
+
             api
               .post("/enquiry/insertQuoteItems", item)
               .then(() => {
