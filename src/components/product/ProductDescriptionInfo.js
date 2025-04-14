@@ -7,7 +7,7 @@ import { getProductCartQuantity } from "../../helpers/product";
 import { addToCart } from "../../redux/actions/cartActions";
 import { addToWishlist } from "../../redux/actions/wishlistActions";
 import { addToCompare } from "../../redux/actions/compareActions";
-import Rating from "./sub-components/ProductRating";
+// import Rating from "./sub-components/ProductRating";
 import { Badge } from "reactstrap";
 import LoginModal from "../LoginModal";
 import { fetchCartData, insertCartData, updateCartData } from "../../redux/actions/cartItemActions";
@@ -135,13 +135,13 @@ const ProductDescriptionInfo = ({
       {loginModal && <LoginModal loginModal={loginModal} setLoginModal={setLoginModal} />}
       <h2>{product.title}</h2>
 
-      {proRating && proRating > 0 && (
+      {/* {proRating && proRating > 0 && (
         <div className="pro-details-rating-wrap">
           <div className="pro-details-rating">
             <Rating ratingValue={proRating} />
           </div>
         </div>
-      )}
+      )} */}
 
       <div className="pro-details-list">
         <p>{product.description}</p>
