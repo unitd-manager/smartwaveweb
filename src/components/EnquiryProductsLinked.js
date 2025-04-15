@@ -28,7 +28,7 @@ const ProductsLinkedModal = ({productsLinked}) => {
               <tr>
                 <th>#</th>
                 <th>Product Name</th>
-                <th>Qty</th>
+                <th>Grade</th>
               
                 
               </tr>
@@ -38,7 +38,7 @@ const ProductsLinkedModal = ({productsLinked}) => {
                 <tr key={product.enq_prod_id}>
                   <td>{index + 1}</td>
                   <td>{product.product_title}</td>
-                  <td>{product.quantity}</td>
+                  <td>{product.grades}</td>
                  
                   
                 </tr>

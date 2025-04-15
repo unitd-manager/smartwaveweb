@@ -38,14 +38,28 @@ export default function Contact({ location }) {
     setUser((prevUser) => ({ ...prevUser, [name]: value }));
   };
 
+  // const isValidEmail = (email) => {
+  //   const re = /\S+@\S+\.\S+/;
+  //   return re.test(email);
+  // };
   const isValidEmail = (email) => {
-    const re = /\S+@\S+\.\S+/;
+    const re = /^[a-zA-Z0-9](?!.*?[._%+-]{2})[a-zA-Z0-9._%+-]*@[a-zA-Z0-9-]+(\.[a-zA-Z]{2,})+$/;
     return re.test(email);
   };
+  
+  
 
   const validateForm = () => {
     if (!user.email || !isValidEmail(user.email)) {
       addToast("Please enter a valid email address.", {
+        appearance: "error",
+        autoDismiss: true,
+      });
+      return false;
+    }
+
+    if (!user.first_name || user.first_name.trim() === "") {
+      addToast("Please enter your name.", {
         appearance: "error",
         autoDismiss: true,
       });
@@ -109,49 +123,43 @@ export default function Contact({ location }) {
   };
 
   const sendMail = () => {
-    if (!validateForm()) return;
-
-    if (window.confirm("Are you sure you want to send Email?")) {
-      const to = mailId.email;
-      const text = user.comments;
-      const subject = user.email;
-      const dynamic_template_data = {
-        first_name: user.first_name,
-        email: user.email,
-        comments: user.comments,
-      };
-
-      api
-        .post("/commonApi/sendemail", {
-          to,
-          text,
-          subject,
-          dynamic_template_data,
-        })
-        .then(() => {
-          addToast("Email has been sent successfully!", {
-            appearance: "success",
-            autoDismiss: true,
-          });
-          setUser({
-            first_name: "",
-            last_name: "",
-            email: "",
-            comments: "",
-            enquiry_code: "",
-          });
-        })
-        .catch((err) => {
-          addToast("Unable to send Email", {
-            appearance: "error",
-            autoDismiss: true,
-          });
+    const to = mailId.email;
+    const text = user.comments;
+    const subject = user.email;
+    const dynamic_template_data = {
+      first_name: user.first_name,
+      email: user.email,
+      comments: user.comments,
+    };
+  
+    api
+      .post("/commonApi/sendemail", {
+        to,
+        text,
+        subject,
+        dynamic_template_data,
+      })
+      .then(() => {
+        addToast("Email has been sent successfully!", {
+          appearance: "success",
+          autoDismiss: true,
         });
-    } else {
-      applyChanges();
-    }
+        setUser({
+          first_name: "",
+          last_name: "",
+          email: "",
+          comments: "",
+          enquiry_code: "",
+        });
+      })
+      .catch((err) => {
+        addToast("Unable to send Email", {
+          appearance: "error",
+          autoDismiss: true,
+        });
+      });
   };
-
+  
   const getEnquiryEmail = () => {
     api.get("/setting/getEnquiryMailId").then((res) => {
       setmailId(res.data.data[0]);
@@ -204,6 +212,19 @@ export default function Contact({ location }) {
     getGoogleMap();
   }, []);
 
+
+  const handleSubmit = () => {
+    if (!validateForm()) return;
+  
+    if (window.confirm("Are you sure you want to send Email?")) {
+      sendMail();
+      generateCode();
+    } else {
+      applyChanges();
+    }
+  };
+  
+
   return (
     <Fragment>
       <MetaTags>
@@ -239,7 +260,7 @@ export default function Contact({ location }) {
                   <div className="single-contact-info">
                     <div className="contact-icon"><i className="fa fa-map-marker" /></div>
                     <div className="contact-info-dec">
-                      <span>{address && address.addr}</span>
+                    <span dangerouslySetInnerHTML={{ __html: (address && address.addr)?.replace(/\n/g, "<br/>") }} />
                     </div>
                   </div>
                   <div className="contact-social text-center">
@@ -265,7 +286,7 @@ export default function Contact({ location }) {
                         <input
                           type="text"
                           className="form-control mb-4"
-                          placeholder="First Name"
+                          placeholder="First Name *"
                           name="first_name"
                           value={user.first_name}
                           onChange={handleChange}
@@ -285,7 +306,7 @@ export default function Contact({ location }) {
                         <input
                           type="text"
                           className="form-control mb-4"
-                          placeholder="Email"
+                          placeholder="Email *"
                           name="email"
                           value={user.email}
                           onChange={handleChange}
@@ -295,22 +316,20 @@ export default function Contact({ location }) {
                         <textarea
                           name="comments"
                           className="form-control mb-4"
-                          placeholder="Message"
+                          placeholder="Message *"
                           value={user.comments}
                           onChange={handleChange}
                         ></textarea>
                       </div>
                       <div className="col-8">
-                        <button
-                          type="button"
-                          className="btn btn-primary"
-                          onClick={() => {
-                            sendMail();
-                            generateCode();
-                          }}
-                        >
-                          Submit Now
-                        </button>
+                      <button
+  type="button"
+  className="btn btn-primary"
+  onClick={handleSubmit}
+>
+  Submit Now
+</button>
+
                       </div>
                     </div>
                   </form>
