@@ -29,6 +29,7 @@ export default function Contact({ location }) {
     first_name: "",
     last_name: "",
     email: "",
+    phone: "",
     comments: "",
     enquiry_code: "",
   });
@@ -66,6 +67,14 @@ export default function Contact({ location }) {
       return false;
     }
 
+    if (!user.phone || user.phone.trim() === "") {
+      addToast("Please enter your contact no.", {
+        appearance: "error",
+        autoDismiss: true,
+      });
+      return false;
+    }
+
     if (!user.comments || user.comments.trim() === "") {
       addToast("Please enter your message.", {
         appearance: "error",
@@ -85,6 +94,7 @@ export default function Contact({ location }) {
         first_name: user.first_name,
         last_name: user.last_name,
         email: user.email,
+        phone: user.phone,
         comments: user.comments,
         enquiry_code: code,
       })
@@ -97,6 +107,7 @@ export default function Contact({ location }) {
           first_name: "",
           last_name: "",
           email: "",
+          phone: "",
           comments: "",
           enquiry_code: "",
         });
@@ -309,6 +320,16 @@ export default function Contact({ location }) {
                           placeholder="Email *"
                           name="email"
                           value={user.email}
+                          onChange={handleChange}
+                        />
+                      </div>
+                      <div className="col-lg-12">
+                        <input
+                          type="text"
+                          className="form-control mb-4"
+                          placeholder="Contact No *"
+                          name="phone"
+                          value={user.phone}
                           onChange={handleChange}
                         />
                       </div>
