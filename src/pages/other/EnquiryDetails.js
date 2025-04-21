@@ -19,9 +19,12 @@ const EnquiryDetails = () => {
   const [receiptFile, setReceiptFile] = useState(null);
   const [receiptFileDoc, setReceiptFileDoc] = useState(null);
   const [receiptArrival, setReceiptArrival] = useState(null);
+  const [receiptArrival1, setReceiptArrival1] = useState(null);
+
   const [receiptUrl, setReceiptUrl] = useState("");
   const [receiptUrl1, setReceiptUrl1] = useState("");
   const [receiptUrl2, setReceiptUrl2] = useState("");
+  const [receiptUrl3, setReceiptUrl3] = useState("");
   const [addressList, setAddressList] = useState([]);
   const [productsLinked, setProductsLinked] = useState([]);
   const [selectedAddress, setSelectedAddress] = useState(null); // State for selected address
@@ -81,6 +84,9 @@ console.log('profile',profile);
     });
     api.post('/file/getListOfFiles', { record_id: id, room_name: 'AfterArrival' }).then((res) => {
       setReceiptUrl2(res.data);
+    });
+    api.post('/file/getListOfFiles', { record_id: id, room_name: 'Enquiry' }).then((res) => {
+      setReceiptUrl3(res.data);
     });
 if(user){
     api
@@ -270,6 +276,8 @@ console.log('receiptUrl',receiptUrl)
     })
   };
 
+  
+
   const generateOrder = () => {
     if(selectedAddressString){
     enquiries.modification_date = moment().format('DD-MM-YYYY h:mm:ss a');
@@ -441,12 +449,13 @@ console.log('receiptUrl',receiptUrl)
 
         <button className="btn btn-primary mt-2" onClick={()=>generateOrder()}>
             Save Address
-        </button>
+        </button><br/><br/>
       </div>
 
         {/* Stylish File Upload Section */}
-        <h6 className="fw-bold mt-4">Payment Receipt</h6>
+      
         <div className="card p-4 text-center border-dashed mb-3">
+        <h6 className="d-flex justify-content-between align-items-center my-2 fw-bold mt-4">Payment Receipt</h6>
           <div className="custom-file-upload">
             <input
               type="file"
@@ -478,9 +487,7 @@ console.log('receiptUrl',receiptUrl)
           {receiptFile && (<button className="btn btn-primary mt-2" onClick={handleUpload} disabled={!receiptFile}>
             <FaUpload className="me-2" /> Upload Receipt
           </button>)}
-        </div>
-
-        {/* Show Uploaded Receipt */}
+            {/* Show Uploaded Receipt */}
         {receiptUrl && receiptUrl.length > 0 && receiptUrl.map((res, index) => (
         <div
           key={index}
@@ -505,10 +512,14 @@ console.log('receiptUrl',receiptUrl)
           </button>
         </div>
         ))}
+        </div>
+
+      
 
         {/* 2. On documents payment Upload Section */}
-        <h6 className="fw-bold mt-4">On documents payment</h6>
         <div className="card p-4 text-center border-dashed mb-3">
+        <h6 className="d-flex justify-content-between align-items-center my-2 fw-bold mt-4">On documents payment</h6>
+
           <div className="custom-file-upload">
             <input
               type="file"
@@ -540,8 +551,8 @@ console.log('receiptUrl',receiptUrl)
           {receiptFileDoc && (<button className="btn btn-primary mt-2" onClick={handleUploadOnDoc} disabled={!receiptFileDoc}>
             <FaUpload className="me-2" /> Upload Receipt
           </button>)}
-        </div>
 
+          
         {receiptUrl1 && receiptUrl1.length > 0 && receiptUrl1.map((res1, index) => (
         <div
           key={index}
@@ -566,12 +577,15 @@ console.log('receiptUrl',receiptUrl)
           </button>
         </div>
         ))}
+        </div>
+
 
   
 
        {/* 2. On documents payment Upload Section */}
-       <h6 className="fw-bold mt-4">After Arrival</h6>
         <div className="card p-4 text-center border-dashed mb-3">
+        <h6 className="d-flex justify-content-between align-items-center my-2 fw-bold mt-4">After Arrival</h6>
+
           <div className="custom-file-upload">
             <input
               type="file"
@@ -603,9 +617,8 @@ console.log('receiptUrl',receiptUrl)
           {receiptArrival && (<button className="btn btn-primary mt-2" onClick={handleUploadArrival} disabled={!receiptArrival}>
             <FaUpload className="me-2" /> Upload Arrival Receipt
           </button>)}
-        </div>
 
-        {receiptUrl2 && receiptUrl2.length > 0 && receiptUrl2.map((res1, index) => (
+          {receiptUrl2 && receiptUrl2.length > 0 && receiptUrl2.map((res1, index) => (
         <div
           key={index}
           className="d-flex justify-content-between align-items-center my-2"
@@ -629,6 +642,74 @@ console.log('receiptUrl',receiptUrl)
           </button>
         </div>
         ))}
+        </div>
+
+
+
+        
+       {/* 2. On documents payment Upload Section */}
+       <div className="card p-4 text-center border-dashed mb-3">
+        <h6 className="d-flex justify-content-between align-items-center my-2 fw-bold mt-4">Buisness Document</h6>
+
+          {/* <div className="custom-file-upload">
+            <input
+              type="file"
+              id="fileInputArrival"
+              className="d-none"
+              accept="application/pdf"
+              onChange={handleArrival}
+            />
+            <label htmlFor="fileInputArrival" className="btn btn-outline-primary">
+              <FaUpload className="me-2" /> Choose PDF File
+            </label>
+          </div> */}
+
+          {/* {receiptArrival1 && (
+            <p className="mt-2 text-success">
+              <FaFilePdf className="me-2" />
+              {receiptArrival1.name}
+            </p>
+          )} */}
+          {/* { uploaded2 &&  <div className='progress mt-2'>
+            <div className="progress-bar h-4" role='progressbar'
+              aria-valuenow={uploaded2}
+              aria-valuemin='0'
+              aria-valuemax='100'
+              style={{width:`${uploaded2}%`}}>
+                {`${uploaded2}% uploaded`}
+            </div>
+          </div>}
+          {receiptArrival1 && (<button className="btn btn-primary mt-2" onClick={handleUploadArrival} disabled={!receiptArrival1}>
+            <FaUpload className="me-2" /> Upload Arrival Receipt
+          </button>)} */}
+
+          {receiptUrl3 && receiptUrl3.length > 0 && receiptUrl3.map((res1, index) => (
+        <div
+          key={index}
+          className="d-flex justify-content-between align-items-center my-2"
+        >
+          <a
+            href={`https://smartwaveadmin.unitdtechnologies.com/storage/uploads/${res1.name}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-decoration-none d-flex align-items-center text-primary"
+          >
+            <FaFileDownload className="me-2" />
+            {res1.name}
+          </a>
+{/*     
+          <button
+            type="button"
+            className="btn btn-sm btn-light shadow-none"
+            onClick={() => deleteFile(res1.media_id)}
+          >
+            <FaTrash />
+          </button> */}
+        </div>
+        ))}
+        </div>
+
+      
 
         <Card className="p-4 shadow-sm rounded-3 mb-4">
           {/* Enquiry Code & Status */}
