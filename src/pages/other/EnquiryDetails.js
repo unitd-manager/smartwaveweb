@@ -364,6 +364,14 @@ console.log('receiptUrl',receiptUrl)
                 </div>
               </Col>
 
+              {/* Enquiry Type */}
+              <Col md={6}>
+                <div className="mb-3">
+                  <p className="text-muted mb-1">Grades</p>
+                  <p className="fw-bold m-0">{enquiries?.grades || 'N/A'}</p>
+                </div>
+              </Col>
+
               {/* Address */}
               <Col md={6}>
                 <div className="mb-3">

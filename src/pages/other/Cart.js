@@ -98,7 +98,7 @@ const Cart = ({ location }) => {
         created_by: user.first_name,
         first_name: user.first_name,
         email: user.email,
-        grades: cartItems.map(item => item.grades).join(', '),      };
+              };
       api
         .post("/enquiry/insertEnquiry", enquiryDetails)
         .then((res) => {
@@ -113,11 +113,12 @@ const Cart = ({ location }) => {
             item.email = user.email;
             item.grades = item.grades;
 
-            api
-              .post("/enquiry/insertQuoteItems", item)
+
+            api.post("/enquiry/insertQuoteItems", item)
               .then(() => {
-                console.log("order placed");
+                console.log("Order placed");
               })
+             
               .catch((err) => console.log(err));
           });
         }).then(() => {

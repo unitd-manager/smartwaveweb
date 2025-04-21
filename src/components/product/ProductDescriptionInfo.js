@@ -135,14 +135,7 @@ const ProductDescriptionInfo = ({
       {loginModal && <LoginModal loginModal={loginModal} setLoginModal={setLoginModal} />}
       <h2>{product.title}</h2>
 
-      {/* {proRating && proRating > 0 && (
-        <div className="pro-details-rating-wrap">
-          <div className="pro-details-rating">
-            <Rating ratingValue={proRating} />
-          </div>
-        </div>
-      )} */}
-
+    
       <div className="pro-details-list">
         <p>{product.description}</p>
       </div>
