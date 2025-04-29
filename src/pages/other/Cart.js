@@ -108,6 +108,7 @@ const Cart = ({ location }) => {
             item.quantity = item.qty;
             item.product_id = item.product_id;
             item.category_id = item.category_id;
+            item.sub_category_id = item.sub_category_id;
             item.created_by = user.first_name;
             item.first_name = user.first_name;
             item.email = user.email;
