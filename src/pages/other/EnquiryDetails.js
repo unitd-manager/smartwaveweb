@@ -760,6 +760,25 @@ console.log('receiptUrl',receiptUrl)
                 <p className="fw-bold m-0 pull-left">{tracking?.expected_delivery_date || 'N/A'}</p>
               </div>
             </Col>          
+
+            <Col md={6}>
+              <div className="mb-3">
+                <p className="text-muted mr-3 pull-left">Website Link :</p>
+                <p className="fw-bold m-0 pull-left">
+                  {tracking?.tracking_link ? (
+                    <a
+                      href={tracking.tracking_link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      {tracking.tracking_link}
+                    </a>
+                  ) : (
+                    'N/A'
+                  )}
+                </p>
+              </div>
+            </Col>          
           </Row>
           
         </Card>
