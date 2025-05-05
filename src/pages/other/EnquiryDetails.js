@@ -282,6 +282,7 @@ console.log('receiptUrl',receiptUrl)
     if(selectedAddressString){
     enquiries.modification_date = moment().format('DD-MM-YYYY h:mm:ss a');
     enquiries.shipping_address = selectedAddressString;
+    enquiries.customer_address_id = selectedAddress;
       api
         .post('/enquiry/updateShipping', enquiries)
         .then(() => {
@@ -311,10 +312,10 @@ console.log('receiptUrl',receiptUrl)
   };
 
 
-  const handleSelect = (id) => {
-    setSelectedAddress(id);
+  const handleSelect = (customer_address_id) => {
+    setSelectedAddress(customer_address_id);
   
-    const selectedAddr = combinedAddressList.find(addr => addr.customer_address_id === id);
+    const selectedAddr = combinedAddressList.find(addr => addr.customer_address_id === customer_address_id);
   
     if (selectedAddr) {
       // Concatenate address fields
@@ -519,7 +520,8 @@ console.log('receiptUrl',receiptUrl)
         {/* 2. On documents payment Upload Section */}
         <div className="card p-4 text-center border-dashed mb-3">
         <h6 className="d-flex justify-content-between align-items-center my-2 fw-bold mt-4">On documents payment</h6>
-
+        {enquiries?.on_document === 1 && (
+          <>
           <div className="custom-file-upload">
             <input
               type="file"
@@ -551,7 +553,8 @@ console.log('receiptUrl',receiptUrl)
           {receiptFileDoc && (<button className="btn btn-primary mt-2" onClick={handleUploadOnDoc} disabled={!receiptFileDoc}>
             <FaUpload className="me-2" /> Upload Receipt
           </button>)}
-
+          </>
+        )}
           
         {receiptUrl1 && receiptUrl1.length > 0 && receiptUrl1.map((res1, index) => (
         <div
@@ -586,6 +589,8 @@ console.log('receiptUrl',receiptUrl)
         <div className="card p-4 text-center border-dashed mb-3">
         <h6 className="d-flex justify-content-between align-items-center my-2 fw-bold mt-4">After Arrival</h6>
 
+        {enquiries?.after_arrival === 1 && (
+          <>
           <div className="custom-file-upload">
             <input
               type="file"
@@ -617,6 +622,8 @@ console.log('receiptUrl',receiptUrl)
           {receiptArrival && (<button className="btn btn-primary mt-2" onClick={handleUploadArrival} disabled={!receiptArrival}>
             <FaUpload className="me-2" /> Upload Arrival Receipt
           </button>)}
+          </>
+        )}
 
           {receiptUrl2 && receiptUrl2.length > 0 && receiptUrl2.map((res1, index) => (
         <div
