@@ -74,12 +74,17 @@ export const fetchCartData = (userInfo) => {
       // Make the API call
       api
       .post("/contact/update-cart", data)
-        .then(() =>{ dispatch(updateCartDataSuccess(data));
+        .then((res) =>{ dispatch(updateCartDataSuccess(data));
           addToast("CartItem Quantity is Updated", {
             appearance: "success",
             autoDismiss: true,
-           })})
-        .catch((error) => dispatch(updateCartDataFailure(error)));
+           })
+          return res; 
+          })
+        .catch((error) => {dispatch(updateCartDataFailure(error))
+
+          throw error;
+        });
     };
   };
 
