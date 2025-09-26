@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { useToasts } from "react-toast-notifications";
 import MetaTags from "react-meta-tags";
 import { BreadcrumbsItem } from "react-breadcrumbs-dynamic";
-import { connect } from "react-redux";
+import { connect, useDispatch } from "react-redux";
 import { getDiscountPrice } from "../../helpers/product";
 import {
   addToWishlist,
@@ -22,7 +22,7 @@ import {
   fetchWishlistData,
   removeWishlistData,
 } from "../../redux/actions/wishlistItemActions";
-import { insertCartData } from "../../redux/actions/cartItemActions";
+import { insertCartData,updateCartData,fetchCartData } from "../../redux/actions/cartItemActions";
 
 const Wishlist = ({
   location,
@@ -34,13 +34,13 @@ const Wishlist = ({
   wishlistData,
   removeWishlistData,
   clearWishlistData,
-  insertCartData,
+  // insertCartData,
 }) => {
   const { addToast } = useToasts();
   const { pathname } = location;
   const [user, setUser] = useState();
   const [loading, setLoading] = useState(false);
-
+const dispatch=useDispatch();
   const getWishlistItems = (userin) => {
     fetchWishlistData(userin);
   };
@@ -52,10 +52,25 @@ const Wishlist = ({
   const clearWishlistItems = () => {
     clearWishlistData(user);
   };
+const onUpdateCart = (data) => {
+    // if (avaiableQuantity === 0) {
+    //   return;
+    // }
+    console.log('updatedata',data);
+ 
+    data.contact_id=user.contact_id
+   dispatch(updateCartData(data,addToast))
+  };
 
   const onAddToCart = (data) => {
     data.contact_id = user.contact_id;
-    insertCartData(data, addToast);
+    dispatch(insertCartData(data, addToast))
+         .then(() => {
+                  dispatch(fetchCartData(user));
+                })
+                .catch((error) => {
+                  console.error('Failed to add to cart:', error);
+                });
   };
 
   useEffect(() => {
@@ -145,7 +160,17 @@ const Wishlist = ({
                                       </a>
                                     ) : wishlistItem.qty_in_stock > 0 ? (
                                       <button
-                                        onClick={() => onAddToCart(wishlistItem)}
+                                        // onClick={() => onAddToCart(wishlistItem)}
+                                        onClick={ () => { 
+                                          const cartItem = cartItems.find(
+                                (item) => item.product_id === wishlistItem.product_id
+                              );
+                  if(cartItem?.qty>0){
+                  wishlistItem.qty=parseFloat(cartItem?.qty) +Number(1);
+                  wishlistItem.basket_id=cartItem.basket_id;
+                  onUpdateCart(wishlistItem,addToast)
+                }else{
+                  onAddToCart(wishlistItem, addToast)}}}
                                         className={
                                           cartItem && cartItem.quantity > 0 ? "active" : ""
                                         }
@@ -278,7 +303,7 @@ Wishlist.propTypes = {
 };
 
 const mapStateToProps = (state) => ({
-  cartItems: state.cartData,
+  cartItems: state.cartItems.cartItems,
   wishlistItems: state.wishlistData,
   currency: state.currencyData,
   wishlistData: state.wishlistItems.wishlistItems,
@@ -291,7 +316,7 @@ const mapDispatchToProps = (dispatch) => ({
   fetchWishlistData: (user, addToast) => dispatch(fetchWishlistData(user, addToast)),
   clearWishlistData: (user, addToast) => dispatch(clearWishlistData(user, addToast)),
   removeWishlistData: (item, addToast) => dispatch(removeWishlistData(item, addToast)),
-  insertCartData: (item, addToast) => dispatch(insertCartData(item, addToast)),
+  //insertCartData: (item, addToast) => dispatch(insertCartData(item, addToast)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Wishlist);
