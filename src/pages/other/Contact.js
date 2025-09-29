@@ -32,6 +32,9 @@ export default function Contact({ location }) {
     phone: "",
     comments: "",
     enquiry_code: "",
+    company_name: "",
+    company_address: "",
+    gst_number: "",
   });
 
   const handleChange = (e) => {
@@ -83,6 +86,30 @@ export default function Contact({ location }) {
       return false;
     }
 
+    if (!user.company_name || user.company_name.trim() === "") {
+      addToast("Please enter your company name.", {
+        appearance: "error",
+        autoDismiss: true,
+      });
+      return false;
+    }
+
+    if (!user.company_address || user.company_address.trim() === "") {
+      addToast("Please enter your company address.", {
+        appearance: "error",
+        autoDismiss: true,
+      });
+      return false;
+    }
+
+    if (!user.gst_number || user.gst_number.trim() === "") {
+      addToast("Please enter your GST number.", {
+        appearance: "error",
+        autoDismiss: true,
+      });
+      return false;
+    }
+
     return true;
   };
 
@@ -97,6 +124,9 @@ export default function Contact({ location }) {
         phone: user.phone,
         comments: user.comments,
         enquiry_code: code,
+        company_name: user.company_name,
+        company_address: user.company_address,
+        gst_number: user.gst_number,
       })
       .then((res) => {
         addToast("Thank you for your enquiry submission!", {
@@ -110,6 +140,9 @@ export default function Contact({ location }) {
           phone: "",
           comments: "",
           enquiry_code: "",
+          company_name: "",
+          company_address: "",
+          gst_number: "",
         });
       })
       .catch((err) => {
@@ -161,6 +194,9 @@ export default function Contact({ location }) {
           email: "",
           comments: "",
           enquiry_code: "",
+          company_name: "",
+          company_address: "",
+          gst_number: "",
         });
       })
       .catch((err) => {
@@ -330,6 +366,36 @@ export default function Contact({ location }) {
                           placeholder="Contact No *"
                           name="phone"
                           value={user.phone}
+                          onChange={handleChange}
+                        />
+                      </div>
+                      <div className="col-12">
+                        <input
+                          type="text"
+                          className="form-control mb-4"
+                          placeholder="Company Name *"
+                          name="company_name"
+                          value={user.company_name}
+                          onChange={handleChange}
+                        />
+                      </div>
+                      <div className="col-12">
+                        <textarea
+                          name="company_address"
+                          className="form-control mb-4"
+                          placeholder="Company Address *"
+                          value={user.company_address}
+                          onChange={handleChange}
+                          rows="3"
+                        ></textarea>
+                      </div>
+                      <div className="col-12">
+                        <input
+                          type="text"
+                          className="form-control mb-4"
+                          placeholder="GST Number *"
+                          name="gst_number"
+                          value={user.gst_number}
                           onChange={handleChange}
                         />
                       </div>
