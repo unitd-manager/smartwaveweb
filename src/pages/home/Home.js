@@ -135,28 +135,7 @@ const Home = () => {
         />
         <br />
         <br />
-        {/* <HeroSlider /> */}
-        <FeatureIcon spaceTopClass="pt-100" spaceBottomClass="pb-60" />
-
-
-        {/* tab product */}
-        <TabProductTwo
-          spaceBottomClass="pb-100"
-          category="furniture"
-          newProducts={newProducts}
-          bestSellingProducts={bestSellingProducts}
-          mostPopularProducts={mostPopularProducts}
-        />
-        {/* <TopBrands/> */}
-        <TabProductThree
-          spaceBottomClass="pb-100"
-          category="furniture"
-          bestSellingProducts={bestSellingProducts}
-          mostPopularProducts={mostPopularProducts}
-          
-        />
- <FeaturesSection spaceBottomClass="pb-100"/>
-        <section
+          <section
           style={{
             width: "100%",
             backgroundImage: `url("https://demoapus2.com/ogami/wp-content/uploads/2019/01/bg-countdown.jpg")`,
@@ -194,6 +173,28 @@ const Home = () => {
               </div>
             </div>
         </section>
+        {/* <HeroSlider /> */}
+        <FeatureIcon spaceTopClass="pt-100" spaceBottomClass="pb-60" />
+
+
+        {/* tab product */}
+        <TabProductTwo
+          spaceBottomClass="pb-100"
+          category="furniture"
+          newProducts={newProducts}
+          bestSellingProducts={bestSellingProducts}
+          mostPopularProducts={mostPopularProducts}
+        />
+        {/* <TopBrands/> */}
+        <TabProductThree
+          spaceBottomClass="pb-100"
+          category="furniture"
+          bestSellingProducts={bestSellingProducts}
+          mostPopularProducts={mostPopularProducts}
+          
+        />
+ <FeaturesSection spaceBottomClass="pb-100"/>
+     
 
         
 
