@@ -329,7 +329,7 @@ api
                 <div className="grand-totall">
                   <div className="button-group">
                   <Link onClick={() => generateCode()} className="checkout-btn">
-                  Submit Enquiry
+                  Request for Quote
                     </Link>
                     <button type="button"
                       onClick={()=>handleClearCart()}
