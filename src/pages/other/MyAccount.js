@@ -369,7 +369,7 @@ const MyAccount = ({ location }) => {
                               <div className="col-12 col-md-6">
                               {firstNameError && <span className="error">{firstNameError}</span>}
                               <div className="billing-info">
-                                  <label>Name</label>
+                                  <label>Contact Name</label>
                                   <input
                                     type="text"
                                     name="first_name"
@@ -463,6 +463,16 @@ const MyAccount = ({ location }) => {
                                   <input
                                     type="text"
                                     name="gst"
+                                    value={userData && userData.gst}
+                                    onChange={handleUserData}
+                                    className="form-control"
+                                  />
+                                </div>
+                                <div className="billing-info">
+                                  <label>Company Name</label>
+                                  <input
+                                    type="text"
+                                    name="company_name"
                                     value={userData && userData.gst}
                                     onChange={handleUserData}
                                     className="form-control"
