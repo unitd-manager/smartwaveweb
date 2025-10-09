@@ -65,6 +65,18 @@ const Home = () => {
     api
       .get("/product/getBestSellingProducts")
       .then((res) => {
+          res.data.data.forEach((element) => {
+            element.tag = String(element.tag).split(",");
+          });
+          res.data.data.forEach((element) => {
+            element.grades = String(element.grades).split(",").filter(grade => grade !== null && grade !== undefined && grade !== 'undefined' && grade !== 'null' && grade !== '');
+          });
+          res.data.data.forEach((element) => {
+           element.count = String(element.count).split(",").filter(grade => grade !== null && grade !== undefined && grade !== 'undefined' && grade !== 'null' && grade !== '');
+          });
+          res.data.data.forEach((element) => {
+            element.origin = String(element.origin).split(",").filter(grade => grade !== null && grade !== undefined && grade !== 'undefined' && grade !== 'null' && grade !== '');
+          });
         setBestSellingProducts(res.data.data);
       })
       .catch((err) => {
@@ -76,6 +88,18 @@ const Home = () => {
     api
       .get("/product/getNewProducts")
       .then((res) => {
+          res.data.data.forEach((element) => {
+            element.tag = String(element.tag).split(",");
+          });
+          res.data.data.forEach((element) => {
+            element.grades = String(element.grades).split(",").filter(grade => grade !== null && grade !== undefined && grade !== 'undefined' && grade !== 'null' && grade !== '');
+          });
+          res.data.data.forEach((element) => {
+           element.count = String(element.count).split(",").filter(grade => grade !== null && grade !== undefined && grade !== 'undefined' && grade !== 'null' && grade !== '');
+          });
+          res.data.data.forEach((element) => {
+            element.origin = String(element.origin).split(",").filter(grade => grade !== null && grade !== undefined && grade !== 'undefined' && grade !== 'null' && grade !== '');
+          });
         setNewProducts(res.data.data);
       })
       .catch((err) => {
@@ -86,6 +110,18 @@ const Home = () => {
     api
       .get("/product/getMostPopularProducts")
       .then((res) => {
+          res.data.data.forEach((element) => {
+            element.tag = String(element.tag).split(",");
+          });
+          res.data.data.forEach((element) => {
+            element.grades = String(element.grades).split(",").filter(grade => grade !== null && grade !== undefined && grade !== 'undefined' && grade !== 'null' && grade !== '');
+          });
+          res.data.data.forEach((element) => {
+           element.count = String(element.count).split(",").filter(grade => grade !== null && grade !== undefined && grade !== 'undefined' && grade !== 'null' && grade !== '');
+          });
+          res.data.data.forEach((element) => {
+            element.origin = String(element.origin).split(",").filter(grade => grade !== null && grade !== undefined && grade !== 'undefined' && grade !== 'null' && grade !== '');
+          });
         setMostPopularProducts(res.data.data);
       })
       .catch((err) => {
@@ -97,6 +133,18 @@ const Home = () => {
     api
       .get("/product/getTopOfferProducts")
       .then((res) => {
+          res.data.data.forEach((element) => {
+            element.tag = String(element.tag).split(",");
+          });
+          res.data.data.forEach((element) => {
+            element.grades = String(element.grades).split(",").filter(grade => grade !== null && grade !== undefined && grade !== 'undefined' && grade !== 'null' && grade !== '');
+          });
+          res.data.data.forEach((element) => {
+           element.count = String(element.count).split(",").filter(grade => grade !== null && grade !== undefined && grade !== 'undefined' && grade !== 'null' && grade !== '');
+          });
+          res.data.data.forEach((element) => {
+            element.origin = String(element.origin).split(",").filter(grade => grade !== null && grade !== undefined && grade !== 'undefined' && grade !== 'null' && grade !== '');
+          });
         res.data.data.forEach((element) => {
           element.images = String(element.images).split(",");
         });

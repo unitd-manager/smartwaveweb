@@ -84,9 +84,31 @@ const Cart = ({ location }) => {
         placeEnquiry('');
       });
   };
-
-  const placeEnquiry = (code) => {     
+console.log('user',user);
+  const placeEnquiry = (code) => {
     if (user) {
+      // Check if address fields are empty
+      const addressFields = [
+        user.address,
+        user.address1,
+        user.address2,
+        user.address_area,
+        user.address_city,
+        user.address_state,
+        user.address_country_code,
+        user.address_po_code
+      ];
+
+      const isAddressEmpty = addressFields.some(field => !field || field.trim() === '');
+
+      // Check if first_name is not in user
+      const isFirstNameEmpty = !user.first_name || user.first_name.trim() === '';
+
+      if (isAddressEmpty || isFirstNameEmpty) {
+        alert("Please fill in your profile details, including your first name and address.");
+        return;
+      }
+
       const enquiryDetails = {
         contact_id : user.contact_id,
         enquiry_date : new Date().toISOString().split('T')[0],
@@ -98,7 +120,19 @@ const Cart = ({ location }) => {
         created_by: user.first_name,
         first_name: user.first_name,
         email: user.email,
+        shipping_address: [
+          user.address || '',
+          user.address1 || '',
+          user.address2 || '',
+          user.address_area || '',
+          user.address_city || '',
+          user.address_state || '',
+          user.address_country_code || '',
+          user.address_po_code || ''
+        ].filter(Boolean).join(', '),
               };
+
+            
       api
         .post("/enquiry/insertEnquiry", enquiryDetails)
         .then((res) => {
@@ -113,7 +147,8 @@ const Cart = ({ location }) => {
             item.first_name = user.first_name;
             item.email = user.email;
             item.grades = item.grades;
-
+   item.counts=item.counts;
+   item.origins=item.origins;
 
             api.post("/enquiry/insertQuoteItems", item)
               .then(() => {
@@ -272,59 +307,73 @@ api
               <Fragment>
                 <h3 className="cart-page-title">Your cart items</h3>
                 <div className="table-content table-responsive cart-table-content">
-                  <table>
-                    <thead>
-                      <tr>
-                        <th>Image</th>
-                        <th>Product Name</th>
-                        <th>Qty</th>
-                        <th>Action</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {cartItems?.map((item, index) => (
-                        <tr key={index}>
-                          <td className="product-thumbnail">
-                            <Link to={`/product/${item.product_id}/${item.title}`}>
-                              <img
-                                src={`${imageBase}${item.images[0]}`}
-                                alt={item.title}
-                                className="img-fluid"
-                              />
-                            </Link>
-                          </td>
-                          <td className="product-name text-center">{item.title}</td>
-                          <td className="product-quantity">
-                            <div className="cart-plus-minus">
-                              <button
-                                className="dec qtybutton"
-                                onClick={() => handleDecreaseQuantity(item)}
-                              >
-                                -
-                              </button>
-                              <input
-                                className="cart-plus-minus-box"
-                                type="text"
-                                value={item.qty}
-                                readOnly
-                              />
-                              <button
-                                className="inc qtybutton"
-                                onClick={() => handleIncreaseQuantity(item)}
-                              >
-                                +
-                              </button>
-                            </div>
-                          </td>
-                          <td className="product-remove">
-                            <button onClick={() => handleRemoveItem(item)}>
-                              <i className="fa fa-times"></i>
-                            </button>
-                          </td>
+                  <div className="cart-table-wrapper">
+                    <table className="cart-table">
+                      <thead>
+                        <tr>
+                          <th className="col-image">Image</th>
+                          <th className="col-product">Product Name</th>
+                          <th className="col-qty">Qty</th>
+                          <th className="col-grades">Details</th>
+                          <th className="col-action">Action</th>
                         </tr>
-                      ))}
-                    </tbody>
-                  </table>
+                      </thead>
+                      <tbody>
+                        {cartItems?.map((item, index) => (
+                          <tr key={index} className="cart-row">
+                            <td className="product-thumbnail">
+                              <Link to={`/product/${item.product_id}/${item.title}`}>
+                                <img
+                                  src={`${imageBase}${item.images[0]}`}
+                                  alt={item.title}
+                                  className="img-fluid"
+                                />
+                              </Link>
+                            </td>
+                            <td className="product-name">{item.title}</td>
+                            <td className="product-quantity">
+                              <div className="cart-plus-minus">
+                                <button
+                                  className="dec qtybutton"
+                                  onClick={() => handleDecreaseQuantity(item)}
+                                >
+                                  -
+                                </button>
+                                <input
+                                  className="cart-plus-minus-box"
+                                  type="text"
+                                  value={item.qty}
+                                  readOnly
+                                />
+                                <button
+                                  className="inc qtybutton"
+                                  onClick={() => handleIncreaseQuantity(item)}
+                                >
+                                  +
+                                </button>
+                              </div>
+                            </td>
+                            <td className="product-grades">
+                              <div className="grades-info">
+                                {item.grade && <div><strong>Grade:</strong> {item.grade}</div>}
+                                {item.counts && <div><strong>Counts:</strong> {item.counts}</div>}
+                                {item.origins && <div><strong>Origin:</strong> {item.origins}</div>}
+                              </div>
+                            </td>
+                            <td className="product-remove">
+                              <button
+                                className="remove-btn"
+                                onClick={() => handleRemoveItem(item)}
+                                aria-label="Remove item"
+                              >
+                                <i className="fa fa-times"></i>
+                              </button>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
                 </div>
                 <div className="grand-totall">
                   <div className="button-group">

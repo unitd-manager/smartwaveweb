@@ -45,6 +45,18 @@ const Shop = ({}) => {
       api
         .post(`product/getProductsbySearch`, { keyword: query })
         .then((res) => {
+            res.data.data.forEach((element) => {
+            element.tag = String(element.tag).split(",");
+          });
+          res.data.data.forEach((element) => {
+            element.grades = String(element.grades).split(",").filter(grade => grade !== null && grade !== undefined && grade !== 'undefined' && grade !== 'null' && grade !== '');
+          });
+          res.data.data.forEach((element) => {
+           element.count = String(element.count).split(",").filter(grade => grade !== null && grade !== undefined && grade !== 'undefined' && grade !== 'null' && grade !== '');
+          });
+          res.data.data.forEach((element) => {
+            element.origin = String(element.origin).split(",").filter(grade => grade !== null && grade !== undefined && grade !== 'undefined' && grade !== 'null' && grade !== '');
+          });
           setProducts(res.data.data);
         })
         .catch((err) => {
@@ -60,6 +72,15 @@ const Shop = ({}) => {
         .then((res) => {
           res.data.data.forEach((element) => {
             element.tag = String(element.tag).split(",");
+          });
+          res.data.data.forEach((element) => {
+            element.grades = String(element.grades).split(",").filter(grade => grade !== null && grade !== undefined && grade !== 'undefined' && grade !== 'null' && grade !== '');
+          });
+          res.data.data.forEach((element) => {
+           element.count = String(element.count).split(",").filter(grade => grade !== null && grade !== undefined && grade !== 'undefined' && grade !== 'null' && grade !== '');
+          });
+          res.data.data.forEach((element) => {
+            element.origin = String(element.origin).split(",").filter(grade => grade !== null && grade !== undefined && grade !== 'undefined' && grade !== 'null' && grade !== '');
           });
           setProducts(res.data.data);
           setAllProducts(res.data.data);

@@ -47,12 +47,26 @@ const ProductDescriptionInfo = ({
   const [loginModal, setLoginModal] = useState(false);
   const [proRating, setProRating] = useState(0);
   const [selectedProductGrade, setSelectedProductGrade] = useState("");
+  const [selectedProductOrigin, setSelectedProductOrigin] = useState("");
+  const [selectedProductCount, setSelectedProductCount] = useState("");
 
   const dispatch = useDispatch();
   const wishlistItems = useSelector(state => state.wishlistItems.wishlistItems);
-
+console.log('product',product);
   const onAddToCart = (data) => {
     if (user) {
+      if(data.grades.length>0 && !selectedProductGrade){
+addToast("Please Select a grade", { appearance: "warning", autoDismiss: true });
+      return;}
+         if(data.count.length>0 && !selectedProductCount){
+addToast("Please Select a count", { appearance: "warning", autoDismiss: true });
+      return;}
+      if(data.origin.length>0 && !selectedProductOrigin){
+addToast("Please Select an origin", { appearance: "warning", autoDismiss: true });
+      return;}
+      data.counts=selectedProductCount;
+      data.origins=selectedProductOrigin;
+      data.grade=selectedProductGrade;
       data.contact_id = user.contact_id;
       data.qty = quantityCount;
       dispatch(insertCartData(data, addToast))
@@ -208,6 +222,65 @@ const ProductDescriptionInfo = ({
       <option value="">Select a grade</option>
       {product.grades
         .filter(grade => grade !== null && grade !== undefined && grade !== 'null')
+        .map((grade, index) => (
+          <option key={index} value={grade}>{grade}</option>
+        ))}
+    </select>
+  </div>
+)}
+
+{product?.count &&
+  Array.isArray(product.count) &&
+  product.count.filter(
+    g => g !== null && g !== undefined && g !== 'null' && g !== ''
+  ).length > 0 && (
+    <div className="p-4 bg-white rounded-lg">
+      <label htmlFor="count-select" className="text-lg font-semibold text-gray-700">
+        Select Count
+      </label>
+      <select
+        id="count-select"
+        className="mt-2 w-full p-2 border rounded-lg text-gray-700 focus:ring-2 focus:ring-pink-500"
+        value={selectedProductCount || ""}   // ✅ bind to same state
+        onChange={(e) => setSelectedProductCount(e.target.value)}
+      >
+        <option value="">Select a count</option>
+        {[...new Set( // ✅ removes duplicates
+          product.count.filter(
+            grade =>
+              grade !== null &&
+              grade !== undefined &&
+              grade !== 'undefined' &&
+              grade !== 'null' &&
+              grade !== ''
+          )
+        )].map((grade, index) => (
+          <option key={index} value={grade}>
+            {String(grade)}
+          </option>
+        ))}
+      </select>
+    </div>
+  )}
+
+
+
+{product?.origin && 
+ Array.isArray(product.origin) && 
+ product.origin.filter(g => g !== null && g !== undefined && g !== 'null').length > 0 && (
+  <div className="p-4 bg-white rounded-lg">
+    <label htmlFor="grade-select" className="text-lg font-semibold text-gray-700">
+      Select Origin
+    </label>
+    <select
+      id="grade-select"
+      className="mt-2 w-full p-2 border rounded-lg text-gray-700 focus:ring-2 focus:ring-pink-500"
+      value={selectedProductGrade}
+      onChange={(e) => setSelectedProductOrigin(e.target.value)}
+    >
+      <option value="">Select an origin</option>
+      {product.origin
+        .filter(grade => grade !== null && grade !== undefined && grade !== 'undefined' && grade !== 'null')
         .map((grade, index) => (
           <option key={index} value={grade}>{grade}</option>
         ))}

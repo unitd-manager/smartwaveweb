@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
 import React, { Fragment, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link,useHistory } from "react-router-dom";
 import { useToasts } from "react-toast-notifications";
 import { useDispatch, useSelector } from "react-redux";
 import { getDiscountPrice } from "../../helpers/product";
@@ -25,6 +25,8 @@ const TabProductTwo = ({
   const [modalShow, setModalShow] = useState(false);
   const { addToast } = useToasts();
   const dispatch = useDispatch();
+  const history=useHistory();
+  
   const wishlistItems = useSelector(state => state.wishlistItems.wishlistItems);
 
   const discountedPrice = getDiscountPrice(product.price, product.discount_amount);
@@ -50,6 +52,16 @@ const TabProductTwo = ({
             {product.qty_in_stock > 0 ? (
                 <button
                   onClick={() => {
+                     if(product.grades.length>0 ){
+                    history.push(`/product/${product.product_id}/${formattedTitle}`);
+                  return;
+                  }
+                           if(product.count.length>0 ){
+                 history.push(`/product/${product.product_id}/${formattedTitle}`);
+                        return;}
+                        if(product.origin.length>0){
+                 history.push(`/product/${product.product_id}/${formattedTitle}`);
+                        return;}
                     if (cartItem?.qty > 0) {
                       product.qty = parseFloat(cartItem?.qty) + 1;
                       product.basket_id = cartItem.basket_id;
