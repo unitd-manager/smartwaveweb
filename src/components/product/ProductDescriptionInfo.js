@@ -275,7 +275,7 @@ addToast("Please Select an origin", { appearance: "warning", autoDismiss: true }
     <select
       id="grade-select"
       className="mt-2 w-full p-2 border rounded-lg text-gray-700 focus:ring-2 focus:ring-pink-500"
-      value={selectedProductGrade}
+      value={selectedProductOrigin}
       onChange={(e) => setSelectedProductOrigin(e.target.value)}
     >
       <option value="">Select an origin</option>

@@ -27,6 +27,7 @@ const Cart = ({ location }) => {
   const { addToast } = useToasts();
   const { pathname } = location;
   const dispatch = useDispatch();
+  const[userData,setUserData]=useState({});
   const user = JSON.parse(localStorage.getItem("user")); // Replace with your auth logic
   const cartItems = useSelector((state) => state.cartItems.cartItems);
   const currency = useSelector((state) => state.currencyData);
@@ -89,23 +90,23 @@ console.log('user',user);
     if (user) {
       // Check if address fields are empty
       const addressFields = [
-        user.address,
-        user.address1,
-        user.address2,
-        user.address_area,
-        user.address_city,
-        user.address_state,
-        user.address_country_code,
-        user.address_po_code
+      
+        userData.address1,
+        userData.address2,
+        userData.address_area,
+        userData.address_city,
+        userData.address_state,
+        userData.address_country_code,
+        userData.address_po_code
       ];
 
       const isAddressEmpty = addressFields.some(field => !field || field.trim() === '');
 
       // Check if first_name is not in user
-      const isFirstNameEmpty = !user.first_name || user.first_name.trim() === '';
+      const isFirstNameEmpty = !userData.first_name || userData.first_name.trim() === '';
 
       if (isAddressEmpty || isFirstNameEmpty) {
-        alert("Please fill in your profile details, including your first name and address.");
+        alert("Please fill in your profile details, including your first name");
         return;
       }
 
@@ -114,21 +115,21 @@ console.log('user',user);
         enquiry_date : new Date().toISOString().split('T')[0],
         enquiry_type : 'Enquiry and order for Retail products.',
         status : 'New',
-        title : 'Enquiry from ' + user.first_name,      
+        title : 'Enquiry from ' + userData.first_name,      
         enquiry_code: code,
         creation_date : new Date().toISOString().split('T')[0],
-        created_by: user.first_name,
-        first_name: user.first_name,
-        email: user.email,
+        created_by: userData.first_name,
+        first_name: userData.first_name,
+        email: userData.email,
         shipping_address: [
-          user.address || '',
-          user.address1 || '',
-          user.address2 || '',
-          user.address_area || '',
-          user.address_city || '',
-          user.address_state || '',
-          user.address_country_code || '',
-          user.address_po_code || ''
+          userData.address || '',
+          userData.address1 || '',
+          userData.address2 || '',
+          userData.address_area || '',
+          userData.address_city || '',
+          userData.address_state || '',
+          userData.address_country_code || '',
+          userData.address_po_code || ''
         ].filter(Boolean).join(', '),
               };
 
@@ -143,9 +144,9 @@ console.log('user',user);
             item.product_id = item.product_id;
             item.category_id = item.category_id;
             item.sub_category_id = item.sub_category_id;
-            item.created_by = user.first_name;
-            item.first_name = user.first_name;
-            item.email = user.email;
+            item.created_by = userData.first_name;
+            item.first_name = userData.first_name;
+            item.email = userData.email;
             item.grades = item.grades;
    item.counts=item.counts;
    item.origins=item.origins;
@@ -276,14 +277,28 @@ api
     });
   }, [dispatch, user]);
 
-
+const getUser = () => {
+    api
+      .post("/contact/getContactsById", { contact_id: user.contact_id })
+      .then((res) => {
+        setUserData(res.data.data[0]);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
   useEffect(() => {
     if (user) {
       dispatch(fetchCartData(user));
     }
     getEmail()
   }, [ ]);
-
+   useEffect(() => {
+    if (user) {
+      getUser();
+    }
+  }, [ ]);
+  
   return (
     <Fragment>
       <MetaTags>
@@ -330,7 +345,7 @@ api
                                 />
                               </Link>
                             </td>
-                            <td className="product-name">{item.title}</td>
+                            <td className="product-name" style={{ textAlign: 'center' }}>{item.title}</td>
                             <td className="product-quantity">
                               <div className="cart-plus-minus">
                                 <button
