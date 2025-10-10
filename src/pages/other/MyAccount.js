@@ -93,8 +93,8 @@ const MyAccount = ({ location }) => {
     return fssaiPattern.test(fssai);
   };
 
-  const validateAddress = (address) => {
-    return address.trim().length >= 1; // Minimum 1 character required
+  const validateAddress = (address1) => {
+    return address1.trim().length >= 1; // Minimum 1 character required
   };  
   
   const validateCity = (city) => {
