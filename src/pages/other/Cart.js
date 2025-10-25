@@ -105,10 +105,33 @@ console.log('user',user);
       // Check if first_name is not in user
       const isFirstNameEmpty = !userData.first_name || userData.first_name.trim() === '';
 
-      if (isAddressEmpty || isFirstNameEmpty) {
-        alert("Please fill in your profile details, including your first name");
-        return;
+
+if (isAddressEmpty || isFirstNameEmpty) {
+  Swal.fire({
+    title: "Incomplete Profile",
+    html: `
+      Please update your profile details, including your first name and address.<br/><br/>
+      <a href="#" id="updateProfileLink" style="color:#3085d6; text-decoration:underline;">
+        Click here to update your address
+      </a>
+    `,
+    icon: "warning",
+    showConfirmButton: false,
+    didOpen: () => {
+      const link = document.getElementById("updateProfileLink");
+      if (link) {
+        link.addEventListener("click", (e) => {
+          e.preventDefault();
+          history.push("/my-account"); // 👈 navigates to MyAccount.js page
+          Swal.close();
+        });
       }
+    },
+  });
+  return;
+}
+
+
 
       const enquiryDetails = {
         contact_id : user.contact_id,
@@ -322,59 +345,6 @@ const getUser = () => {
               <Fragment>
                 <h3 className="cart-page-title">Your cart items</h3>
                 <div className="table-content table-responsive cart-table-content">
-<<<<<<< HEAD
-                  <table>
-                    <thead>
-                      <tr>
-                        <th>Image</th>
-                        <th>Product Name</th>
-                        <th>No.of.containers</th>
-                        <th>Type of Containers</th>
-                        <th>Action</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {cartItems?.map((item, index) => (
-                        <tr key={index}>
-                          <td className="product-thumbnail">
-                            <Link to={`/product/${item.product_id}/${item.title}`}>
-                              <img
-                                src={`${imageBase}${item.images[0]}`}
-                                alt={item.title}
-                                className="img-fluid"
-                              />
-                            </Link>
-                          </td>
-                          <td className="product-name text-center">{item.title}</td>
-                          <td className="product-quantity">
-                            <div className="cart-plus-minus">
-                              <button
-                                className="dec qtybutton"
-                                onClick={() => handleDecreaseQuantity(item)}
-                              >
-                                -
-                              </button>
-                              <input
-                                className="cart-plus-minus-box"
-                                type="text"
-                                value={item.qty}
-                                readOnly
-                              />
-                              <button
-                                className="inc qtybutton"
-                                onClick={() => handleIncreaseQuantity(item)}
-                              >
-                                +
-                              </button>
-                            </div>
-                          </td>
-                          <td className="product-name text-center">20 Feet/40 Feet</td>
-                          <td className="product-remove">
-                            <button onClick={() => handleRemoveItem(item)}>
-                              <i className="fa fa-times"></i>
-                            </button>
-                          </td>
-=======
                   <div className="cart-table-wrapper">
                     <table className="cart-table">
                       <thead>
@@ -384,7 +354,6 @@ const getUser = () => {
                           <th className="col-qty">Qty</th>
                           <th className="col-grades">Details</th>
                           <th className="col-action">Action</th>
->>>>>>> 0bb99ad65f2004c1b7b888cfa7570a3f29ff60cb
                         </tr>
                       </thead>
                       <tbody>
