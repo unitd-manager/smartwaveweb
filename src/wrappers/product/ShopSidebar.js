@@ -14,6 +14,7 @@ const[subCategories,setSubCategories]=useState([]);
 const[subCategoryTypes,setSubCategoryTypes]=useState([]);
 const[selectedSubCategory,setSelectedSubCategory]=useState([]);
 const[selectedSubCategoryTypes,setSelectedSubCategoryTypes]=useState([]);
+console.log('subCategoryTypes',subCategoryTypes);
 console.log('products',products)
 console.log('tags',uniqueTags);
   useEffect(()=>{

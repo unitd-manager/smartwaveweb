@@ -27,6 +27,7 @@ const Cart = ({ location }) => {
   const { addToast } = useToasts();
   const { pathname } = location;
   const dispatch = useDispatch();
+  const[userData,setUserData]=useState({});
   const user = JSON.parse(localStorage.getItem("user")); // Replace with your auth logic
   const cartItems = useSelector((state) => state.cartItems.cartItems);
   const currency = useSelector((state) => state.currencyData);
@@ -84,21 +85,55 @@ const Cart = ({ location }) => {
         placeEnquiry('');
       });
   };
-
-  const placeEnquiry = (code) => {     
+console.log('user',user);
+  const placeEnquiry = (code) => {
     if (user) {
+      // Check if address fields are empty
+      const addressFields = [
+      
+        userData.address1,
+        userData.address2,
+        userData.address_area,
+        userData.address_city,
+        userData.address_state,
+        userData.address_country_code,
+        userData.address_po_code
+      ];
+
+      const isAddressEmpty = addressFields.some(field => !field || field.trim() === '');
+
+      // Check if first_name is not in user
+      const isFirstNameEmpty = !userData.first_name || userData.first_name.trim() === '';
+
+      if (isAddressEmpty || isFirstNameEmpty) {
+        alert("Please fill in your profile details, including your first name");
+        return;
+      }
+
       const enquiryDetails = {
         contact_id : user.contact_id,
         enquiry_date : new Date().toISOString().split('T')[0],
         enquiry_type : 'Enquiry and order for Retail products.',
         status : 'New',
-        title : 'Enquiry from ' + user.first_name,      
+        title : 'Enquiry from ' + userData.first_name,      
         enquiry_code: code,
         creation_date : new Date().toISOString().split('T')[0],
-        created_by: user.first_name,
-        first_name: user.first_name,
-        email: user.email,
+        created_by: userData.first_name,
+        first_name: userData.first_name,
+        email: userData.email,
+        shipping_address: [
+          userData.address || '',
+          userData.address1 || '',
+          userData.address2 || '',
+          userData.address_area || '',
+          userData.address_city || '',
+          userData.address_state || '',
+          userData.address_country_code || '',
+          userData.address_po_code || ''
+        ].filter(Boolean).join(', '),
               };
+
+            
       api
         .post("/enquiry/insertEnquiry", enquiryDetails)
         .then((res) => {
@@ -109,11 +144,12 @@ const Cart = ({ location }) => {
             item.product_id = item.product_id;
             item.category_id = item.category_id;
             item.sub_category_id = item.sub_category_id;
-            item.created_by = user.first_name;
-            item.first_name = user.first_name;
-            item.email = user.email;
+            item.created_by = userData.first_name;
+            item.first_name = userData.first_name;
+            item.email = userData.email;
             item.grades = item.grades;
-
+   item.counts=item.counts;
+   item.origins=item.origins;
 
             api.post("/enquiry/insertQuoteItems", item)
               .then(() => {
@@ -241,14 +277,28 @@ api
     });
   }, [dispatch, user]);
 
-
+const getUser = () => {
+    api
+      .post("/contact/getContactsById", { contact_id: user.contact_id })
+      .then((res) => {
+        setUserData(res.data.data[0]);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
   useEffect(() => {
     if (user) {
       dispatch(fetchCartData(user));
     }
     getEmail()
   }, [ ]);
-
+   useEffect(() => {
+    if (user) {
+      getUser();
+    }
+  }, [ ]);
+  
   return (
     <Fragment>
       <MetaTags>
@@ -272,6 +322,7 @@ api
               <Fragment>
                 <h3 className="cart-page-title">Your cart items</h3>
                 <div className="table-content table-responsive cart-table-content">
+<<<<<<< HEAD
                   <table>
                     <thead>
                       <tr>
@@ -323,10 +374,75 @@ api
                               <i className="fa fa-times"></i>
                             </button>
                           </td>
+=======
+                  <div className="cart-table-wrapper">
+                    <table className="cart-table">
+                      <thead>
+                        <tr>
+                          <th className="col-image">Image</th>
+                          <th className="col-product">Product Name</th>
+                          <th className="col-qty">Qty</th>
+                          <th className="col-grades">Details</th>
+                          <th className="col-action">Action</th>
+>>>>>>> 0bb99ad65f2004c1b7b888cfa7570a3f29ff60cb
                         </tr>
-                      ))}
-                    </tbody>
-                  </table>
+                      </thead>
+                      <tbody>
+                        {cartItems?.map((item, index) => (
+                          <tr key={index} className="cart-row">
+                            <td className="product-thumbnail">
+                              <Link to={`/product/${item.product_id}/${item.title}`}>
+                                <img
+                                  src={`${imageBase}${item.images[0]}`}
+                                  alt={item.title}
+                                  className="img-fluid"
+                                />
+                              </Link>
+                            </td>
+                            <td className="product-name" style={{ textAlign: 'center' }}>{item.title}</td>
+                            <td className="product-quantity">
+                              <div className="cart-plus-minus">
+                                <button
+                                  className="dec qtybutton"
+                                  onClick={() => handleDecreaseQuantity(item)}
+                                >
+                                  -
+                                </button>
+                                <input
+                                  className="cart-plus-minus-box"
+                                  type="text"
+                                  value={item.qty}
+                                  readOnly
+                                />
+                                <button
+                                  className="inc qtybutton"
+                                  onClick={() => handleIncreaseQuantity(item)}
+                                >
+                                  +
+                                </button>
+                              </div>
+                            </td>
+                            <td className="product-grades">
+                              <div className="grades-info">
+                                {item.grade && <div><strong>Grade:</strong> {item.grade}</div>}
+                                {item.counts && <div><strong>Counts:</strong> {item.counts}</div>}
+                                {item.origins && <div><strong>Origin:</strong> {item.origins}</div>}
+                              </div>
+                            </td>
+                            <td className="product-remove">
+                              <button
+                                className="remove-btn"
+                                onClick={() => handleRemoveItem(item)}
+                                aria-label="Remove item"
+                              >
+                                <i className="fa fa-times"></i>
+                              </button>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
                 </div>
                 <div className="grand-totall">
                   <div className="button-group">

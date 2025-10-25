@@ -39,7 +39,8 @@ export default function Contact({ location }) {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setUser((prevUser) => ({ ...prevUser, [name]: value }));
+    const nextValue = name === "gst_number" ? value.toUpperCase() : value;
+    setUser((prevUser) => ({ ...prevUser, [name]: nextValue }));
   };
 
   // const isValidEmail = (email) => {
@@ -51,6 +52,11 @@ export default function Contact({ location }) {
     return re.test(email);
   };
   
+  // Indian GSTIN format: 15 chars (2 digits state code, 10 PAN, 1 entity code, 1 'Z', 1 checksum)
+  const isValidGSTIN = (gstin) => {
+    const re = /^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$/;
+    return re.test((gstin || "").toUpperCase().trim());
+  };
   
 
   const validateForm = () => {
@@ -104,6 +110,14 @@ export default function Contact({ location }) {
 
     if (!user.gst_number || user.gst_number.trim() === "") {
       addToast("Please enter your GST number.", {
+        appearance: "error",
+        autoDismiss: true,
+      });
+      return false;
+    }
+
+    if (!isValidGSTIN(user.gst_number)) {
+      addToast("Please enter a valid 15-character GSTIN (e.g., 27ABCDE1234F1Z5).", {
         appearance: "error",
         autoDismiss: true,
       });
@@ -398,6 +412,9 @@ export default function Contact({ location }) {
                           value={user.gst_number}
                           onChange={handleChange}
                         />
+                        <small className="text-muted" style={{ display: 'block', marginTop: '-8px' }}>
+                          For invoicing compliance. Format: 15 characters (e.g., 27ABCDE1234F1Z5).
+                        </small>
                       </div>
                       <div className="col-12">
                         <textarea
