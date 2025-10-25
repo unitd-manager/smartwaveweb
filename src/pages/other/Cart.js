@@ -271,8 +271,9 @@ const Cart = ({ location }) => {
                                   +
                                 </button>
                               </div>
+                             
                             </td>
-                            <td className="product-type">20 Feet/40 Feet</td>
+                             <td className="product-quantity">20 Feet/40 Feet</td>
                             <td className="product-grades">
                               {item.grade && <div><strong>Grade:</strong> {item.grade}</div>}
                               {item.counts && <div><strong>Counts:</strong> {item.counts}</div>}
