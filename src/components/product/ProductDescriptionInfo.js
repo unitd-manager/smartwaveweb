@@ -290,8 +290,8 @@ const ProductDescriptionInfo = ({
 
       {product.tag && (
         <div className="pro-details-meta">
-          <span>Tags :</span>
-          <ul>
+          {/* <span>Tags :</span> */}
+          {/* <ul>
             {product.tag.filter(el => el !== 'null').map((single, key) => (
               <li key={key}>
                 <Link to="/shop">
@@ -299,7 +299,7 @@ const ProductDescriptionInfo = ({
                 </Link>
               </li>
             ))}
-          </ul>
+          </ul> */}
         </div>
       )}
     </div>

@@ -277,7 +277,8 @@ api
                       <tr>
                         <th>Image</th>
                         <th>Product Name</th>
-                        <th>Qty</th>
+                        <th>No.of.containers</th>
+                        <th>Type of Containers</th>
                         <th>Action</th>
                       </tr>
                     </thead>
@@ -316,6 +317,7 @@ api
                               </button>
                             </div>
                           </td>
+                          <td className="product-name text-center">20 Feet/40 Feet</td>
                           <td className="product-remove">
                             <button onClick={() => handleRemoveItem(item)}>
                               <i className="fa fa-times"></i>

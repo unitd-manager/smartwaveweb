@@ -206,6 +206,7 @@ console.log('receiptUrl',receiptUrl)
     }
   };
 
+
   const handleUploadOnDoc = async () => {
     if (!receiptFileDoc) {
       alert("Please select a PDF file first.");
@@ -774,6 +775,8 @@ console.log('receiptUrl',receiptUrl)
             {res1.name}
           </a>
 {/*     
+
+
           <button
             type="button"
             className="btn btn-sm btn-light shadow-none"
