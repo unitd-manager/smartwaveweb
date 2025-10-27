@@ -105,9 +105,29 @@ console.log('user',user);
     const isFirstNameEmpty = !userData.first_name || userData.first_name.trim() === '';
 
     if (isAddressEmpty || isFirstNameEmpty) {
-      alert("Please fill in your profile details, including your first name");
-      return;
-    }
+  Swal.fire({
+    title: "Incomplete Profile",
+    html: `
+      Please update your profile details, including your first name and address.<br/><br/>
+      <a href="#" id="updateProfileLink" style="color:#3085d6; text-decoration:underline;">
+        Click here to update your address
+      </a>
+    `,
+    icon: "warning",
+    showConfirmButton: false,
+    didOpen: () => {
+      const link = document.getElementById("updateProfileLink");
+      if (link) {
+        link.addEventListener("click", (e) => {
+          e.preventDefault();
+          history.push("/my-account"); // 👈 navigates to MyAccount.js page
+          Swal.close();
+        });
+      }
+    },
+  });
+  return;
+}
 
     const groupedCartItems = cartItems.reduce((acc, item) => {
       if (!acc[item.product_id]) {
