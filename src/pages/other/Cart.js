@@ -396,6 +396,7 @@ api
                               {item.grade && <div><strong>Grade:</strong> {item.grade}</div>}
                               {item.counts && <div><strong>Counts:</strong> {item.counts}</div>}
                               {item.origins && <div><strong>Origin:</strong> {item.origins}</div>}
+                              {item.destination_port && <div><strong>Destination Port:</strong> {item.destination_port}</div>}
                             </td>
                             <td className="product-remove">
                               <button onClick={() => handleRemoveItem(item)}>
