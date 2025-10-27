@@ -27,19 +27,17 @@ const Cart = ({ location }) => {
   const { addToast } = useToasts();
   const { pathname } = location;
   const dispatch = useDispatch();
-  const[userData,setUserData]=useState({});
-  const user = JSON.parse(localStorage.getItem("user")); // Replace with your auth logic
+  const [userData, setUserData] = useState({});
+  const user = JSON.parse(localStorage.getItem("user"));
   const cartItems = useSelector((state) => state.cartItems.cartItems);
-  const currency = useSelector((state) => state.currencyData);
-  const history = useHistory(); 
-
+  const history = useHistory();
   const [mailId, setmailId] = useState("");
+
   const getEmail = () => {
     api.get("/setting/getMailId").then((res) => {
       setmailId(res.data.data[0]);
     });
   };
-
 
   const cartTotalPrice = useMemo(() => {
     return cartItems.reduce((total, item) => {
@@ -48,7 +46,7 @@ const Cart = ({ location }) => {
         : item.price;
       return total + discountedPrice * item.qty;
     }, 0);
-  }, [cartItems]); 
+  }, [cartItems]);
 
   const handleIncreaseQuantity = useCallback(
     (item) => {
@@ -77,7 +75,7 @@ const Cart = ({ location }) => {
 
   const generateCode = () => {
     api
-      .post('/commonApi/getCodeValues', { type: 'enquiry' })
+      .post("/commonApi/getCodeValues", { type: "enquiry" })
       .then((res) => {
         placeEnquiriesForAllProducts(res.data.data);
       })
@@ -262,28 +260,28 @@ api
   // }, [dispatch, user]);
   const handleClearCart = useCallback(() => {
     Swal.fire({
-      title: 'Are you sure?',
+      title: "Are you sure?",
       text: "Do you really want to clear the cart?",
-      icon: 'warning',
+      icon: "warning",
       showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Yes, clear it!',
-      cancelButtonText: 'Cancel',
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, clear it!",
+      cancelButtonText: "Cancel",
     }).then((result) => {
       if (result.isConfirmed) {
         dispatch(clearCartData(user));
         Swal.fire({
-          title: 'Cleared!',
-          text: 'Your cart has been cleared.',
-          icon: 'success',
-          confirmButtonColor: '#3085d6',
+          title: "Cleared!",
+          text: "Your cart has been cleared.",
+          icon: "success",
+          confirmButtonColor: "#3085d6",
         });
       }
     });
   }, [dispatch, user]);
 
-const getUser = () => {
+  const getUser = () => {
     api
       .post("/contact/getContactsById", { contact_id: user.contact_id })
       .then((res) => {
@@ -293,32 +291,29 @@ const getUser = () => {
         console.log(err);
       });
   };
+
   useEffect(() => {
     if (user) {
       dispatch(fetchCartData(user));
     }
-    getEmail()
-  }, [ ]);
-   useEffect(() => {
+    getEmail();
+  }, []);
+
+  useEffect(() => {
     if (user) {
       getUser();
     }
-  }, [ ]);
-  
+  }, []);
+
   return (
     <Fragment>
       <MetaTags>
         <title>Smartwave | Cart</title>
-        <meta
-          name="description"
-          content="Cart page of Smart Wave eCommerce template."
-        />
+        <meta name="description" content="Cart page of Smart Wave eCommerce template." />
       </MetaTags>
 
       <BreadcrumbsItem to={process.env.PUBLIC_URL + "/"}>Home</BreadcrumbsItem>
-      <BreadcrumbsItem to={process.env.PUBLIC_URL + pathname}>
-        Cart
-      </BreadcrumbsItem>
+      <BreadcrumbsItem to={process.env.PUBLIC_URL + pathname}>Cart</BreadcrumbsItem>
 
       <LayoutOne headerTop="visible">
         <Breadcrumb />
@@ -332,16 +327,17 @@ const getUser = () => {
                     <table className="cart-table">
                       <thead>
                         <tr>
-                          <th className="col-image">Image</th>
-                          <th className="col-product">Product Name</th>
-                          <th className="col-qty">Qty</th>
-                          <th className="col-grades">Details</th>
-                          <th className="col-action">Action</th>
+                          <th>Image</th>
+                          <th>Product Name</th>
+                          <th>No.of.Containers</th>
+                          <th>Type of containers</th>
+                          <th>Details</th>
+                          <th>Action</th>
                         </tr>
                       </thead>
                       <tbody>
                         {cartItems?.map((item, index) => (
-                          <tr key={index} className="cart-row">
+                          <tr key={index}>
                             <td className="product-thumbnail">
                               <Link to={`/product/${item.product_id}/${item.title}`}>
                                 <img
@@ -351,7 +347,7 @@ const getUser = () => {
                                 />
                               </Link>
                             </td>
-                            <td className="product-name" style={{ textAlign: 'center' }}>{item.title}</td>
+                            <td className="product-name text-center">{item.title}</td>
                             <td className="product-quantity">
                               <div className="cart-plus-minus">
                                 <button
@@ -373,20 +369,16 @@ const getUser = () => {
                                   +
                                 </button>
                               </div>
+                             
                             </td>
+                             <td className="product-quantity">20 Feet/40 Feet</td>
                             <td className="product-grades">
-                              <div className="grades-info">
-                                {item.grade && <div><strong>Grade:</strong> {item.grade}</div>}
-                                {item.counts && <div><strong>Counts:</strong> {item.counts}</div>}
-                                {item.origins && <div><strong>Origin:</strong> {item.origins}</div>}
-                              </div>
+                              {item.grade && <div><strong>Grade:</strong> {item.grade}</div>}
+                              {item.counts && <div><strong>Counts:</strong> {item.counts}</div>}
+                              {item.origins && <div><strong>Origin:</strong> {item.origins}</div>}
                             </td>
                             <td className="product-remove">
-                              <button
-                                className="remove-btn"
-                                onClick={() => handleRemoveItem(item)}
-                                aria-label="Remove item"
-                              >
+                              <button onClick={() => handleRemoveItem(item)}>
                                 <i className="fa fa-times"></i>
                               </button>
                             </td>
@@ -396,15 +388,21 @@ const getUser = () => {
                     </table>
                   </div>
                 </div>
+
                 <div className="grand-totall">
                   <div className="button-group">
-                  <Link onClick={() => generateCode()} className="checkout-btn">
-                  Request for Quote
+                    <Link onClick={() => generateCode()} className="checkout-btn">
+                      Request for Quote
                     </Link>
-                    <button type="button"
-                      onClick={()=>handleClearCart()}
+                    <button
+                      type="button"
+                      onClick={handleClearCart}
                       className="clear-btn"
-                      style={{ backgroundColor: "red", color: "white", borderRadius: 50 }}
+                      style={{
+                        backgroundColor: "red",
+                        color: "white",
+                        borderRadius: 50,
+                      }}
                     >
                       CLEAR CART
                     </button>
@@ -412,23 +410,20 @@ const getUser = () => {
                 </div>
               </Fragment>
             ) : (
-              
-                          <div className="row">
-                            <div className="col-lg-12">
-                              <div className="item-empty-area text-center">
-                                <div className="item-empty-area__icon mb-30">
-                                <i className="pe-7s-cart"></i>
-                                </div>
-                                <div className="item-empty-area__text">
-                                  No items found in cart <br />{" "}
-                                  <Link to={process.env.PUBLIC_URL + "/shop"}>
-                                  Shop Now
-                                  </Link>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        )}
+              <div className="row">
+                <div className="col-lg-12">
+                  <div className="item-empty-area text-center">
+                    <div className="item-empty-area__icon mb-30">
+                      <i className="pe-7s-cart"></i>
+                    </div>
+                    <div className="item-empty-area__text">
+                      No items found in cart <br />
+                      <Link to={process.env.PUBLIC_URL + "/shop"}>Shop Now</Link>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </LayoutOne>

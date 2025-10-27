@@ -394,8 +394,8 @@ addToast("Please Select a Destination Port", { appearance: "warning", autoDismis
 
       {product.tag && (
         <div className="pro-details-meta">
-          <span>Tags :</span>
-          <ul>
+          {/* <span>Tags :</span> */}
+          {/* <ul>
             {product.tag.filter(el => el !== 'null').map((single, key) => (
               <li key={key}>
                 <Link to="/shop">
@@ -403,7 +403,7 @@ addToast("Please Select a Destination Port", { appearance: "warning", autoDismis
                 </Link>
               </li>
             ))}
-          </ul>
+          </ul> */}
         </div>
       )}
     </div>
