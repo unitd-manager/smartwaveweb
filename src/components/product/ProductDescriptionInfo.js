@@ -49,6 +49,8 @@ const ProductDescriptionInfo = ({
   const [selectedProductGrade, setSelectedProductGrade] = useState("");
   const [selectedProductOrigin, setSelectedProductOrigin] = useState("");
   const [selectedProductCount, setSelectedProductCount] = useState("");
+  const [selectedProductDestinationPort, setSelectedProductDestinationPort] = useState("");
+
 
   const dispatch = useDispatch();
   const wishlistItems = useSelector(state => state.wishlistItems.wishlistItems);
@@ -64,9 +66,13 @@ addToast("Please Select a count", { appearance: "warning", autoDismiss: true });
       if(data.origin.length>0 && !selectedProductOrigin){
 addToast("Please Select an origin", { appearance: "warning", autoDismiss: true });
       return;}
+      if(data.destination_ports.length>0 && !selectedProductDestinationPort){
+addToast("Please Select a Destination Port", { appearance: "warning", autoDismiss: true });
+      return;}
       data.counts=selectedProductCount;
       data.origins=selectedProductOrigin;
       data.grade=selectedProductGrade;
+      data.destination_port=selectedProductDestinationPort;
       data.contact_id = user.contact_id;
       data.qty = quantityCount;
       dispatch(insertCartData(data, addToast))
@@ -110,6 +116,7 @@ addToast("Please Select an origin", { appearance: "warning", autoDismiss: true }
               String(grade).trim() !== ''
     );
   };
+
 
   const validateBeforeCart = () => {
     if (hasValidGrades(product?.grades) && !selectedProductGrade) {
@@ -205,88 +212,112 @@ addToast("Please Select an origin", { appearance: "warning", autoDismiss: true }
           </div>
         </div>
       )}
-
-{product?.grades && 
- Array.isArray(product.grades) && 
- product.grades.filter(g => g !== null && g !== undefined && g !== 'null').length > 0 && (
-  <div className="p-4 bg-white rounded-lg">
-    <label htmlFor="grade-select" className="text-lg font-semibold text-gray-700">
-      Select Grade
-    </label>
-    <select
-      id="grade-select"
-      className="mt-2 w-full p-2 border rounded-lg text-gray-700 focus:ring-2 focus:ring-pink-500"
-      value={selectedProductGrade}
-      onChange={(e) => setSelectedProductGrade(e.target.value)}
-    >
-      <option value="">Select a grade</option>
-      {product.grades
-        .filter(grade => grade !== null && grade !== undefined && grade !== 'null')
-        .map((grade, index) => (
-          <option key={index} value={grade}>{grade}</option>
-        ))}
-    </select>
-  </div>
-)}
-
-{product?.count &&
-  Array.isArray(product.count) &&
-  product.count.filter(
-    g => g !== null && g !== undefined && g !== 'null' && g !== ''
-  ).length > 0 && (
+<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+  {/* Row 1 */}
+  {product?.grades && 
+   Array.isArray(product.grades) && 
+   product.grades.filter(g => g !== null && g !== undefined && g !== 'null').length > 0 && (
     <div className="p-4 bg-white rounded-lg">
-      <label htmlFor="count-select" className="text-lg font-semibold text-gray-700">
-        Select Count
+      <label htmlFor="grade-select" className="text-lg font-semibold text-gray-700">
+        Select Grade
       </label>
       <select
-        id="count-select"
-        className="mt-2 w-full p-2 border rounded-lg text-gray-700 focus:ring-2 focus:ring-pink-500"
-        value={selectedProductCount || ""}   // ✅ bind to same state
-        onChange={(e) => setSelectedProductCount(e.target.value)}
+        id="grade-select"
+        className="mt-2 w-1/2 p-2 border rounded-lg text-gray-700 focus:ring-2 focus:ring-pink-500"
+        value={selectedProductGrade}
+        onChange={(e) => setSelectedProductGrade(e.target.value)}
       >
-        <option value="">Select a count</option>
-        {[...new Set( // ✅ removes duplicates
-          product.count.filter(
-            grade =>
-              grade !== null &&
-              grade !== undefined &&
-              grade !== 'undefined' &&
-              grade !== 'null' &&
-              grade !== ''
-          )
-        )].map((grade, index) => (
-          <option key={index} value={grade}>
-            {String(grade)}
-          </option>
-        ))}
+        <option value="">Select a grade</option>
+        {product.grades
+          .filter(grade => grade !== null && grade !== undefined && grade !== 'null')
+          .map((grade, index) => (
+            <option key={index} value={grade}>{grade}</option>
+          ))}
       </select>
     </div>
   )}
 
+  {product?.count &&
+    Array.isArray(product.count) &&
+    product.count.filter(
+      g => g !== null && g !== undefined && g !== 'null' && g !== ''
+    ).length > 0 && (
+      <div className="p-4 bg-white rounded-lg">
+        <label htmlFor="count-select" className="text-lg font-semibold text-gray-700">
+          Select Count
+        </label>
+        <select
+          id="count-select"
+          className="mt-2 w-full p-2 border rounded-lg text-gray-700 focus:ring-2 focus:ring-pink-500"
+          value={selectedProductCount || ""}
+          onChange={(e) => setSelectedProductCount(e.target.value)}
+        >
+          <option value="">Select a count</option>
+          {[...new Set(
+            product.count.filter(
+              grade =>
+                grade !== null &&
+                grade !== undefined &&
+                grade !== 'undefined' &&
+                grade !== 'null' &&
+                grade !== ''
+            )
+          )].map((grade, index) => (
+            <option key={index} value={grade}>
+              {String(grade)}
+            </option>
+          ))}
+        </select>
+      </div>
+    )}
 
+  {/* Row 2 */}
+  {product?.origin && 
+   Array.isArray(product.origin) && 
+   product.origin.filter(g => g !== null && g !== undefined && g !== 'null').length > 0 && (
+    <div className="p-4 bg-white rounded-lg">
+      <label htmlFor="origin-select" className="text-lg font-semibold text-gray-700">
+        Select Origin
+      </label>
+      <select
+        id="origin-select"
+        className="mt-2 w-full p-2 border rounded-lg text-gray-700 focus:ring-2 focus:ring-pink-500"
+        value={selectedProductOrigin}
+        onChange={(e) => setSelectedProductOrigin(e.target.value)}
+      >
+        <option value="">Select an origin</option>
+        {product.origin
+          .filter(grade => grade !== null && grade !== undefined && grade !== 'undefined' && grade !== 'null')
+          .map((grade, index) => (
+            <option key={index} value={grade}>{grade}</option>
+          ))}
+      </select>
+    </div>
+  )}
 
-{product?.origin && 
- Array.isArray(product.origin) && 
- product.origin.filter(g => g !== null && g !== undefined && g !== 'null').length > 0 && (
-  <div className="p-4 bg-white rounded-lg">
-    <label htmlFor="grade-select" className="text-lg font-semibold text-gray-700">
-      Select Origin
-    </label>
-    <select
-      id="grade-select"
-      className="mt-2 w-full p-2 border rounded-lg text-gray-700 focus:ring-2 focus:ring-pink-500"
-      value={selectedProductOrigin}
-      onChange={(e) => setSelectedProductOrigin(e.target.value)}
-    >
-      <option value="">Select an origin</option>
-      {product.origin
-        .filter(grade => grade !== null && grade !== undefined && grade !== 'undefined' && grade !== 'null')
-        .map((grade, index) => (
-          <option key={index} value={grade}>{grade}</option>
-        ))}
-    </select>
-  </div>
-)}
+  {product?.destination_ports && 
+   Array.isArray(product.destination_ports) && 
+   product.destination_ports.filter(g => g !== null && g !== undefined && g !== 'null').length > 0 && (
+    <div className="p-4 bg-white rounded-lg">
+      <label htmlFor="destination-select" className="text-lg font-semibold text-gray-700">
+        Select Destination Port
+      </label>
+      <select
+        id="destination-select"
+        className="mt-2 w-full p-2 border rounded-lg text-gray-700 focus:ring-2 focus:ring-pink-500"
+        value={selectedProductDestinationPort}
+        onChange={(e) => setSelectedProductDestinationPort(e.target.value)}
+      >
+        <option value="">Select a Destination Port</option>
+        {product.destination_ports
+          .filter(grade => grade !== null && grade !== undefined && grade !== 'undefined' && grade !== 'null')
+          .map((grade, index) => (
+            <option key={index} value={grade}>{grade}</option>
+          ))}
+      </select>
+    </div>
+  )}
+</div>
 
       <div className="pro-details-quality">
         <div className="pro-details-cart btn-hover">

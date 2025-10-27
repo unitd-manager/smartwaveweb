@@ -79,44 +79,58 @@ const Cart = ({ location }) => {
     api
       .post('/commonApi/getCodeValues', { type: 'enquiry' })
       .then((res) => {
-        placeEnquiry(res.data.data);
+        placeEnquiriesForAllProducts(res.data.data);
       })
       .catch(() => {
-        placeEnquiry('');
+        placeEnquiriesForAllProducts('');
       });
   };
 console.log('user',user);
-  const placeEnquiry = (code) => {
-    if (user) {
-      // Check if address fields are empty
-      const addressFields = [
-      
-        userData.address1,
-        userData.address2,
-        userData.address_area,
-        userData.address_city,
-        userData.address_state,
-        userData.address_country_code,
-        userData.address_po_code
-      ];
 
-      const isAddressEmpty = addressFields.some(field => !field || field.trim() === '');
+  const placeEnquiriesForAllProducts = async (code) => {
+    if (!user) {
+      console.log("Please login");
+      return;
+    }
 
-      // Check if first_name is not in user
-      const isFirstNameEmpty = !userData.first_name || userData.first_name.trim() === '';
+    const addressFields = [
+      userData.address1,
+      userData.address2,
+      userData.address_area,
+      userData.address_city,
+      userData.address_state,
+      userData.address_country_code,
+      userData.address_po_code
+    ];
 
-      if (isAddressEmpty || isFirstNameEmpty) {
-        alert("Please fill in your profile details, including your first name");
-        return;
+    const isAddressEmpty = addressFields.some(field => !field || field.trim() === '');
+    const isFirstNameEmpty = !userData.first_name || userData.first_name.trim() === '';
+
+    if (isAddressEmpty || isFirstNameEmpty) {
+      alert("Please fill in your profile details, including your first name");
+      return;
+    }
+
+    const groupedCartItems = cartItems.reduce((acc, item) => {
+      if (!acc[item.product_id]) {
+        acc[item.product_id] = [];
       }
+      acc[item.product_id].push(item);
+      return acc;
+    }, {});
 
+    for (const productId in groupedCartItems) {
+      const productsInGroup = groupedCartItems[productId];
+      const firstItemInGroup = productsInGroup[0]; // Use first item for general enquiry details
+
+      const uniqueEnquiryCode = `${code}-${productId}`;
       const enquiryDetails = {
         contact_id : user.contact_id,
         enquiry_date : new Date().toISOString().split('T')[0],
         enquiry_type : 'Enquiry and order for Retail products.',
         status : 'New',
-        title : 'Enquiry from ' + userData.first_name,      
-        enquiry_code: code,
+        title : `Enquiry for ${productsInGroup.map(p => p.title).join(', ')} from ` + userData.first_name,      
+        enquiry_code: uniqueEnquiryCode,
         creation_date : new Date().toISOString().split('T')[0],
         created_by: userData.first_name,
         first_name: userData.first_name,
@@ -131,49 +145,42 @@ console.log('user',user);
           userData.address_country_code || '',
           userData.address_po_code || ''
         ].filter(Boolean).join(', '),
-              };
+      };
 
-            
-      api
-        .post("/enquiry/insertEnquiry", enquiryDetails)
-        .then((res) => {
-          const insertedId = res.data.data.insertId;
-          cartItems.forEach((item) => {
-            item.enquiry_id = insertedId;
-            item.quantity = item.qty;
-            item.product_id = item.product_id;
-            item.category_id = item.category_id;
-            item.sub_category_id = item.sub_category_id;
-            item.created_by = userData.first_name;
-            item.first_name = userData.first_name;
-            item.email = userData.email;
-            item.grades = item.grades;
-   item.counts=item.counts;
-   item.origins=item.origins;
+      try {
+        const res = await api.post("/enquiry/insertEnquiry", enquiryDetails);
+        const insertedId = res.data.data.insertId;
 
-            api.post("/enquiry/insertQuoteItems", item)
-              .then(() => {
-                console.log("Order placed");
-              })
-             
-              .catch((err) => console.log(err));
-          });
-        }).then(() => {
-          console.log("cart user",user)
-          clearCartData(user)
-            // Make the API call
-      api
-      .post("/contact/clearCartItems", { contact_id: user.contact_id })
-       
-        })
-        .then(() => {
-          //alert("Enquiry Submitted Successfully");
-          history.push('/enquirysuccess')
-        })
-        .catch((err) => console.log(err));
-    } else {
-      console.log("please login");
+        for (const item of productsInGroup) {
+          const quoteItem = {
+            enquiry_id: insertedId, // Use the insertedId for the group's enquiry
+            quantity: item.qty,
+            product_id: item.product_id,
+            category_id: item.category_id,
+            sub_category_id: item.sub_category_id,
+            created_by: userData.first_name,
+            first_name: userData.first_name,
+            email: userData.email,
+            grades: item.grades,
+            counts: item.counts,
+            origins: item.origins,
+            destination_port: item.destination_port,
+          };
+          await api.post("/enquiry/insertQuoteItems", quoteItem);
+          console.log(`Quote item for ${item.title} added to enquiry ${insertedId}.`);
+        }
+        console.log(`Enquiry for product group ${productId} placed successfully.`);
+      } catch (err) {
+        console.error(`Error placing enquiry for product group ${productId}:`, err);
+      }
     }
+
+    clearCartData(user);
+    api.post("/contact/clearCartItems", { contact_id: user.contact_id });
+    history.push('/enquirysuccess');
+
+    // Temporarily commenting out email sending logic
+    /*
     const orderDate = new Date();
     const deliveryDate = new Date();
     deliveryDate.setDate(orderDate.getDate() + 7);
@@ -185,7 +192,6 @@ console.log('user',user);
       return `${day}-${month}-${year}`;
     };
 
-  
     const to = mailId.email;
     const toCustomer = user.email; // Customer's Email
     const subject = "Smartwave Product Details";
@@ -248,7 +254,7 @@ api
       });
     
     };
-
+    */
   };
 
   // const handleClearCart = useCallback(() => {
