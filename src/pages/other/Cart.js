@@ -32,12 +32,27 @@ const Cart = ({ location }) => {
   const cartItems = useSelector((state) => state.cartItems.cartItems);
   const history = useHistory();
   const [mailId, setmailId] = useState("");
-
+  const [container, setContainer] = useState("");
   const getEmail = () => {
     api.get("/setting/getMailId").then((res) => {
       setmailId(res.data.data[0]);
     });
   };
+const getContainer = () => {
+  api.get("/setting/getContainer").then((res) => {
+    console.log("Container API Response:", res.data); // 👈 Add this line
+    if (res.data.data.length > 0) {
+      const value = res.data.data[0].value;
+      try {
+        const parsed = JSON.parse(value);
+        setContainer(parsed.map((v) => v.label).join(" / "));
+      } catch (e) {
+        setContainer(value);
+      }
+    }
+  });
+};
+
 
   const cartTotalPrice = useMemo(() => {
     return cartItems.reduce((total, item) => {
@@ -206,7 +221,9 @@ const Cart = ({ location }) => {
       getUser();
     }
   }, []);
-
+useEffect(() => {
+  getContainer();
+}, []);
   return (
     <Fragment>
       <MetaTags>
@@ -273,7 +290,7 @@ const Cart = ({ location }) => {
                               </div>
                              
                             </td>
-                             <td className="product-quantity">20 Feet/40 Feet</td>
+                             <td className="product-quantity">{container}</td>
                             <td className="product-grades">
                               {item.grade && <div><strong>Grade:</strong> {item.grade}</div>}
                               {item.counts && <div><strong>Counts:</strong> {item.counts}</div>}
