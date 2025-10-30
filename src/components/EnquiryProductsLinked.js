@@ -31,6 +31,8 @@ const ProductsLinkedModal = ({productsLinked}) => {
                 <th>Grade</th>
                 <th>Count</th>
                   <th>Origin</th>
+                  <th>Destination Port</th>
+                  <th>HSN</th>
               </tr>
             </thead>
             <tbody>
@@ -41,6 +43,8 @@ const ProductsLinkedModal = ({productsLinked}) => {
                   <td>{product.grades}</td>
                   <td>{product.counts}</td>
                    <td>{product.origins}</td>
+                   <td>{product.destination_port}</td>
+                   <td>{product.hsn}</td>
                 </tr>
               ))}
             </tbody>

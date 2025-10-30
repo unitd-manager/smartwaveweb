@@ -92,89 +92,207 @@ const getContainer = () => {
     api
       .post("/commonApi/getCodeValues", { type: "enquiry" })
       .then((res) => {
-        placeEnquiry(res.data.data);
+        placeEnquiriesForAllProducts(res.data.data);
       })
       .catch(() => {
-        placeEnquiry("");
+        placeEnquiriesForAllProducts('');
       });
   };
+console.log('user',user);
 
-  const placeEnquiry = (code) => {
-    if (user) {
-      const addressFields = [
-        userData.address1,
-        userData.address2,
-        userData.address_area,
-        userData.address_city,
-        userData.address_state,
-        userData.address_country_code,
-        userData.address_po_code,
-      ];
+  const placeEnquiriesForAllProducts = async (code) => {
+    if (!user) {
+      console.log("Please login");
+      return;
+    }
 
-      const isAddressEmpty = addressFields.some(
-        (field) => !field || field.trim() === ""
-      );
-      const isFirstNameEmpty =
-        !userData.first_name || userData.first_name.trim() === "";
+    const addressFields = [
+      userData.address1,
+      userData.address2,
+      userData.address_area,
+      userData.address_city,
+      userData.address_state,
+      userData.address_country_code,
+      userData.address_po_code
+    ];
 
-      if (isAddressEmpty || isFirstNameEmpty) {
-        alert("Please fill in your profile details, including your first name");
-        return;
+    const isAddressEmpty = addressFields.some(field => !field || field.trim() === '');
+    const isFirstNameEmpty = !userData.first_name || userData.first_name.trim() === '';
+
+    if (isAddressEmpty || isFirstNameEmpty) {
+  Swal.fire({
+    title: "Incomplete Profile",
+    html: `
+      Please update your profile details, including your first name and address.<br/><br/>
+      <a href="#" id="updateProfileLink" style="color:#3085d6; text-decoration:underline;">
+        Click here to update your address
+      </a>
+    `,
+    icon: "warning",
+    showConfirmButton: false,
+    didOpen: () => {
+      const link = document.getElementById("updateProfileLink");
+      if (link) {
+        link.addEventListener("click", (e) => {
+          e.preventDefault();
+          history.push("/my-account"); // 👈 navigates to MyAccount.js page
+          Swal.close();
+        });
       }
+    },
+  });
+  return;
+}
 
+    const groupedCartItems = cartItems.reduce((acc, item) => {
+      if (!acc[item.product_id]) {
+        acc[item.product_id] = [];
+      }
+      acc[item.product_id].push(item);
+      return acc;
+    }, {});
+
+    for (const productId in groupedCartItems) {
+      const productsInGroup = groupedCartItems[productId];
+      const firstItemInGroup = productsInGroup[0]; // Use first item for general enquiry details
+
+      const uniqueEnquiryCode = `${code}-${productId}`;
       const enquiryDetails = {
-        contact_id: user.contact_id,
-        enquiry_date: new Date().toISOString().split("T")[0],
-        enquiry_type: "Enquiry and order for Retail products.",
-        status: "New",
-        title: "Enquiry from " + userData.first_name,
-        enquiry_code: code,
-        creation_date: new Date().toISOString().split("T")[0],
+        contact_id : user.contact_id,
+        enquiry_date : new Date().toISOString().split('T')[0],
+        enquiry_type : 'Enquiry and order for Retail products.',
+        status : 'New',
+        title : `Enquiry for ${productsInGroup.map(p => p.title).join(', ')} from ` + userData.first_name,      
+        enquiry_code: uniqueEnquiryCode,
+        creation_date : new Date().toISOString().split('T')[0],
         created_by: userData.first_name,
         first_name: userData.first_name,
         email: userData.email,
         shipping_address: [
-          userData.address || "",
-          userData.address1 || "",
-          userData.address2 || "",
-          userData.address_area || "",
-          userData.address_city || "",
-          userData.address_state || "",
-          userData.address_country_code || "",
-          userData.address_po_code || "",
-        ]
-          .filter(Boolean)
-          .join(", "),
+          userData.address || '',
+          userData.address1 || '',
+          userData.address2 || '',
+          userData.address_area || '',
+          userData.address_city || '',
+          userData.address_state || '',
+          userData.address_country_code || '',
+          userData.address_po_code || ''
+        ].filter(Boolean).join(', '),
       };
 
-      api
-        .post("/enquiry/insertEnquiry", enquiryDetails)
-        .then((res) => {
-          const insertedId = res.data.data.insertId;
-          cartItems.forEach((item) => {
-            item.enquiry_id = insertedId;
-            item.quantity = item.qty;
-            item.created_by = userData.first_name;
-            item.first_name = userData.first_name;
-            item.email = userData.email;
-            api.post("/enquiry/insertQuoteItems", item).catch((err) => {
-              console.log(err);
-            });
-          });
-        })
-        .then(() => {
-          clearCartData(user);
-          api.post("/contact/clearCartItems", { contact_id: user.contact_id });
-        })
-        .then(() => {
-          history.push("/enquirysuccess");
-        })
-        .catch((err) => console.log(err));
-    } else {
-      console.log("please login");
+      try {
+        const res = await api.post("/enquiry/insertEnquiry", enquiryDetails);
+        const insertedId = res.data.data.insertId;
+
+        for (const item of productsInGroup) {
+          const quoteItem = {
+            enquiry_id: insertedId, // Use the insertedId for the group's enquiry
+            quantity: item.qty,
+            product_id: item.product_id,
+            category_id: item.category_id,
+            sub_category_id: item.sub_category_id,
+            created_by: userData.first_name,
+            first_name: userData.first_name,
+            email: userData.email,
+            grades: item.grades,
+            counts: item.counts,
+            origins: item.origins,
+            destination_port: item.destination_port,
+          };
+          await api.post("/enquiry/insertQuoteItems", quoteItem);
+          console.log(`Quote item for ${item.title} added to enquiry ${insertedId}.`);
+        }
+        console.log(`Enquiry for product group ${productId} placed successfully.`);
+      } catch (err) {
+        console.error(`Error placing enquiry for product group ${productId}:`, err);
+      }
     }
+
+    clearCartData(user);
+    api.post("/contact/clearCartItems", { contact_id: user.contact_id });
+    history.push('/enquirysuccess');
+
+    // Temporarily commenting out email sending logic
+    /*
+    const orderDate = new Date();
+    const deliveryDate = new Date();
+    deliveryDate.setDate(orderDate.getDate() + 7);
+
+    const formatDate = (date) => {
+      const day = String(date.getDate()).padStart(2, '0');
+      const month = String(date.getMonth() + 1).padStart(2, '0'); // Month is zero-based
+      const year = date.getFullYear();
+      return `${day}-${month}-${year}`;
+    };
+
+    const to = mailId.email;
+    const toCustomer = user.email; // Customer's Email
+    const subject = "Smartwave Product Details";
+    
+    // Group all products into an array
+    const dynamic_template_data = {
+      first_name: cartItems[0]?.first_name,
+      phone: cartItems[0]?.phone, // Assuming same user for all products
+      address: cartItems[0]?.address, // Assuming same user for all products
+      email: cartItems[0]?.email, // Assuming same user for all products
+      // Assuming same user for all products
+      products: cartItems.map((item) => ({
+        title: item.title,
+        qty: item.qty,
+      })),
+    };
+    // Send a single API request with all products
+    api
+      .post("/commonApi/sendProductAdmin", { to, subject, dynamic_template_data })
+      .then((res) => {
+        console.log("Product admin email sent successfully.");
+      })
+      .catch((err) => {
+        console.error("Error sending product admin email:", err);
+      });
+      
+  // Send Email to Customer (Customer Dynamic Template)
+api
+.post("/commonApi/sendProduct",{ toCustomer, subject, dynamic_template_data })
+.then((res) => {
+  console.log("Customer email sent successfully.");
+})
+.catch((err) => {
+  console.error("Error sending customer email:", err);
+});
+
+    {
+      
+      const to = user.email;
+      const dynamic_template_data= 
+      {
+     first_name:user.first_name,
+     order_date:formatDate(orderDate),
+     delivery_date:formatDate(deliveryDate),
+     order_status: "Paid"
+    };
+    api
+      .post('/commonApi/sendgmail',{to,dynamic_template_data})
+      .then(() => {
+        addToast("Email Sent Successfully", {
+          appearance: "success",
+          autoDismiss: true,
+        })
+      })
+      .catch(() => {
+        addToast("Email Sent Successfully", {
+          appearance: "success",
+          autoDismiss: true,
+        })
+      });
+    
+    };
+    */
   };
 
+  // const handleClearCart = useCallback(() => {
+  //   dispatch(clearCartData(user));
+  // }, [dispatch, user]);
   const handleClearCart = useCallback(() => {
     Swal.fire({
       title: "Are you sure?",
@@ -295,6 +413,7 @@ useEffect(() => {
                               {item.grade && <div><strong>Grade:</strong> {item.grade}</div>}
                               {item.counts && <div><strong>Counts:</strong> {item.counts}</div>}
                               {item.origins && <div><strong>Origin:</strong> {item.origins}</div>}
+                              {item.destination_port && <div><strong>Destination Port:</strong> {item.destination_port}</div>}
                             </td>
                             <td className="product-remove">
                               <button onClick={() => handleRemoveItem(item)}>

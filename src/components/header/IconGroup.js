@@ -67,6 +67,7 @@ const IconGroup = ({
           className="account-setting-active"
           onClick={handleClick}
           ref={userIconRef}
+          title="My Profile"
         >
           <i className="pe-7s-user-female" />
         </button>
@@ -130,7 +131,7 @@ const IconGroup = ({
       </div>
 
       <div className="same-style cart-wrap d-block d-lg-none">
-        <Link className="icon-cart" to={process.env.PUBLIC_URL + "/cart"}>
+        <Link className="icon-cart" to={process.env.PUBLIC_URL + "/cart"} title="Cart">
           <i className="pe-7s-shopbag" />
           <span className="count-style">
             {cartItems && cartItems.length ? cartItems.length : 0}
@@ -142,6 +143,7 @@ const IconGroup = ({
         <button
           className="mobile-aside-button"
           onClick={() => triggerMobileMenu()}
+          title="Mobile Menu"
         >
           <i className="pe-7s-menu" />
         </button>
