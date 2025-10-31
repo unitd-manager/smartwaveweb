@@ -464,7 +464,7 @@ console.log('receiptUrl',receiptUrl)
         {/* Stylish File Upload Section */}
       
         <div className="card p-4 text-center border-dashed mb-3">
-        <h6 className="d-flex justify-content-between align-items-center my-2 fw-bold mt-4">Payment Receipt</h6>
+        <h6 className="d-flex justify-content-between align-items-center my-2 fw-bold mt-4">Advance Payment</h6>
           <div className="custom-file-upload">
             <input
               type="file"
@@ -592,11 +592,11 @@ console.log('receiptUrl',receiptUrl)
 
 
   
-
+{/* 
        {/* 2. On documents payment Upload Section */}
-        <div className="card p-4 text-center border-dashed mb-3">
-        <h6 className="d-flex justify-content-between align-items-center my-2 fw-bold mt-4">After Arrival</h6>
-
+        {/* <div className="card p-4 text-center border-dashed mb-3"> */}
+        {/* <h6 className="d-flex justify-content-between align-items-center my-2 fw-bold mt-4">After Arrival</h6> */} 
+{/* 
         {enquiries?.after_arrival === 1 && (
           <>
           <div className="custom-file-upload">
@@ -631,9 +631,9 @@ console.log('receiptUrl',receiptUrl)
             <FaUpload className="me-2" /> Upload Arrival Receipt
           </button>)}
           </>
-        )}
+        )} */}
 
-          {receiptUrl2 && receiptUrl2.length > 0 && receiptUrl2.map((res1, index) => (
+          {/* {receiptUrl2 && receiptUrl2.length > 0 && receiptUrl2.map((res1, index) => (
         <div
           key={index}
           className="d-flex justify-content-between align-items-center my-2"
@@ -657,7 +657,7 @@ console.log('receiptUrl',receiptUrl)
           </button>
         </div>
         ))}
-        </div>
+        </div> */}
 
 
 

@@ -13,6 +13,7 @@ import LoginModal from "../LoginModal";
 import { fetchCartData, insertCartData, updateCartData } from "../../redux/actions/cartItemActions";
 import { insertWishlistData, removeWishlistData } from "../../redux/actions/wishlistItemActions";
 import { insertCompareData } from "../../redux/actions/compareItemActions";
+import api from "../../constants/api";
 
 const ProductDescriptionInfo = ({
   product,
@@ -46,6 +47,7 @@ const ProductDescriptionInfo = ({
   const [sessionId, setSessionId] = useState('');
   const [loginModal, setLoginModal] = useState(false);
   const [proRating, setProRating] = useState(0);
+  const [destinationPorts, setDestinationPorts] = useState([]);
   const [selectedProductGrade, setSelectedProductGrade] = useState("");
   const [selectedProductOrigin, setSelectedProductOrigin] = useState("");
   const [selectedProductCount, setSelectedProductCount] = useState("");
@@ -128,6 +130,18 @@ addToast("Please Select a Destination Port", { appearance: "warning", autoDismis
     }
     return true;
   };
+
+useEffect(()=>{
+ api.get("/valuelist/getDestinationPortValueList")
+      .then((res) => {
+        setDestinationPorts(res.data.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+
+
+},[])
 
   useEffect(() => {
     const userData = localStorage.getItem('user') ? localStorage.getItem('user') : null;
@@ -281,8 +295,8 @@ addToast("Please Select a Destination Port", { appearance: "warning", autoDismis
       onChange={(e) => setSelectedProductDestinationPort(e.target.value)}
     >
       <option value="">Select Destination Port</option>
-      {product?.destination_ports?.map((p, index) => (
-        <option key={index} value={p}>{p}</option>
+      {destinationPorts?.map((p, index) => (
+        <option key={index} value={p.value}>{p.value}</option>
       ))}
     </select>
   </div>
