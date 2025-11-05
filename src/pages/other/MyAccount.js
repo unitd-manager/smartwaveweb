@@ -93,8 +93,8 @@ const MyAccount = ({ location }) => {
     return fssaiPattern.test(fssai);
   };
 
-  const validateAddress = (address) => {
-    return address.trim().length >= 1; // Minimum 1 character required
+  const validateAddress = (address1) => {
+    return address1.trim().length >= 1; // Minimum 1 character required
   };  
   
   const validateCity = (city) => {
@@ -382,7 +382,18 @@ const MyAccount = ({ location }) => {
                                   />
                                 </div>
                               </div>
-
+                              
+                              <div className="col-12 col-md-6">
+ <div className="billing-info">
+                                  <label>Company Name</label>
+                                  <input
+                                    type="text"
+                                    name="company_name"
+                                    value={userData && userData.company_name}
+                                    onChange={handleUserData}
+                                    className="form-control"
+                                  />
+                                </div></div>
                               {/* Email Address Field */}
                               <div className="col-12 col-md-6">
                                 {signUpEmailError && (
@@ -468,16 +479,7 @@ const MyAccount = ({ location }) => {
                                     className="form-control"
                                   />
                                 </div>
-                                <div className="billing-info">
-                                  <label>Company Name</label>
-                                  <input
-                                    type="text"
-                                    name="company_name"
-                                    value={userData && userData.gst}
-                                    onChange={handleUserData}
-                                    className="form-control"
-                                  />
-                                </div>
+                               
                               </div>
                             </div>
 

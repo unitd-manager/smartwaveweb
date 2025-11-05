@@ -32,7 +32,10 @@ const ProductDetail = ({ location, product }) => {
       .post("/product/getProductbyproductId", { product_id: id })
       .then((res) => {
         res.data.data[0].tag = String(res.data.data[0].tag).split(",");
-        res.data.data[0].grades = String(res.data.data[0].grades).split(",");
+        res.data.data[0].grades = String(res.data.data[0].grades).split(",").filter(grade => grade !== null && grade !== undefined && grade !== 'undefined' && grade !== 'null' && grade !== '');
+        res.data.data[0].count = String(res.data.data[0].count).split(",").filter(count => count !== null && count !== undefined && count !== 'undefined' && count !== 'null' && count !== '');
+        res.data.data[0].origin = String(res.data.data[0].origin).split(",").filter(origin => origin !== null && origin !== undefined && origin !== 'undefined' && origin !== 'null' && origin !== '');
+       res.data.data[0].destination_ports = String(res.data.data[0].destination_ports).split(",").filter(origin => origin !== null && origin !== undefined && origin !== 'undefined' && origin !== 'null' && origin !== '');
         res.data.data[0].images = String(res.data.data[0].images).split(",");
         setFoundProduct(res.data.data[0]);
         api

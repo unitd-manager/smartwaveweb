@@ -8,11 +8,12 @@ import { addToCart } from "../../redux/actions/cartActions";
 import { addToWishlist } from "../../redux/actions/wishlistActions";
 import { addToCompare } from "../../redux/actions/compareActions";
 // import Rating from "./sub-components/ProductRating";
-import { Badge } from "reactstrap";
+import { Badge, Row } from "reactstrap";
 import LoginModal from "../LoginModal";
 import { fetchCartData, insertCartData, updateCartData } from "../../redux/actions/cartItemActions";
 import { insertWishlistData, removeWishlistData } from "../../redux/actions/wishlistItemActions";
 import { insertCompareData } from "../../redux/actions/compareItemActions";
+import api from "../../constants/api";
 
 const ProductDescriptionInfo = ({
   product,
@@ -46,13 +47,34 @@ const ProductDescriptionInfo = ({
   const [sessionId, setSessionId] = useState('');
   const [loginModal, setLoginModal] = useState(false);
   const [proRating, setProRating] = useState(0);
+  const [destinationPorts, setDestinationPorts] = useState([]);
   const [selectedProductGrade, setSelectedProductGrade] = useState("");
+  const [selectedProductOrigin, setSelectedProductOrigin] = useState("");
+  const [selectedProductCount, setSelectedProductCount] = useState("");
+  const [selectedProductDestinationPort, setSelectedProductDestinationPort] = useState("");
+
 
   const dispatch = useDispatch();
   const wishlistItems = useSelector(state => state.wishlistItems.wishlistItems);
-
+console.log('product',product);
   const onAddToCart = (data) => {
     if (user) {
+      if(data.grades.length>0 && !selectedProductGrade){
+addToast("Please Select a grade", { appearance: "warning", autoDismiss: true });
+      return;}
+         if(data.count.length>0 && !selectedProductCount){
+addToast("Please Select a count", { appearance: "warning", autoDismiss: true });
+      return;}
+      if(data.origin.length>0 && !selectedProductOrigin){
+addToast("Please Select an origin", { appearance: "warning", autoDismiss: true });
+      return;}
+      if(data.destination_ports.length>0 && !selectedProductDestinationPort){
+addToast("Please Select a Destination Port", { appearance: "warning", autoDismiss: true });
+      return;}
+      data.counts=selectedProductCount;
+      data.origins=selectedProductOrigin;
+      data.grade=selectedProductGrade;
+      data.destination_port=selectedProductDestinationPort;
       data.contact_id = user.contact_id;
       data.qty = quantityCount;
       dispatch(insertCartData(data, addToast))
@@ -97,6 +119,7 @@ const ProductDescriptionInfo = ({
     );
   };
 
+
   const validateBeforeCart = () => {
     if (hasValidGrades(product?.grades) && !selectedProductGrade) {
       addToast("Please select a grade before adding to cart", {
@@ -107,6 +130,18 @@ const ProductDescriptionInfo = ({
     }
     return true;
   };
+
+useEffect(()=>{
+ api.get("/valuelist/getDestinationPortValueList")
+      .then((res) => {
+        setDestinationPorts(res.data.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+
+
+},[])
 
   useEffect(() => {
     const userData = localStorage.getItem('user') ? localStorage.getItem('user') : null;
@@ -191,10 +226,9 @@ const ProductDescriptionInfo = ({
           </div>
         </div>
       )}
-
-{product?.grades && 
- Array.isArray(product.grades) && 
- product.grades.filter(g => g !== null && g !== undefined && g !== 'null').length > 0 && (
+<div className="grid grid-cols-2 gap-4">
+  {/* Grade */}
+  <Row>
   <div className="p-4 bg-white rounded-lg">
     <label htmlFor="grade-select" className="text-lg font-semibold text-gray-700">
       Select Grade
@@ -206,14 +240,71 @@ const ProductDescriptionInfo = ({
       onChange={(e) => setSelectedProductGrade(e.target.value)}
     >
       <option value="">Select a grade</option>
-      {product.grades
-        .filter(grade => grade !== null && grade !== undefined && grade !== 'null')
-        .map((grade, index) => (
-          <option key={index} value={grade}>{grade}</option>
-        ))}
+      {product?.grades?.map((grade, index) => (
+        <option key={index} value={grade}>{grade}</option>
+      ))}
     </select>
   </div>
-)}
+
+  {/* Count */}
+  <div className="p-4 bg-white rounded-lg">
+    <label htmlFor="count-select" className="text-lg font-semibold text-gray-700">
+      Select Count
+    </label>
+    <select
+      id="count-select"
+      className="mt-2 w-full p-2 border rounded-lg text-gray-700 focus:ring-2 focus:ring-pink-500"
+      value={selectedProductCount}
+      onChange={(e) => setSelectedProductCount(e.target.value)}
+    >
+      <option value="">Select a count</option>
+      {product?.count?.map((count, index) => (
+        <option key={index} value={count}>{count}</option>
+      ))}
+    </select>
+  </div>
+</Row>
+<Row>
+  {/* Origin */}
+  <div className="p-4 bg-white rounded-lg">
+    <label htmlFor="origin-select" className="text-lg font-semibold text-gray-700">
+      Select Origin
+    </label>
+    <select
+      id="origin-select"
+      className="mt-2 w-full p-2 border rounded-lg text-gray-700 focus:ring-2 focus:ring-pink-500"
+      value={selectedProductOrigin}
+      onChange={(e) => setSelectedProductOrigin(e.target.value)}
+    >
+      <option value="">Select Origin</option>
+      {product?.origin?.map((o, index) => (
+        <option key={index} value={o}>{o}</option>
+      ))}
+    </select>
+  </div>
+
+  {/* Destination Port */}
+  <div className="p-4 bg-white rounded-lg">
+    <label htmlFor="destination-select" className="text-lg font-semibold text-gray-700">
+      Select Destination Port
+    </label>
+    <select
+      id="destination-select"
+      className="mt-2 w-full p-2 border rounded-lg text-gray-700 focus:ring-2 focus:ring-pink-500"
+      value={selectedProductDestinationPort}
+      onChange={(e) => setSelectedProductDestinationPort(e.target.value)}
+    >
+      <option value="">Select Destination Port</option>
+      {destinationPorts?.map((p, index) => (
+        <option key={index} value={p.value}>{p.value}</option>
+      ))}
+    </select>
+  </div>
+  </Row>
+</div>
+
+
+
 
       <div className="pro-details-quality">
         <div className="pro-details-cart btn-hover">
@@ -290,8 +381,8 @@ const ProductDescriptionInfo = ({
 
       {product.tag && (
         <div className="pro-details-meta">
-          <span>Tags :</span>
-          <ul>
+          {/* <span>Tags :</span> */}
+          {/* <ul>
             {product.tag.filter(el => el !== 'null').map((single, key) => (
               <li key={key}>
                 <Link to="/shop">
@@ -299,7 +390,7 @@ const ProductDescriptionInfo = ({
                 </Link>
               </li>
             ))}
-          </ul>
+          </ul> */}
         </div>
       )}
     </div>

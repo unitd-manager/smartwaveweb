@@ -23,7 +23,7 @@ const user=getUser();
     <div className="language-currency-wrap">
       <div className="same-language-currency ">
         <span>
-          Email : info@smartwave.com
+          Email : support@smartwaveintl.com
         </span>
         <div className="lang-car-dropdown">
           <ul>
@@ -42,7 +42,7 @@ const user=getUser();
       </div>
 
       <div className="same-language-currency">
-        <p>Call Us +91 97891 82749</p>
+        <p>Call Us +918925851195/96</p>
       </div>
      {user&& <div className="same-language-currency welcome-section">
         <p>Welcome, {user.first_name}</p>

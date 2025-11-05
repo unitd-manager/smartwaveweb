@@ -58,6 +58,7 @@ const dispatch=useDispatch();
 
   const onAddToCart = (data) => {
     if (user) {
+     
       if (data.price) {
         data.contact_id = user.contact_id;
 

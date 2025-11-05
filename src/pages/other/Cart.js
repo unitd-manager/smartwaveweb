@@ -27,17 +27,31 @@ const Cart = ({ location }) => {
   const { addToast } = useToasts();
   const { pathname } = location;
   const dispatch = useDispatch();
-  const user = JSON.parse(localStorage.getItem("user")); // Replace with your auth logic
+  const [userData, setUserData] = useState({});
+  const user = JSON.parse(localStorage.getItem("user"));
   const cartItems = useSelector((state) => state.cartItems.cartItems);
-  const currency = useSelector((state) => state.currencyData);
-  const history = useHistory(); 
-
+  const history = useHistory();
   const [mailId, setmailId] = useState("");
+  const [container, setContainer] = useState("");
   const getEmail = () => {
     api.get("/setting/getMailId").then((res) => {
       setmailId(res.data.data[0]);
     });
   };
+const getContainer = () => {
+  api.get("/setting/getContainer").then((res) => {
+    console.log("Container API Response:", res.data); // 👈 Add this line
+    if (res.data.data.length > 0) {
+      const value = res.data.data[0].value;
+      try {
+        const parsed = JSON.parse(value);
+        setContainer(parsed.map((v) => v.label).join(" / "));
+      } catch (e) {
+        setContainer(value);
+      }
+    }
+  });
+};
 
 
   const cartTotalPrice = useMemo(() => {
@@ -47,7 +61,7 @@ const Cart = ({ location }) => {
         : item.price;
       return total + discountedPrice * item.qty;
     }, 0);
-  }, [cartItems]); 
+  }, [cartItems]);
 
   const handleIncreaseQuantity = useCallback(
     (item) => {
@@ -76,68 +90,130 @@ const Cart = ({ location }) => {
 
   const generateCode = () => {
     api
-      .post('/commonApi/getCodeValues', { type: 'enquiry' })
+      .post("/commonApi/getCodeValues", { type: "enquiry" })
       .then((res) => {
-        placeEnquiry(res.data.data);
+        placeEnquiriesForAllProducts(res.data.data);
       })
       .catch(() => {
-        placeEnquiry('');
+        placeEnquiriesForAllProducts('');
       });
   };
+console.log('user',user);
 
-  const placeEnquiry = (code) => {     
-    if (user) {
+  const placeEnquiriesForAllProducts = async (code) => {
+    if (!user) {
+      console.log("Please login");
+      return;
+    }
+
+    const addressFields = [
+      userData.address1,
+      userData.address2,
+      userData.address_area,
+      userData.address_city,
+      userData.address_state,
+      userData.address_country_code,
+      userData.address_po_code
+    ];
+
+    const isAddressEmpty = addressFields.some(field => !field || field.trim() === '');
+    const isFirstNameEmpty = !userData.first_name || userData.first_name.trim() === '';
+
+    if (isAddressEmpty || isFirstNameEmpty) {
+  Swal.fire({
+    title: "Incomplete Profile",
+    html: `
+      Please update your profile details, including your first name and address.<br/><br/>
+      <a href="#" id="updateProfileLink" style="color:#3085d6; text-decoration:underline;">
+        Click here to update your address
+      </a>
+    `,
+    icon: "warning",
+    showConfirmButton: false,
+    didOpen: () => {
+      const link = document.getElementById("updateProfileLink");
+      if (link) {
+        link.addEventListener("click", (e) => {
+          e.preventDefault();
+          history.push("/my-account"); // 👈 navigates to MyAccount.js page
+          Swal.close();
+        });
+      }
+    },
+  });
+  return;
+}
+
+    const groupedCartItems = cartItems.reduce((acc, item) => {
+      if (!acc[item.product_id]) {
+        acc[item.product_id] = [];
+      }
+      acc[item.product_id].push(item);
+      return acc;
+    }, {});
+
+    for (const productId in groupedCartItems) {
+      const productsInGroup = groupedCartItems[productId];
+      const firstItemInGroup = productsInGroup[0]; // Use first item for general enquiry details
+
+      const uniqueEnquiryCode = `${code}-${productId}`;
       const enquiryDetails = {
         contact_id : user.contact_id,
         enquiry_date : new Date().toISOString().split('T')[0],
         enquiry_type : 'Enquiry and order for Retail products.',
         status : 'New',
-        title : 'Enquiry from ' + user.first_name,      
-        enquiry_code: code,
+        title : `Enquiry for ${productsInGroup.map(p => p.title).join(', ')} from ` + userData.first_name,      
+        enquiry_code: uniqueEnquiryCode,
         creation_date : new Date().toISOString().split('T')[0],
-        created_by: user.first_name,
-        first_name: user.first_name,
-        email: user.email,
-              };
-      api
-        .post("/enquiry/insertEnquiry", enquiryDetails)
-        .then((res) => {
-          const insertedId = res.data.data.insertId;
-          cartItems.forEach((item) => {
-            item.enquiry_id = insertedId;
-            item.quantity = item.qty;
-            item.product_id = item.product_id;
-            item.category_id = item.category_id;
-            item.sub_category_id = item.sub_category_id;
-            item.created_by = user.first_name;
-            item.first_name = user.first_name;
-            item.email = user.email;
-            item.grades = item.grades;
+        created_by: userData.first_name,
+        first_name: userData.first_name,
+        email: userData.email,
+        shipping_address: [
+          userData.address || '',
+          userData.address1 || '',
+          userData.address2 || '',
+          userData.address_area || '',
+          userData.address_city || '',
+          userData.address_state || '',
+          userData.address_country_code || '',
+          userData.address_po_code || ''
+        ].filter(Boolean).join(', '),
+      };
 
+      try {
+        const res = await api.post("/enquiry/insertEnquiry", enquiryDetails);
+        const insertedId = res.data.data.insertId;
 
-            api.post("/enquiry/insertQuoteItems", item)
-              .then(() => {
-                console.log("Order placed");
-              })
-             
-              .catch((err) => console.log(err));
-          });
-        }).then(() => {
-          console.log("cart user",user)
-          clearCartData(user)
-            // Make the API call
-      api
-      .post("/contact/clearCartItems", { contact_id: user.contact_id })
-       
-        })
-        .then(() => {
-          //alert("Enquiry Submitted Successfully");
-          history.push('/enquirysuccess')
-        })
-        .catch((err) => console.log(err));
-    } else {
-      console.log("please login");
+        for (const item of productsInGroup) {
+          const quoteItem = {
+            enquiry_id: insertedId, // Use the insertedId for the group's enquiry
+            quantity: item.qty,
+            product_id: item.product_id,
+            category_id: item.category_id,
+            sub_category_id: item.sub_category_id,
+            created_by: userData.first_name,
+            first_name: userData.first_name,
+            email: userData.email,
+            grades: item.grades,
+            counts: item.counts,
+            origins: item.origins,
+            destination_port: item.destination_port,
+          };
+          await api.post("/enquiry/insertQuoteItems", quoteItem);
+          console.log(`Quote item for ${item.title} added to enquiry ${insertedId}.`);
+        }
+        console.log(`Enquiry for product group ${productId} placed successfully.`);
+      } catch (err) {
+        console.error(`Error placing enquiry for product group ${productId}:`, err);
+      }
     }
+
+    clearCartData(user);
+    api.post("/contact/clearCartItems", { contact_id: user.contact_id });
+    history.push('/enquirysuccess');
+
+    // Temporarily commenting out email sending logic
+    /*
     const orderDate = new Date();
     const deliveryDate = new Date();
     deliveryDate.setDate(orderDate.getDate() + 7);
@@ -149,7 +225,6 @@ const Cart = ({ location }) => {
       return `${day}-${month}-${year}`;
     };
 
-  
     const to = mailId.email;
     const toCustomer = user.email; // Customer's Email
     const subject = "Smartwave Product Details";
@@ -212,7 +287,7 @@ api
       });
     
     };
-
+    */
   };
 
   // const handleClearCart = useCallback(() => {
@@ -220,49 +295,62 @@ api
   // }, [dispatch, user]);
   const handleClearCart = useCallback(() => {
     Swal.fire({
-      title: 'Are you sure?',
+      title: "Are you sure?",
       text: "Do you really want to clear the cart?",
-      icon: 'warning',
+      icon: "warning",
       showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Yes, clear it!',
-      cancelButtonText: 'Cancel',
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, clear it!",
+      cancelButtonText: "Cancel",
     }).then((result) => {
       if (result.isConfirmed) {
         dispatch(clearCartData(user));
         Swal.fire({
-          title: 'Cleared!',
-          text: 'Your cart has been cleared.',
-          icon: 'success',
-          confirmButtonColor: '#3085d6',
+          title: "Cleared!",
+          text: "Your cart has been cleared.",
+          icon: "success",
+          confirmButtonColor: "#3085d6",
         });
       }
     });
   }, [dispatch, user]);
 
+  const getUser = () => {
+    api
+      .post("/contact/getContactsById", { contact_id: user.contact_id })
+      .then((res) => {
+        setUserData(res.data.data[0]);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   useEffect(() => {
     if (user) {
       dispatch(fetchCartData(user));
     }
-    getEmail()
-  }, [ ]);
+    getEmail();
+  }, []);
 
+  useEffect(() => {
+    if (user) {
+      getUser();
+    }
+  }, []);
+useEffect(() => {
+  getContainer();
+}, []);
   return (
     <Fragment>
       <MetaTags>
         <title>Smartwave | Cart</title>
-        <meta
-          name="description"
-          content="Cart page of Smart Wave eCommerce template."
-        />
+        <meta name="description" content="Cart page of Smart Wave eCommerce template." />
       </MetaTags>
 
       <BreadcrumbsItem to={process.env.PUBLIC_URL + "/"}>Home</BreadcrumbsItem>
-      <BreadcrumbsItem to={process.env.PUBLIC_URL + pathname}>
-        Cart
-      </BreadcrumbsItem>
+      <BreadcrumbsItem to={process.env.PUBLIC_URL + pathname}>Cart</BreadcrumbsItem>
 
       <LayoutOne headerTop="visible">
         <Breadcrumb />
@@ -272,69 +360,87 @@ api
               <Fragment>
                 <h3 className="cart-page-title">Your cart items</h3>
                 <div className="table-content table-responsive cart-table-content">
-                  <table>
-                    <thead>
-                      <tr>
-                        <th>Image</th>
-                        <th>Product Name</th>
-                        <th>Qty</th>
-                        <th>Action</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {cartItems?.map((item, index) => (
-                        <tr key={index}>
-                          <td className="product-thumbnail">
-                            <Link to={`/product/${item.product_id}/${item.title}`}>
-                              <img
-                                src={`${imageBase}${item.images[0]}`}
-                                alt={item.title}
-                                className="img-fluid"
-                              />
-                            </Link>
-                          </td>
-                          <td className="product-name text-center">{item.title}</td>
-                          <td className="product-quantity">
-                            <div className="cart-plus-minus">
-                              <button
-                                className="dec qtybutton"
-                                onClick={() => handleDecreaseQuantity(item)}
-                              >
-                                -
-                              </button>
-                              <input
-                                className="cart-plus-minus-box"
-                                type="text"
-                                value={item.qty}
-                                readOnly
-                              />
-                              <button
-                                className="inc qtybutton"
-                                onClick={() => handleIncreaseQuantity(item)}
-                              >
-                                +
-                              </button>
-                            </div>
-                          </td>
-                          <td className="product-remove">
-                            <button onClick={() => handleRemoveItem(item)}>
-                              <i className="fa fa-times"></i>
-                            </button>
-                          </td>
+                  <div className="cart-table-wrapper">
+                    <table className="cart-table">
+                      <thead>
+                        <tr>
+                          <th>Image</th>
+                          <th>Product Name</th>
+                          <th>No.of.Containers</th>
+                          <th>Type of containers</th>
+                          <th>Details</th>
+                          <th>Action</th>
                         </tr>
-                      ))}
-                    </tbody>
-                  </table>
+                      </thead>
+                      <tbody>
+                        {cartItems?.map((item, index) => (
+                          <tr key={index}>
+                            <td className="product-thumbnail">
+                              <Link to={`/product/${item.product_id}/${item.title}`}>
+                                <img
+                                  src={`${imageBase}${item.images[0]}`}
+                                  alt={item.title}
+                                  className="img-fluid"
+                                />
+                              </Link>
+                            </td>
+                            <td className="product-name text-center">{item.title}</td>
+                            <td className="product-quantity">
+                              <div className="cart-plus-minus">
+                                <button
+                                  className="dec qtybutton"
+                                  onClick={() => handleDecreaseQuantity(item)}
+                                >
+                                  -
+                                </button>
+                                <input
+                                  className="cart-plus-minus-box"
+                                  type="text"
+                                  value={item.qty}
+                                  readOnly
+                                />
+                                <button
+                                  className="inc qtybutton"
+                                  onClick={() => handleIncreaseQuantity(item)}
+                                >
+                                  +
+                                </button>
+                              </div>
+                             
+                            </td>
+                             <td className="product-quantity">{container}</td>
+                            <td className="product-grades">
+                              {item.grade && <div><strong>Grade:</strong> {item.grade}</div>}
+                              {item.counts && <div><strong>Counts:</strong> {item.counts}</div>}
+                              {item.origins && <div><strong>Origin:</strong> {item.origins}</div>}
+                              {item.destination_port && <div><strong>Destination Port:</strong> {item.destination_port}</div>}
+                            </td>
+                            <td className="product-remove">
+                              <button onClick={() => handleRemoveItem(item)}>
+                                <i className="fa fa-times"></i>
+                              </button>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
                 </div>
+
                 <div className="grand-totall">
                   <div className="button-group">
-                  <Link onClick={() => generateCode()} className="checkout-btn">
-                  Request for Quote
+                    <Link onClick={() => generateCode()} className="checkout-btn">
+                      Request for Quote
                     </Link>
-                    <button type="button"
-                      onClick={()=>handleClearCart()}
+                    <button
+                      type="button"
+                      onClick={handleClearCart}
                       className="clear-btn"
-                      style={{ backgroundColor: "red", color: "white", borderRadius: 50 }}
+                      style={{
+                        backgroundColor: "red",
+                        color: "white",
+                        borderRadius: 50,
+                      }}
                     >
                       CLEAR CART
                     </button>
@@ -342,23 +448,20 @@ api
                 </div>
               </Fragment>
             ) : (
-              
-                          <div className="row">
-                            <div className="col-lg-12">
-                              <div className="item-empty-area text-center">
-                                <div className="item-empty-area__icon mb-30">
-                                <i className="pe-7s-cart"></i>
-                                </div>
-                                <div className="item-empty-area__text">
-                                  No items found in cart <br />{" "}
-                                  <Link to={process.env.PUBLIC_URL + "/shop"}>
-                                  Shop Now
-                                  </Link>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        )}
+              <div className="row">
+                <div className="col-lg-12">
+                  <div className="item-empty-area text-center">
+                    <div className="item-empty-area__icon mb-30">
+                      <i className="pe-7s-cart"></i>
+                    </div>
+                    <div className="item-empty-area__text">
+                      No items found in cart <br />
+                      <Link to={process.env.PUBLIC_URL + "/shop"}>Shop Now</Link>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </LayoutOne>
