@@ -180,47 +180,31 @@ export default function Contact({ location }) {
       });
   };
 
-  const sendMail = () => {
-    const to = mailId.email;
-    const text = user.comments;
-    const subject = user.email;
-    const dynamic_template_data = {
-      first_name: user.first_name,
-      email: user.email,
-      comments: user.comments,
-    };
-  
-    api
-      .post("/commonApi/sendemail", {
-        to,
-        text,
-        subject,
-        dynamic_template_data,
-      })
-      .then(() => {
-        addToast("Email has been sent successfully!", {
+  const sendMail = async () => {
+    try {
+      const response = await api.post("/email/sendMail", user);
+      if (response.data.success) {
+        addToast("✅ Message sent successfully!", {
           appearance: "success",
           autoDismiss: true,
         });
-        setUser({
-          first_name: "",
-          last_name: "",
-          email: "",
-          comments: "",
-          enquiry_code: "",
-          company_name: "",
-          company_address: "",
-          gst_number: "",
-        });
-      })
-      .catch((err) => {
-        addToast("Unable to send Email", {
+        return true;
+      } else {
+        addToast("❌ Failed to send message.", {
           appearance: "error",
           autoDismiss: true,
         });
+        return false;
+      }
+    } catch (error) {
+      addToast("⚠️ Something went wrong while sending mail.", {
+        appearance: "error",
+        autoDismiss: true,
       });
+      return false;
+    }
   };
-  
+
   const getEnquiryEmail = () => {
     api.get("/setting/getEnquiryMailId").then((res) => {
       setmailId(res.data.data[0]);

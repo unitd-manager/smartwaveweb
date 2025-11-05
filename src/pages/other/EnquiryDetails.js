@@ -461,8 +461,29 @@ console.log('receiptUrl',receiptUrl)
         </button><br/><br/>
       </div>
 
+        {/* Quotation Section */}
+        <div className="card p-4 text-center border-dashed mb-3">
+        <h6 className="d-flex justify-content-between align-items-center my-2 fw-bold mt-4">Performa quote</h6>
+          {receiptUrl4 && receiptUrl4.length > 0 && receiptUrl4.map((res1, index) => (
+            <div
+              key={index}
+              className="d-flex justify-content-between align-items-center my-2"
+            >
+              <a
+                href={`https://smartwaveadmin.unitdtechnologies.com/storage/uploads/${res1.name}`}
+                target="_blank" 
+                download
+                rel="noopener noreferrer"
+                className="text-decoration-none d-flex align-items-center text-primary"
+              >
+                <FaFileDownload className="me-2" />
+                {res1.name}
+              </a>
+            </div>
+          ))}
+        </div>
+
         {/* Stylish File Upload Section */}
-      
         <div className="card p-4 text-center border-dashed mb-3">
         <h6 className="d-flex justify-content-between align-items-center my-2 fw-bold mt-4">Advance Payment</h6>
           <div className="custom-file-upload">
@@ -723,70 +744,7 @@ console.log('receiptUrl',receiptUrl)
         </div>
         ))}
         </div>
-<div className="card p-4 text-center border-dashed mb-3">
-        <h6 className="d-flex justify-content-between align-items-center my-2 fw-bold mt-4">Quotation</h6>
 
-          {/* <div className="custom-file-upload">
-            <input
-              type="file"
-              id="fileInputArrival"
-              className="d-none"
-              accept="application/pdf"
-              onChange={handleArrival}
-            />
-            <label htmlFor="fileInputArrival" className="btn btn-outline-primary">
-              <FaUpload className="me-2" /> Choose PDF File
-            </label>
-          </div> */}
-
-          {/* {receiptArrival1 && (
-            <p className="mt-2 text-success">
-              <FaFilePdf className="me-2" />
-              {receiptArrival1.name}
-            </p>
-          )} */}
-          {/* { uploaded2 &&  <div className='progress mt-2'>
-            <div className="progress-bar h-4" role='progressbar'
-              aria-valuenow={uploaded2}
-              aria-valuemin='0'
-              aria-valuemax='100'
-              style={{width:`${uploaded2}%`}}>
-                {`${uploaded2}% uploaded`}
-            </div>
-          </div>}
-          {receiptArrival1 && (<button className="btn btn-primary mt-2" onClick={handleUploadArrival} disabled={!receiptArrival1}>
-            <FaUpload className="me-2" /> Upload Arrival Receipt
-          </button>)} */}
-
-          {receiptUrl4 && receiptUrl4.length > 0 && receiptUrl4.map((res1, index) => (
-        <div
-          key={index}
-          className="d-flex justify-content-between align-items-center my-2"
-        >
-          <a
-            href={`https://smartwaveadmin.unitdtechnologies.com/storage/uploads/${res1.name}`}
-            target="_blank" 
-            download
-            rel="noopener noreferrer"
-            className="text-decoration-none d-flex align-items-center text-primary"
-           
-          >
-            <FaFileDownload className="me-2" />
-            {res1.name}
-          </a>
-{/*     
-
-
-          <button
-            type="button"
-            className="btn btn-sm btn-light shadow-none"
-            onClick={() => deleteFile(res1.media_id)}
-          >
-            <FaTrash />
-          </button> */}
-        </div>
-        ))}
-        </div>
       
       
 
