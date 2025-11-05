@@ -1,6 +1,7 @@
 import PropTypes from "prop-types"; 
 import React, { Fragment, useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import DOMPurify from 'dompurify';
 import { connect, useDispatch, useSelector } from "react-redux";
 import { v4 as uuid } from 'uuid';
 import { getProductCartQuantity } from "../../helpers/product";
@@ -35,7 +36,11 @@ const ProductDescriptionInfo = ({
     product?.variation ? product?.variation[0].size[0].stock : product?.qty_in_stock
   );
   const [quantityCount, setQuantityCount] = useState(1);
-
+ const decodeHTML = (html) => {
+    const txt = document.createElement('textarea');
+    txt.innerHTML = html;
+    return txt.value;
+  };
   const productCartQty = getProductCartQuantity(
     cartItems,
     product,
@@ -132,7 +137,7 @@ addToast("Please Select a Destination Port", { appearance: "warning", autoDismis
   };
 
 useEffect(()=>{
- api.get("/valuelist/getDestinationPortValueList")
+ api.get("/destinationPort/getDestinationPort")
       .then((res) => {
         setDestinationPorts(res.data.data);
       })
@@ -172,7 +177,12 @@ useEffect(()=>{
 
     
       <div className="pro-details-list">
-        <p>{product.description}</p>
+      <div
+       className="product-anotherinfo-wrapper"
+       dangerouslySetInnerHTML={{
+         __html: DOMPurify.sanitize(decodeHTML(product.description))
+       }}
+     ></div>
       </div>
 
       {product.variation && (
@@ -229,7 +239,7 @@ useEffect(()=>{
 <div className="grid grid-cols-2 gap-4">
   {/* Grade */}
   <Row>
-  <div className="p-4 bg-white rounded-lg">
+  {product?.grades?.length >0 &&<div className="p-4 bg-white rounded-lg">
     <label htmlFor="grade-select" className="text-lg font-semibold text-gray-700">
       Select Grade
     </label>
@@ -244,10 +254,10 @@ useEffect(()=>{
         <option key={index} value={grade}>{grade}</option>
       ))}
     </select>
-  </div>
+  </div>}
 
   {/* Count */}
-  <div className="p-4 bg-white rounded-lg">
+ {product?.count?.length >0 && <div className="p-4 bg-white rounded-lg">
     <label htmlFor="count-select" className="text-lg font-semibold text-gray-700">
       Select Count
     </label>
@@ -262,11 +272,11 @@ useEffect(()=>{
         <option key={index} value={count}>{count}</option>
       ))}
     </select>
-  </div>
+  </div>}
 </Row>
 <Row>
   {/* Origin */}
-  <div className="p-4 bg-white rounded-lg">
+ {product?.origin?.length >0 && <div className="p-4 bg-white rounded-lg">
     <label htmlFor="origin-select" className="text-lg font-semibold text-gray-700">
       Select Origin
     </label>
@@ -281,24 +291,26 @@ useEffect(()=>{
         <option key={index} value={o}>{o}</option>
       ))}
     </select>
-  </div>
+  </div>}
 
   {/* Destination Port */}
   <div className="p-4 bg-white rounded-lg">
     <label htmlFor="destination-select" className="text-lg font-semibold text-gray-700">
       Select Destination Port
     </label>
-    <select
+    <input
       id="destination-select"
+      list="destination-ports-list"
       className="mt-2 w-full p-2 border rounded-lg text-gray-700 focus:ring-2 focus:ring-pink-500"
       value={selectedProductDestinationPort}
       onChange={(e) => setSelectedProductDestinationPort(e.target.value)}
-    >
-      <option value="">Select Destination Port</option>
+      placeholder="Type to search..."
+    />
+    <datalist id="destination-ports-list">
       {destinationPorts?.map((p, index) => (
-        <option key={index} value={p.value}>{p.value}</option>
+        <option key={index} value={p.destination_port}>{`${p.destination_port},${p.country}`}</option>
       ))}
-    </select>
+    </datalist>
   </div>
   </Row>
 </div>

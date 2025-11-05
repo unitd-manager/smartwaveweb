@@ -194,11 +194,12 @@ console.log('user',user);
             created_by: userData.first_name,
             first_name: userData.first_name,
             email: userData.email,
-            grades: item.grades,
+            grades: item.grade,
             counts: item.counts,
             origins: item.origins,
             destination_port: item.destination_port,
           };
+          console.log('quoteitem',quoteItem);
           await api.post("/enquiry/insertQuoteItems", quoteItem);
           console.log(`Quote item for ${item.title} added to enquiry ${insertedId}.`);
         }

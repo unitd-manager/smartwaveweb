@@ -69,7 +69,7 @@ const IconGroup = ({
           ref={userIconRef}
           title="My Profile"
         >
-          <i className="pe-7s-user-female" />
+          <i className="pe-7s-user-female" /><p className="header-search-title">My Profile</p>
         </button>
         <div className={`account-dropdown ${dropdownActive ? "active" : ""}`}>
           {user && (
@@ -105,38 +105,31 @@ const IconGroup = ({
         </div>
       </div>
 
-      <div className="same-style header-wishlist">
-        <Link to={process.env.PUBLIC_URL + "/wishlist"} title="Wishlist">
-          <i className="pe-7s-like" />
+      <div className="same-style header-wishlist custom-tooltip" data-title="Wishlist">
+        <Link to={process.env.PUBLIC_URL + "/wishlist"}>
+       
+          <i className="pe-7s-like" /> <p className="header-search-title">Wishlist</p>
           <span className="count-style">
-            {wishlistItems && wishlistItems.length ? wishlistItems.length : 0}
+            {wishlistItems.length ? wishlistItems.length : 0}
           </span>
         </Link>
       </div>
-
-      <div className="same-style cart-wrap d-none d-lg-block">
+      <div className="same-style cart-wrap custom-tooltip" data-title="Cart">
         <Link to={process.env.PUBLIC_URL + "/cart"}>
-          <button className="icon-cart" title="Cart">
-            <i className="pe-7s-shopbag" />
-            <span className="count-style">
-              {cartItems && cartItems.length ? cartItems.length : 0}
-            </span>
-          </button>
+       
+        <button className="icon-cart" title="Cart" onClick={handleClick}>
+          <i className="pe-7s-shopbag" /> <p className="header-search-title">Cart</p>
+          <span className="count-style">
+            {cartItems.length ? cartItems.length : 0}
+          </span>
+        </button>
         </Link>
+        {/* mobile cart */} 
         <MenuCart
           cartData={cartItems}
           currency={currency}
           deleteFromCart={deleteFromCart}
         />
-      </div>
-
-      <div className="same-style cart-wrap d-block d-lg-none">
-        <Link className="icon-cart" to={process.env.PUBLIC_URL + "/cart"} title="Cart">
-          <i className="pe-7s-shopbag" />
-          <span className="count-style">
-            {cartItems && cartItems.length ? cartItems.length : 0}
-          </span>
-        </Link>
       </div>
 
       <div className="same-style mobile-off-canvas d-block d-lg-none">

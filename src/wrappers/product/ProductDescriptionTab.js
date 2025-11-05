@@ -49,7 +49,13 @@ const {id}=useParams();
 
               </Tab.Pane>
               <Tab.Pane eventKey="productDescription">
-                {product.description}
+               
+                   <div
+  className="product-anotherinfo-wrapper"
+  dangerouslySetInnerHTML={{
+    __html: DOMPurify.sanitize(decodeHTML(product.description))
+  }}
+></div>
               </Tab.Pane>
               {/* <Tab.Pane eventKey="productReviews">
                 {comments && 

@@ -56,10 +56,17 @@
         > button,
         & > a {
           color: #000;
+          display: flex;
+          align-items: center;
+          gap: 6px;
           span {
             &.count-style {
               color: #fff;
               background-color: #1fb0c1;
+            }
+            &.header-search-title {
+              font-size: 6px;
+              white-space: nowrap;
             }
           }
         }
