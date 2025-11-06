@@ -11,7 +11,7 @@ const ProductDescriptionTab = ({ spaceBottomClass, orderedProducts,product,comme
 const {id}=useParams();
  console.log('orderedProducts',orderedProducts);
   //product.product_description = product?.product_description?.replace(/<[^>]*>/g, '');
-  product.description = product?.description?.replace(/<[^>]*>/g, '');
+  //product.description = product?.description?.replace(/<[^>]*>/g, '');
 
   const decodeHTML = (html) => {
     const txt = document.createElement('textarea');
