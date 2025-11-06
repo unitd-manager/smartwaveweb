@@ -9,7 +9,7 @@ import { addToCart } from "../../redux/actions/cartActions";
 import { addToWishlist } from "../../redux/actions/wishlistActions";
 import { addToCompare } from "../../redux/actions/compareActions";
 // import Rating from "./sub-components/ProductRating";
-import { Badge, Row } from "reactstrap";
+import { Badge, Col, Row } from "reactstrap";
 import LoginModal from "../LoginModal";
 import { fetchCartData, insertCartData, updateCartData } from "../../redux/actions/cartItemActions";
 import { insertWishlistData, removeWishlistData } from "../../redux/actions/wishlistItemActions";
@@ -239,60 +239,71 @@ useEffect(()=>{
 <div className="grid grid-cols-2 gap-4">
   {/* Grade */}
   <Row>
-  {product?.grades?.length >0 &&<div className="p-4 bg-white rounded-lg">
-    <label htmlFor="grade-select" className="text-lg font-semibold text-gray-700">
-      Select Grade
-    </label>
-    <select
-      id="grade-select"
-      className="mt-2 w-full p-2 border rounded-lg text-gray-700 focus:ring-2 focus:ring-pink-500"
-      value={selectedProductGrade}
-      onChange={(e) => setSelectedProductGrade(e.target.value)}
-    >
-      <option value="">Select a grade</option>
-      {product?.grades?.map((grade, index) => (
-        <option key={index} value={grade}>{grade}</option>
-      ))}
-    </select>
-  </div>}
-
+    <Col>
+  {product?.grades?.length > 0 && (
+    <div className="p-4 bg-white rounded-lg">
+      <label htmlFor="grade-select" className="text-lg font-semibold text-gray-700">
+        Select Grade
+      </label>
+      <select
+        id="grade-select"
+        className="mt-2 w-full p-2 border rounded-lg text-gray-700 focus:ring-2 focus:ring-pink-500"
+        value={selectedProductGrade}
+        onChange={(e) => setSelectedProductGrade(e.target.value)}
+      >
+        <option value="">Select a grade</option>
+        {product.grades.map((grade, index) => (
+          <option key={index} value={grade}>{grade}</option>
+        ))}
+      </select>
+    </div>
+  )}
+</Col>
+<Col>
   {/* Count */}
- {product?.count?.length >0 && <div className="p-4 bg-white rounded-lg">
-    <label htmlFor="count-select" className="text-lg font-semibold text-gray-700">
-      Select Count
-    </label>
-    <select
-      id="count-select"
-      className="mt-2 w-full p-2 border rounded-lg text-gray-700 focus:ring-2 focus:ring-pink-500"
-      value={selectedProductCount}
-      onChange={(e) => setSelectedProductCount(e.target.value)}
-    >
-      <option value="">Select a count</option>
-      {product?.count?.map((count, index) => (
-        <option key={index} value={count}>{count}</option>
-      ))}
-    </select>
-  </div>}
+  {product?.count?.length > 0 && (
+    <div className="p-4 bg-white rounded-lg">
+      <label htmlFor="count-select" className="text-lg font-semibold text-gray-700">
+        Select Count
+      </label>
+      <select
+        id="count-select"
+        className="mt-2 w-full p-2 border rounded-lg text-gray-700 focus:ring-2 focus:ring-pink-500"
+        value={selectedProductCount}
+        onChange={(e) => setSelectedProductCount(e.target.value)}
+      >
+        <option value="">Select a count</option>
+        {product.count.map((count, index) => (
+          <option key={index} value={count}>{count}</option>
+        ))}
+      </select>
+    </div>
+  )}
+  </Col>
 </Row>
 <Row>
+  <Col>
   {/* Origin */}
- {product?.origin?.length >0 && <div className="p-4 bg-white rounded-lg">
-    <label htmlFor="origin-select" className="text-lg font-semibold text-gray-700">
-      Select Origin
-    </label>
-    <select
-      id="origin-select"
-      className="mt-2 w-full p-2 border rounded-lg text-gray-700 focus:ring-2 focus:ring-pink-500"
-      value={selectedProductOrigin}
-      onChange={(e) => setSelectedProductOrigin(e.target.value)}
-    >
-      <option value="">Select Origin</option>
-      {product?.origin?.map((o, index) => (
-        <option key={index} value={o}>{o}</option>
-      ))}
-    </select>
-  </div>}
-
+  {product?.origin?.length > 0 && (
+    <div className="p-4 bg-white rounded-lg">
+      <label htmlFor="origin-select" className="text-lg font-semibold text-gray-700">
+        Select Origin
+      </label>
+      <select
+        id="origin-select"
+        className="mt-2 w-full p-2 border rounded-lg text-gray-700 focus:ring-2 focus:ring-pink-500"
+        value={selectedProductOrigin}
+        onChange={(e) => setSelectedProductOrigin(e.target.value)}
+      >
+        <option value="">Select Origin</option>
+        {product.origin.map((o, index) => (
+          <option key={index} value={o}>{o}</option>
+        ))}
+      </select>
+    </div>
+  )}
+  </Col>
+<Col>
   {/* Destination Port */}
   <div className="p-4 bg-white rounded-lg">
     <label htmlFor="destination-select" className="text-lg font-semibold text-gray-700">
@@ -308,12 +319,14 @@ useEffect(()=>{
     />
     <datalist id="destination-ports-list">
       {destinationPorts?.map((p, index) => (
-        <option key={index} value={p.destination_port}>{`${p.destination_port},${p.country}`}</option>
+        <option key={index} value={p.destination_port}>{`${p.destination_port}, ${p.country}`}</option>
       ))}
     </datalist>
   </div>
-  </Row>
+  </Col>
+</Row>
 </div>
+
 
 
 
