@@ -365,12 +365,12 @@ useEffect(() => {
                     <table className="cart-table">
                       <thead>
                         <tr>
-                          <th>Image</th>
-                          <th>Product Name</th>
-                          <th>No.of.Containers</th>
-                          <th>Type of containers</th>
-                          <th>Details</th>
-                          <th>Action</th>
+                          <th style={{ width: "10%" }}>Image</th>
+                          <th style={{ width: "20%" }}>Product Name</th>
+                          <th style={{ width: "10%" }}>No.of.Containers</th>
+                          <th style={{ width: "15%" }}>Type of containers</th>
+                          <th style={{ width: "35%" }}>Details</th>
+                          <th style={{ width: "10%" }}>Action</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -385,7 +385,7 @@ useEffect(() => {
                                 />
                               </Link>
                             </td>
-                            <td className="product-name text-center">{item.title}</td>
+                            <td className="product-quantity">{item.title}</td>
                             <td className="product-quantity">
                               <div className="cart-plus-minus">
                                 <button

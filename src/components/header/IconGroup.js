@@ -69,7 +69,7 @@ const IconGroup = ({
           ref={userIconRef}
           title="My Profile"
         >
-          <i className="pe-7s-user-female" /><p className="header-search-title">My Profile</p>
+          <i className="pe-7s-user-female" /><p className="header-search-title">MyProfile</p>
         </button>
         <div className={`account-dropdown ${dropdownActive ? "active" : ""}`}>
           {user && (
