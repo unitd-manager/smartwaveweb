@@ -71,7 +71,10 @@ const IconGroup = ({
         >
           <i className="pe-7s-user-female" /><p className="header-search-title">MyProfile</p>
         </button>
-        <div className={`account-dropdown ${dropdownActive ? "active" : ""}`}>
+        <div
+          className={`account-dropdown ${dropdownActive ? "active" : ""}`}
+          style={{ top: "100%", right: 0, marginTop: 4 }}
+        >
           {user && (
             <ul>
               <li>
