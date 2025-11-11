@@ -477,7 +477,7 @@ console.log('receiptUrl',receiptUrl)
                 className="text-decoration-none d-flex align-items-center text-primary"
               >
                 <FaFileDownload className="me-2" />
-                {res1.name}
+                {res1.originalname}
               </a>
             </div>
           ))}
@@ -530,7 +530,7 @@ console.log('receiptUrl',receiptUrl)
             className="text-decoration-none d-flex align-items-center text-primary"
           >
             <FaFileDownload className="me-2" />
-            {res.name}
+            {res.originalname}
           </a>
     
           <button
@@ -597,7 +597,7 @@ console.log('receiptUrl',receiptUrl)
             className="text-decoration-none d-flex align-items-center text-primary"
           >
             <FaFileDownload className="me-2" />
-            {res1.name}
+            {res1.originalname}
           </a>
     
           <button
@@ -731,7 +731,7 @@ console.log('receiptUrl',receiptUrl)
             className="text-decoration-none d-flex align-items-center text-primary"
           >
             <FaFileDownload className="me-2" />
-            {res1.name}
+            {res1.originalname}
           </a>
 {/*     
           <button
