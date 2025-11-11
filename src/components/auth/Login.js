@@ -59,7 +59,14 @@ const dispatch = useDispatch();
         // If both email and password are valid, proceed with form submission
         if (validateEmail(email) && validatePassword(password)) {
           api.post("/api/login", signinData).then((res) => {
-            if (res && res.status === "400") {
+            console.log('res',res)
+            if (res && res.data.status === "300") {
+              alert("Your account is not active");
+              addToast("Please verify your email before login", {
+                appearance: "error",
+                autoDismiss: true,
+              });
+            } else if (res && res.status === "400") {
               alert("Invalid Username or Password");
               addToast("Invalid Username or Password", {
                 appearance: "error",
@@ -67,6 +74,7 @@ const dispatch = useDispatch();
               });
             } 
             else {
+              
               localStorage.setItem("user", JSON.stringify(res.data.data));
               localStorage.setItem("token", JSON.stringify(res.data.token));
      dispatch(fetchCartData(res.data.data));
@@ -76,10 +84,10 @@ const dispatch = useDispatch();
               },300)
             }
           }).catch((err)=>{
-            addToast("Invalid Username or Password", {
-              appearance: "error",
-              autoDismiss: true,
-            });
+            // addToast("Invalid Username or Password", {
+            //   appearance: "error",
+            //   autoDismiss: true,
+            // });
           });
         }
       };
