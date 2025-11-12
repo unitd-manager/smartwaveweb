@@ -1,6 +1,7 @@
 import PropTypes from "prop-types"; 
 import React, { Fragment, useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import DOMPurify from 'dompurify';
 import { connect, useDispatch, useSelector } from "react-redux";
 import { v4 as uuid } from 'uuid';
 import { getProductCartQuantity } from "../../helpers/product";
@@ -8,11 +9,12 @@ import { addToCart } from "../../redux/actions/cartActions";
 import { addToWishlist } from "../../redux/actions/wishlistActions";
 import { addToCompare } from "../../redux/actions/compareActions";
 // import Rating from "./sub-components/ProductRating";
-import { Badge, Row } from "reactstrap";
+import { Badge, Col, Row } from "reactstrap";
 import LoginModal from "../LoginModal";
 import { fetchCartData, insertCartData, updateCartData } from "../../redux/actions/cartItemActions";
 import { insertWishlistData, removeWishlistData } from "../../redux/actions/wishlistItemActions";
 import { insertCompareData } from "../../redux/actions/compareItemActions";
+import api from "../../constants/api";
 
 const ProductDescriptionInfo = ({
   product,
@@ -34,7 +36,11 @@ const ProductDescriptionInfo = ({
     product?.variation ? product?.variation[0].size[0].stock : product?.qty_in_stock
   );
   const [quantityCount, setQuantityCount] = useState(1);
-
+ const decodeHTML = (html) => {
+    const txt = document.createElement('textarea');
+    txt.innerHTML = html;
+    return txt.value;
+  };
   const productCartQty = getProductCartQuantity(
     cartItems,
     product,
@@ -46,6 +52,7 @@ const ProductDescriptionInfo = ({
   const [sessionId, setSessionId] = useState('');
   const [loginModal, setLoginModal] = useState(false);
   const [proRating, setProRating] = useState(0);
+  const [destinationPorts, setDestinationPorts] = useState([]);
   const [selectedProductGrade, setSelectedProductGrade] = useState("");
   const [selectedProductOrigin, setSelectedProductOrigin] = useState("");
   const [selectedProductCount, setSelectedProductCount] = useState("");
@@ -129,6 +136,18 @@ addToast("Please Select a Destination Port", { appearance: "warning", autoDismis
     return true;
   };
 
+useEffect(()=>{
+ api.get("/destinationPort/getDestinationPort")
+      .then((res) => {
+        setDestinationPorts(res.data.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+
+
+},[])
+
   useEffect(() => {
     const userData = localStorage.getItem('user') ? localStorage.getItem('user') : null;
     const userInfo = JSON.parse(userData);
@@ -158,7 +177,12 @@ addToast("Please Select a Destination Port", { appearance: "warning", autoDismis
 
     
       <div className="pro-details-list">
-        <p>{product.description}</p>
+      <div
+       className="product-anotherinfo-wrapper"
+       dangerouslySetInnerHTML={{
+         __html: DOMPurify.sanitize(decodeHTML(product.description))
+       }}
+     ></div>
       </div>
 
       {product.variation && (
@@ -215,79 +239,94 @@ addToast("Please Select a Destination Port", { appearance: "warning", autoDismis
 <div className="grid grid-cols-2 gap-4">
   {/* Grade */}
   <Row>
-  <div className="p-4 bg-white rounded-lg">
-    <label htmlFor="grade-select" className="text-lg font-semibold text-gray-700">
-      Select Grade
-    </label>
-    <select
-      id="grade-select"
-      className="mt-2 w-full p-2 border rounded-lg text-gray-700 focus:ring-2 focus:ring-pink-500"
-      value={selectedProductGrade}
-      onChange={(e) => setSelectedProductGrade(e.target.value)}
-    >
-      <option value="">Select a grade</option>
-      {product?.grades?.map((grade, index) => (
-        <option key={index} value={grade}>{grade}</option>
-      ))}
-    </select>
-  </div>
-
+    <Col>
+  {product?.grades?.length > 0 && (
+    <div className="p-4 bg-white rounded-lg">
+      <label htmlFor="grade-select" className="text-lg font-semibold text-gray-700">
+        Select Grade
+      </label>
+      <select
+        id="grade-select"
+        className="mt-2 w-full p-2 border rounded-lg text-gray-700 focus:ring-2 focus:ring-pink-500"
+        value={selectedProductGrade}
+        onChange={(e) => setSelectedProductGrade(e.target.value)}
+      >
+        <option value="">Select a grade</option>
+        {product.grades.map((grade, index) => (
+          <option key={index} value={grade}>{grade}</option>
+        ))}
+      </select>
+    </div>
+  )}
+</Col>
+<Col>
   {/* Count */}
-  <div className="p-4 bg-white rounded-lg">
-    <label htmlFor="count-select" className="text-lg font-semibold text-gray-700">
-      Select Count
-    </label>
-    <select
-      id="count-select"
-      className="mt-2 w-full p-2 border rounded-lg text-gray-700 focus:ring-2 focus:ring-pink-500"
-      value={selectedProductCount}
-      onChange={(e) => setSelectedProductCount(e.target.value)}
-    >
-      <option value="">Select a count</option>
-      {product?.count?.map((count, index) => (
-        <option key={index} value={count}>{count}</option>
-      ))}
-    </select>
-  </div>
+  {product?.count?.length > 0 && (
+    <div className="p-4 bg-white rounded-lg">
+      <label htmlFor="count-select" className="text-lg font-semibold text-gray-700">
+        Select Count
+      </label>
+      <select
+        id="count-select"
+        className="mt-2 w-full p-2 border rounded-lg text-gray-700 focus:ring-2 focus:ring-pink-500"
+        value={selectedProductCount}
+        onChange={(e) => setSelectedProductCount(e.target.value)}
+      >
+        <option value="">Select a count</option>
+        {product.count.map((count, index) => (
+          <option key={index} value={count}>{count}</option>
+        ))}
+      </select>
+    </div>
+  )}
+  </Col>
 </Row>
 <Row>
+  <Col>
   {/* Origin */}
-  <div className="p-4 bg-white rounded-lg">
-    <label htmlFor="origin-select" className="text-lg font-semibold text-gray-700">
-      Select Origin
-    </label>
-    <select
-      id="origin-select"
-      className="mt-2 w-full p-2 border rounded-lg text-gray-700 focus:ring-2 focus:ring-pink-500"
-      value={selectedProductOrigin}
-      onChange={(e) => setSelectedProductOrigin(e.target.value)}
-    >
-      <option value="">Select Origin</option>
-      {product?.origin?.map((o, index) => (
-        <option key={index} value={o}>{o}</option>
-      ))}
-    </select>
-  </div>
-
+  {product?.origin?.length > 0 && (
+    <div className="p-4 bg-white rounded-lg">
+      <label htmlFor="origin-select" className="text-lg font-semibold text-gray-700">
+        Select Origin
+      </label>
+      <select
+        id="origin-select"
+        className="mt-2 w-full p-2 border rounded-lg text-gray-700 focus:ring-2 focus:ring-pink-500"
+        value={selectedProductOrigin}
+        onChange={(e) => setSelectedProductOrigin(e.target.value)}
+      >
+        <option value="">Select Origin</option>
+        {product.origin.map((o, index) => (
+          <option key={index} value={o}>{o}</option>
+        ))}
+      </select>
+    </div>
+  )}
+  </Col>
+<Col>
   {/* Destination Port */}
   <div className="p-4 bg-white rounded-lg">
     <label htmlFor="destination-select" className="text-lg font-semibold text-gray-700">
       Select Destination Port
     </label>
-    <select
+    <input
       id="destination-select"
+      list="destination-ports-list"
       className="mt-2 w-full p-2 border rounded-lg text-gray-700 focus:ring-2 focus:ring-pink-500"
       value={selectedProductDestinationPort}
       onChange={(e) => setSelectedProductDestinationPort(e.target.value)}
-    >
-      <option value="">Select Destination Port</option>
-      {product?.destination_ports?.map((p, index) => (
-        <option key={index} value={p}>{p}</option>
+      placeholder="Type to search..."
+    />
+    <datalist id="destination-ports-list">
+      {destinationPorts?.map((p, index) => (
+        <option key={index} value={p.destination_port}>{`${p.destination_port}, ${p.country}`}</option>
       ))}
-    </select>
+    </datalist>
   </div>
-  </Row>
+  </Col>
+</Row>
 </div>
+
 
 
 

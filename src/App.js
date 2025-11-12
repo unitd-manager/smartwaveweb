@@ -55,6 +55,7 @@ const BlogCategory = lazy(() =>
 // other pages
 const About = lazy(() => import("./pages/other/About"));
 const Contact = lazy(() => import("./pages/other/Contact"));
+const Contact2 = lazy(() => import("./pages/other/Contact2"));
 const MyAccount = lazy(() => import("./pages/other/MyAccount"));
 const LoginRegister = lazy(() => import("./pages/other/LoginRegister"));
 const RegisterVerification = lazy(() => import("./pages/other/RegisterVerification"));
@@ -201,6 +202,10 @@ const App = (props) => {
                 <Route
                   path={process.env.PUBLIC_URL + "/contact"}
                   component={Contact}
+                />
+                 <Route
+                  path={process.env.PUBLIC_URL + "/contact2"}
+                  component={Contact2}
                 />
                 <Route
                   path={process.env.PUBLIC_URL + "/my-account"}

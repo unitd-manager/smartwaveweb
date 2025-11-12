@@ -11,7 +11,7 @@ const ProductDescriptionTab = ({ spaceBottomClass, orderedProducts,product,comme
 const {id}=useParams();
  console.log('orderedProducts',orderedProducts);
   //product.product_description = product?.product_description?.replace(/<[^>]*>/g, '');
-  product.description = product?.description?.replace(/<[^>]*>/g, '');
+  //product.description = product?.description?.replace(/<[^>]*>/g, '');
 
   const decodeHTML = (html) => {
     const txt = document.createElement('textarea');
@@ -49,7 +49,13 @@ const {id}=useParams();
 
               </Tab.Pane>
               <Tab.Pane eventKey="productDescription">
-                {product.description}
+               
+                   <div
+  className="product-anotherinfo-wrapper"
+  dangerouslySetInnerHTML={{
+    __html: DOMPurify.sanitize(decodeHTML(product.description))
+  }}
+></div>
               </Tab.Pane>
               {/* <Tab.Pane eventKey="productReviews">
                 {comments && 

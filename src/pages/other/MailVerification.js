@@ -14,9 +14,10 @@ const MailVerification = ({ location }) => {
 
   useEffect(() => {
     const urlSearchParams = new URLSearchParams(location.search);
-    const query = urlSearchParams.get("otp") || "";
+    const query = urlSearchParams.get("token") || "";
     const token = query.replaceAll('"', '');
-
+    console.log('query',query);
+console.log('token',token);
     api
       .post("commonApi/resetVerification", { resetToken: token })
       .then(() => setSuccess(true))
@@ -32,7 +33,7 @@ const MailVerification = ({ location }) => {
         <title>Smartwave | Mail verification</title>
         <meta
           name="description"
-          content="Compare page of UnitdEcom react minimalist eCommerce template."
+          content="Mail verification"
         />
       </MetaTags>
       <BreadcrumbsItem to={process.env.PUBLIC_URL + "/"}>Home</BreadcrumbsItem>

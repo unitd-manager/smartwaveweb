@@ -194,11 +194,12 @@ console.log('user',user);
             created_by: userData.first_name,
             first_name: userData.first_name,
             email: userData.email,
-            grades: item.grades,
+            grades: item.grade,
             counts: item.counts,
             origins: item.origins,
             destination_port: item.destination_port,
           };
+          console.log('quoteitem',quoteItem);
           await api.post("/enquiry/insertQuoteItems", quoteItem);
           console.log(`Quote item for ${item.title} added to enquiry ${insertedId}.`);
         }
@@ -386,73 +387,73 @@ useEffect(() => {
         <div className="cart-main-area pt-90 pb-100">
           <div className="container">
             {cartItems && cartItems.length > 0 ? (
-              <Fragment>
+              <div>
                 <h3 className="cart-page-title">Your cart items</h3>
                 <div className="table-content table-responsive cart-table-content">
                   <div className="cart-table-wrapper">
-                    <table className="cart-table">
-                      <thead>
-                        <tr>
-                          <th>Image</th>
-                          <th>Product Name</th>
-                          <th>No.of.Containers</th>
-                          <th>Type of containers</th>
-                          <th>Details</th>
-                          <th>Action</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {cartItems?.map((item, index) => (
-                          <tr key={index}>
-                            <td className="product-thumbnail">
-                              <Link to={`/product/${item.product_id}/${item.title}`}>
-                                <img
-                                  src={`${imageBase}${item.images[0]}`}
-                                  alt={item.title}
-                                  className="img-fluid"
-                                />
-                              </Link>
-                            </td>
-                            <td className="product-name text-center">{item.title}</td>
-                            <td className="product-quantity">
-                              <div className="cart-plus-minus">
-                                <button
-                                  className="dec qtybutton"
-                                  onClick={() => handleDecreaseQuantity(item)}
-                                >
-                                  -
-                                </button>
-                                <input
-                                  className="cart-plus-minus-box"
-                                  type="text"
-                                  value={item.qty}
-                                  readOnly
-                                />
-                                <button
-                                  className="inc qtybutton"
-                                  onClick={() => handleIncreaseQuantity(item)}
-                                >
-                                  +
-                                </button>
-                              </div>
-                             
-                            </td>
-                             <td className="product-quantity">{container}</td>
-                            <td className="product-grades">
-                              {item.grade && <div><strong>Grade:</strong> {item.grade}</div>}
-                              {item.counts && <div><strong>Counts:</strong> {item.counts}</div>}
-                              {item.origins && <div><strong>Origin:</strong> {item.origins}</div>}
-                              {item.destination_port && <div><strong>Destination Port:</strong> {item.destination_port}</div>}
-                            </td>
-                            <td className="product-remove">
-                              <button onClick={() => handleRemoveItem(item)}>
-                                <i className="fa fa-times"></i>
-                              </button>
-                            </td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
+                   <table className="cart-table" style={{ width: "100%", borderCollapse: "collapse" }}>
+  <thead>
+    <tr>
+      <th style={{ width: "10%" }}>Image</th>
+      <th style={{ width: "20%" }}>Product Name</th>
+      <th style={{ width: "5%" }}>No. of Containers</th>
+      <th style={{ width: "10%" }}>Type of Containers</th>
+      <th style={{ width: "50%", textAlign: "left" }}>Details</th>
+      <th style={{ width: "5%" }}>Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    {cartItems?.map((item, index) => (
+      <tr key={index}>
+        <td className="product-thumbnail">
+          <Link to={`/product/${item.product_id}/${item.title}`}>
+            <img
+              src={`${imageBase}${item.images[0]}`}
+              alt={item.title}
+              className="img-fluid"
+            />
+          </Link>
+        </td>
+        <td className="product-quantity">{item.title}</td>
+        <td className="product-quantity">
+          <div className="cart-plus-minus">
+            <button
+              className="dec qtybutton"
+              onClick={() => handleDecreaseQuantity(item)}
+            >
+              -
+            </button>
+            <input
+              className="cart-plus-minus-box"
+              type="text"
+              value={item.qty}
+              readOnly
+            />
+            <button
+              className="inc qtybutton"
+              onClick={() => handleIncreaseQuantity(item)}
+            >
+              +
+            </button>
+          </div>
+        </td>
+        <td className="product-quantity">{container}</td>
+        <td className="product-grade" >
+          {item.grade && <div><strong>Grade:</strong> {item.grade}</div>}
+          {item.counts && <div><strong>Counts:</strong> {item.counts}</div>}
+          {item.origins && <div><strong>Origin:</strong> {item.origins}</div>}
+          {item.destination_port && <div><strong>Destination Port:</strong> {item.destination_port}</div>}
+        </td>
+        <td className="product-remove">
+          <button onClick={() => handleRemoveItem(item)}>
+            <i className="fa fa-times"></i>
+          </button>
+        </td>
+      </tr>
+    ))}
+  </tbody>
+</table>
+
                   </div>
                 </div>
 
@@ -475,7 +476,7 @@ useEffect(() => {
                     </button>
                   </div>
                 </div>
-              </Fragment>
+              </div>
             ) : (
               <div className="row">
                 <div className="col-lg-12">
