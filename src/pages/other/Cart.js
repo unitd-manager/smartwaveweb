@@ -210,6 +210,35 @@ console.log('user',user);
 
     clearCartData(user);
     api.post("/contact/clearCartItems", { contact_id: user.contact_id });
+   try {
+      await api.post("/commonApi/sendquoteMail", {
+        first_name: userData.first_name,
+        email: userData.email,
+        comments: `
+          New quote request from ${userData.first_name} (${userData.email}).
+
+          Products Requested:
+          ${cartItems.map(
+            (item) => `• ${item.title} (Qty: ${item.qty})`
+          ).join("\n")}
+        `,
+      });
+
+      Swal.fire({
+        icon: "success",
+        title: "Quote Request Sent!",
+        text: "Your enquiry email has been successfully sent to the admin.",
+      });
+    } catch (error) {
+      console.error("❌ Error sending quote mail:", error);
+      Swal.fire({
+        icon: "error",
+        title: "Email Failed",
+        text: "There was a problem sending your quote email. Please try again later.",
+      });
+    }
+
+
     history.push('/enquirysuccess');
 
     // Temporarily commenting out email sending logic
