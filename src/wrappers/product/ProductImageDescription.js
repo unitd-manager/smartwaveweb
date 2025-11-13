@@ -25,7 +25,10 @@ const ProductImageDescription = ({
     compareItem => compareItem.id === product.product_id
   )[0];
   const cartItem = cartItems.filter(
-    cartItem => cartItem.product_id === product.product_id
+    cartItem =>
+      cartItem.product_id === product.product_id &&
+      cartItem.grade === product.grade &&
+      cartItem.origin === product.origin
   )[0];
   const { addToast } = useToasts();
 

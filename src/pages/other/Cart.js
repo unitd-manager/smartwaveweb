@@ -145,10 +145,10 @@ console.log('user',user);
 }
 
     const groupedCartItems = cartItems.reduce((acc, item) => {
-      if (!acc[item.product_id]) {
-        acc[item.product_id] = [];
+      if (!acc[item.origins]) {
+        acc[item.origins] = [];
       }
-      acc[item.product_id].push(item);
+      acc[item.origins].push(item);
       return acc;
     }, {});
 
