@@ -136,7 +136,7 @@ function Register() {
             console.log('cont',signupData);
           })
           .catch((err) => {
-            addToast("This Email is already Registered", {
+            addToast(err.msg, {
               appearance: "error",
               autoDismiss: true,
             });
