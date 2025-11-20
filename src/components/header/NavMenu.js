@@ -6,6 +6,7 @@ import { getUser } from "../../common/user";
 
 const NavMenu = ({ strings, menuWhiteClass, sidebarMenu, categories }) => {
   const [user, setUser] = useState();
+  console.log('user',user);
   useEffect(() => {
     const userinfo = getUser();
     setUser(userinfo);

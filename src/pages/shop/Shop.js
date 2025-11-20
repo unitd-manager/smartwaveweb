@@ -13,7 +13,7 @@ import ShopTopbar from "../../wrappers/product/ShopTopbar";
 import ShopProducts from "../../wrappers/product/ShopProducts";
 import api from "../../constants/api";
 
-const Shop = ({}) => {
+const Shop = () => {
   const [layout, setLayout] = useState('grid three-column');
   const [sortType, setSortType] = useState("");
   const [sortValue, setSortValue] = useState("");
@@ -26,15 +26,15 @@ const Shop = ({}) => {
   const [currentData, setCurrentData] = useState([]);
   const [sortedProducts, setSortedProducts] = useState([]);
   const [products, setProducts] = useState([]);
-  const [searchResults, setSearchResults] = useState([]);
+  //const [searchResults, setSearchResults] = useState([]);
   const [allProducts, setAllProducts] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
-  const [filteredProducts, setFilteredProducts] = useState([]);
+  //const [filteredProducts, setFilteredProducts] = useState([]);
 
   const location = useLocation();
   const history = useHistory();
 
-  console.log("search", searchQuery);
+
   useEffect(() => {
     const urlSearchParams = new URLSearchParams(location.search);
     const query = urlSearchParams.get("search");
@@ -60,7 +60,7 @@ const Shop = ({}) => {
           setProducts(res.data.data);
         })
         .catch((err) => {
-          console.log(err);
+
         });
     } else if (cate) {
       // If category exists, set it as selected category
@@ -86,10 +86,10 @@ const Shop = ({}) => {
           setAllProducts(res.data.data);
         })
         .catch(() => {
-          console.log("error");
+
         });
     }
-    console.log("searchquery", query);
+
   }, [location]);
   
 
@@ -101,13 +101,13 @@ const Shop = ({}) => {
   };
 
   const getSortParams = (sortType, sortValue,sortarray) => {
-    console.log('selectedCategories getparams');
+
     setSortType(sortType);
     setSortValue(sortValue);
     setSelectedCategories(sortValue);
     setSortArray(sortarray);
-    console.log("sortType", sortType);
-    console.log("sortvalue", sortValue);
+
+
   };
   
 
@@ -115,7 +115,7 @@ const Shop = ({}) => {
     setFilterSortType(sortType);
     setFilterSortValue(sortValue);
   };
-console.log('selectedCategories',selectedCategories);
+
   useEffect(() => {
     const filter = async () => {
       let sortedProducts = getSortedProducts(products, sortType, sortValue,sortarray);
@@ -124,14 +124,14 @@ console.log('selectedCategories',selectedCategories);
         filterSortType,
         filterSortValue,sortarray
       );
-      console.log("sortedpros", sortedProducts);
+
       sortedProducts = filterSortedProducts;
-      console.log("sorted", sortedProducts);
+
       setSortedProducts(sortedProducts);
       setCurrentData(sortedProducts?.slice(offset, offset + pageLimit));
     };
     filter();
-  }, [offset, products, sortType, sortValue, selectedCategories,filterSortType, filterSortValue]);
+  }, [offset, products, sortType, sortValue, selectedCategories,filterSortType, filterSortValue,sortarray]);
 
   const handleSearchSubmit = (event) => {
     event.preventDefault();

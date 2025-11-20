@@ -5,17 +5,17 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import api from "../../constants/api";
 import LayoutOne from "../../layouts/Layout";
 import ReturnOrderModal from "../../components/ReturnOrder/ReturnOrderModal";
-import InvoicePdf from "../../components/PDF/InvoicePdf";
+//import InvoicePdf from "../../components/PDF/InvoicePdf";
 
 
-const OrderDetailsPage = ({ orderStatus }) => {
+const OrderDetailsPage = () => {
   const { id } = useParams();
   const [order, setOrder] = useState({});
   const [orderItems, setOrderItems] = useState([]);
   const[returnItem, setReturnItem]=useState({});
   const[returnModal,setReturnModal]=useState(false);
   order.images = String(order.images).split(",");
-  console.log("order", order);
+  
   
   useEffect(() => {
     api
@@ -24,7 +24,7 @@ const OrderDetailsPage = ({ orderStatus }) => {
         setOrder(res.data.data[0]);
       })
       .catch((err) => {
-        console.log(err);
+        
       });
   }, [id]);
   useEffect(() => {
@@ -32,30 +32,30 @@ const OrderDetailsPage = ({ orderStatus }) => {
       .post("/orders/getOrderByOrderId", { order_id: id })
       .then((res) => {
         setOrderItems(res.data.data);
-        console.log("orders", res.data.data);
+        
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {});
   }, [id]);
 
-  let statusClass = "";
-  let statusText = "";
-  switch (orderStatus) {
-    case "processing":
-      statusClass = "order-processing";
-      statusText = "Processing";
-      break;
-    case "shipped":
-      statusClass = "order-shipped";
-      statusText = "Shipped";
-      break;
-    case "delivered":
-      statusClass = "order-delivered";
-      statusText = "Delivered";
-      break;
-    default:
-      statusClass = "order-pending";
-      statusText = "Pending";
-  }
+  //  let statusClass = "";
+  //  let statusText = "";
+  // switch (orderStatus) {
+  //   case "processing":
+  //     statusClass = "order-processing";
+  //     statusText = "Processing";
+  //     break;
+  //   case "shipped":
+  //     statusClass = "order-shipped";
+  //     statusText = "Shipped";
+  //     break;
+  //   case "delivered":
+  //     statusClass = "order-delivered";
+  //     statusText = "Delivered";
+  //     break;
+  //   default:
+  //     statusClass = "order-pending";
+  //     statusText = "Pending";
+  // }
   return (
     <LayoutOne headerTop="visible">
       <Container className="my-3">
@@ -117,7 +117,7 @@ const OrderDetailsPage = ({ orderStatus }) => {
                               <Col md={4}>
                                 <img
                                   src={`http://192.64.114.83/storage/uploads/${item.images[0]}`}
-                                  alt="product image"
+                                  alt="product"
                                   style={{ height: "180px" }}
                                 />
                               </Col>

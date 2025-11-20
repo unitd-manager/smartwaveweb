@@ -1,14 +1,14 @@
-import React,{useState} from "react";
-import { useHistory } from "react-router-dom";
+import React from "react";
+//import { useHistory } from "react-router-dom";
 
 const OrderSearch = ({handleSearchSubmit,handleSearchChange}) => {
-const history=useHistory();
-  const [search, setSearch] = useState("");
+//const history=useHistory();
+  //const [search, setSearch] = useState("");
 
-  const onSelectOption = (value) => {
-    setSearch(value);
+  // const onSelectOption = (value) => {
+  //   setSearch(value);
 
-  };
+  // };
 
   
   return (

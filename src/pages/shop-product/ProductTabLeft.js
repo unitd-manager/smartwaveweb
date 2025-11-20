@@ -18,7 +18,7 @@ const ProductTabLeft = ({ location }) => {
   const [relatedProducts, setRelatedProducts] = useState([]);
   const [productImages, setProductImages] = useState([]);
   // const foundProduct = getProductsBySlug(productData, slug);
-  console.log("products", foundProduct);
+  console.log("proimg", productImages);
 
   useEffect(() => {
     api
@@ -35,21 +35,21 @@ const ProductTabLeft = ({ location }) => {
             setRelatedProducts(res.data.data);
           })
           .catch((err) => {
-            console.log(err);
+
           });
       })
       .catch((err) => {
-        console.log(err);
+
       });
 
     api
       .post("/file/getListOfFiles", { record_id: id, room_name: "product" })
       .then((res) => {
         setProductImages(res.data);
-        console.log("image", res.data);
+
       })
       .catch((err) => {
-        console.log(err);
+
       });
   }, [id]);
   return (

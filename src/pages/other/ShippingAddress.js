@@ -24,7 +24,7 @@ const EnquiryHistory = () => {
 
   useEffect(() => {
     fetchAddresses();
-  }, []);
+  });
 
   const fetchAddresses = () => {
     api
@@ -34,9 +34,7 @@ const EnquiryHistory = () => {
       .then((res) => {
         setEnquiries(res.data.data);
       })
-      .catch((err) => {
-        console.log(err);
-      });
+      .catch((err) => {});
   };
 
   const handleInputChange = (e) => {
@@ -83,7 +81,7 @@ const EnquiryHistory = () => {
         setShowModal(false);
         fetchAddresses();
       })
-      .catch((err) => console.log(err));
+
   };
 
   const handleEditAddress = (address) => {
@@ -113,7 +111,7 @@ const EnquiryHistory = () => {
         alert("Address Deleted Successfully");
         fetchAddresses();
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {});
   };
 
   return (

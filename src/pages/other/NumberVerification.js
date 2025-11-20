@@ -1,8 +1,8 @@
-import React, { Fragment, useEffect, useState } from "react";
+import React, { Fragment, useState } from "react";
 import { useToasts } from "react-toast-notifications";
 import { useLocation, useHistory, Link } from "react-router-dom";
-import PropTypes from "prop-types";
-import { Container, Form, Button } from "react-bootstrap";
+//import PropTypes from "prop-types";
+//import { Container, Form, Button } from "react-bootstrap";
 import MetaTags from "react-meta-tags";
 import { BreadcrumbsItem } from "react-breadcrumbs-dynamic";
 import Breadcrumb from "../../wrappers/breadcrumb/Breadcrumb";
@@ -14,14 +14,14 @@ import api from "../../constants/api";
 function NumberCode(signupData) {
  
   const location = useLocation();
-  const mobNo = location.state?.mobNo;
+  //const mobNo = location.state?.mobNo;
   const newOTP = location.state?.newOTP;
   const { addToast } = useToasts();
   const [userData, setUserData] = useState({});
   const history = useHistory();
   const [userEnteredOTP, setUserEnteredOTP] = useState("");
   const [error, setError] = useState(false);
-
+  console.log("error", error);
   const handleSubmit = (e) => {
     e.preventDefault();
     updateUserData();
@@ -29,7 +29,7 @@ function NumberCode(signupData) {
 
   const updateUserData = () => {
     // userData.otp_no=signupData
-    console.log("sign", signupData);
+
     api
       .post("/api/checkOTP", { otp_no: userEnteredOTP })
       .then(() => {

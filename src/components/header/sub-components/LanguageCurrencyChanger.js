@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
 import React from "react";
-import { changeLanguage } from "redux-multilanguage";
+//import { changeLanguage } from "redux-multilanguage";
 import { getUser } from "../../../common/user";
 
 const LanguageCurrencyChanger = ({
@@ -9,15 +9,15 @@ const LanguageCurrencyChanger = ({
   currentLanguageCode,
   dispatch
 }) => {
-  const changeLanguageTrigger = e => {
-    const languageCode = e.target.value;
-    dispatch(changeLanguage(languageCode));
-  };
+  // const changeLanguageTrigger = e => {
+  //   const languageCode = e.target.value;
+  //   dispatch(changeLanguage(languageCode));
+  // };
 const user=getUser();
-  const setCurrencyTrigger = e => {
-    const currencyName = e.target.value;
-    setCurrency(currencyName);
-  };
+  // const setCurrencyTrigger = e => {
+  //   const currencyName = e.target.value;
+  //   setCurrency(currencyName);
+  // };
 
   return (
     <div className="language-currency-wrap">

@@ -1,12 +1,12 @@
 import PropTypes from "prop-types";
 import React from "react";
-import blogFeaturedData from "../../data/blog-featured/blog-featured.json";
+//import blogFeaturedData from "../../data/blog-featured/blog-featured.json";
 import BlogFeaturedSingle from "../../components/blog-featured/BlogFeaturedSingle";
 import SectionTitle from "../../components/section-title/SectionTitle";
-import { Link } from "react-router-dom";
-import { useEffect } from "react";
-import api from "../../constants/api";
-import { useState } from "react";
+//import { Link } from "react-router-dom";
+//import { useEffect } from "react";
+//import api from "../../constants/api";
+//import { useState } from "react";
 
 const BlogFeatured = ({ spaceTopClass, spaceBottomClass }) => {
 

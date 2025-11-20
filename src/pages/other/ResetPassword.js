@@ -27,7 +27,7 @@ const history=useHistory();
   const handleConfirmPasswordChange = (event) => {
     setConfirmPassword(event.target.value);
   };
-  console.log("token", token);
+
   const handleSubmit = (event) => {
     event.preventDefault();
 
@@ -47,7 +47,7 @@ setTimeout(()=>{
 },200)
         })
         .catch((err) => {
-          console.log(err);
+
         });
     } else {
       // Passwords do not match
@@ -59,7 +59,7 @@ setTimeout(()=>{
     const query = urlSearchParams.get("token")? urlSearchParams.get("token"):null;
     const q = query!==null ?query.slice(0, -1):'';
     setToken(q);
-  }, []);
+  },[location.search]);
 
   return (
     <Fragment>

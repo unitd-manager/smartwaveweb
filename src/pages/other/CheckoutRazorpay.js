@@ -26,21 +26,20 @@ async function fetchExchangeRate() {
   return data.rates.INR;
 }
 
-function convertCurrency(amount, exchangeRate) {
-  return Math.round(amount * exchangeRate);
-}
+// function convertCurrency(amount, exchangeRate) {
+//   return Math.round(amount * exchangeRate);
+// }
 
 function CheckoutRazorpay({ amount, placeOrder}) {
   const [exchangeRate, setExchangeRate] = useState(null);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
+  console.log('isProcessing',isProcessing);
   const getUser = () => {
-   
     const userData = localStorage.getItem('user')
    
     const userInfo=JSON.parse(userData)
-    console.log ('userInfo',userInfo.contact_id)
 
     api
     .post("/contact/clearCartItems", { contact_id: userInfo.contact_id })

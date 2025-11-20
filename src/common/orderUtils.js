@@ -14,7 +14,7 @@ export const getProductsByCategory = (arr, category_id) => {
     // : arr;
   api.post('/category/getProductByCategory',{category_id:1}).then((res)=>{
     return res.data.data;
-    console.log('res',res.data.data)
+   // console.log('res',res.data.data)
   }).catch((err)=>{
     console.log(err)
   })
@@ -99,7 +99,7 @@ export const getProductsBySearch = (keyword) => {
 
     api.post('/product/getProductsbySearch',{keyword:keyword}).then((res)=>{
       return res.data.data;
-      console.log('res',res.data.data)
+      //console.log('res',res.data.data)
     }).catch((err)=>{
       console.log(err)
     })

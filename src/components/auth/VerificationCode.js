@@ -16,13 +16,14 @@ function VerificationCode(signupData) {
   const [userEnteredOTP, setUserEnteredOTP] = useState('');
   const [error, setError] = useState(false);
   const [returnModal, setReturnModal] = useState(false);
-  const newOTPs = location.state?.newOTPs;
+  //const newOTPs = location.state?.newOTPs;
   const [regeneratedOTP, setRegeneratedOTP] = useState(""); 
   const [newMobileNumber, setNewMobileNumber] = useState();
   const handleSubmit = (e) => {
     e.preventDefault();
     updateUserData();
   };
+    console.log("error", error);
   const handleResendOTP = (e) => {
     e.preventDefault(); 
     const newOTP = Math.floor(100000 + Math.random() * 900000);
@@ -78,7 +79,7 @@ function VerificationCode(signupData) {
   useEffect(() => {
     // Set the regenerated OTP when it is received
     setRegeneratedOTP(location.state?.newOTP);
-  }, [location.state?.newOTP]);
+  },[location.state.newOTP]);
   useEffect(() => {
     // Update otpNo with regenerated OTP when it changes
     if (regeneratedOTP) {
@@ -88,7 +89,7 @@ function VerificationCode(signupData) {
   useEffect(() => {
     // Update otpNo when location state changes
     setOtpNo(location.state?.otpNo);
-  }, [location.state?.otpNo]);
+  },[location.state.otpNo]);
   
   return (
     <div>

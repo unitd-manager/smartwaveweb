@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { CardBody, CardHeader, CardTitle } from "reactstrap";
+import { CardBody, CardHeader } from "reactstrap";
 import ReactHtmlParser from "react-html-parser";
 import api from "../../constants/api";
 
@@ -12,7 +12,7 @@ const SupportPolicy = () => {
         setAddress(res.data.data);
       })
       .catch((err) => {
-        console.log(err);
+        
       });
   };
   useEffect(() => {

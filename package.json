@@ -79,7 +79,10 @@
     "deploy": "ftp-deploy --server 192.64.114.83 --username ftp_foodecom --password \"4154bbea68978\""
   },
   "eslintConfig": {
-    "extends": "react-app"
+    "extends": "react-app",
+    "rules": {
+      "no-console": "warn"
+    }
   },
   "browserslist": {
     "production": [

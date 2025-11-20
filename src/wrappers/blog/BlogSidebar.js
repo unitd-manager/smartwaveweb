@@ -14,7 +14,7 @@ const BlogSidebar = ({
   const [blogs, setblog] = useState();
   const [categories, setCategories] = useState();
   const { id } = useParams();
-
+  console.log("id", id);
   const getblogs = () => {
     api
       .get("/blog/getBlogImage", blogs)
@@ -32,10 +32,10 @@ const BlogSidebar = ({
         // return message.error("Registered Successfully ");
       })
       .catch((err) => {
-        console.log(err);
+        
       });
     getblogs();
-  }, []);
+  });
 
   return (
     <div className={`sidebar-style ${sideSpaceClass ? sideSpaceClass : ""}`}>

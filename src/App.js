@@ -1,7 +1,7 @@
 import PropTypes from "prop-types";
 import React, { useEffect, Suspense, lazy } from "react";
 import ScrollToTop from "./helpers/scroll-top";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import {  Switch, Route } from "react-router-dom";
 import { ToastProvider } from "react-toast-notifications";
 import { multilanguage, loadLanguages } from "redux-multilanguage";
 import { connect } from "react-redux";
@@ -105,14 +105,14 @@ const App = (props) => {
   
   useEffect(() => {
     const userdata = JSON.parse(localStorage.getItem("user"));
-    console.log('user in app.js',userdata);
+
      // Replace with your auth logic
      if (userdata) {
-      console.log('fetching cart in app.js')
+
           dispatch(fetchCartData(userdata));
           dispatch(fetchWishlistData(userdata));
         }else {
-          console.log('empty cart in app.js')
+
       dispatch(emptyCartData(user)); // Clear cart when user logs out
       dispatch(emptyWishlistData(user));
     }

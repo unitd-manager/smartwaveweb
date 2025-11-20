@@ -7,8 +7,8 @@ import Card from "react-bootstrap/Card";
 import Accordion from "react-bootstrap/Accordion";
 import LayoutOne from "../../layouts/Layout";
 import Breadcrumb from "../../wrappers/breadcrumb/Breadcrumb";
-import PictureAttachmentModalV2 from "../../components/ReturnOrder/PictureAttachmentModalV2";
-import PictureAttachmentModalV3 from "../../components/ReturnOrder/PictureAttachmentModalV3";
+//import PictureAttachmentModalV2 from "../../components/ReturnOrder/PictureAttachmentModalV2";
+//import PictureAttachmentModalV3 from "../../components/ReturnOrder/PictureAttachmentModalV3";
 import api from "../../constants/api";
 import { Input } from "reactstrap";
 
@@ -35,15 +35,17 @@ const MyAccount = ({ location }) => {
   const [panError, setPanError] = useState("");
   const [iecError, setIecError] = useState("");
   const [fssaiError, setFssaiError] = useState("");
-  const [attachmentModal, setAttachmentModal] = useState(false);
+  //const [attachmentModal, setAttachmentModal] = useState(false);
   const [imageUrl, setImageUrl] = useState("");
-  const [pictureData, setDataForPicture] = useState({
-    modelType: "",
-  });
+  // const [pictureData, setDataForPicture] = useState({
+  //   modelType: "",
+  // });
   const handleUserData = (e) => {
     setUserData({ ...userData, [e.target.name]: e.target.value });
   };
-
+  console.log("order", firstName);
+    console.log("order", imageUrl);
+      
   const getAllCountries = () => {
     api
       .get('/commonApi/getCountry')
@@ -120,7 +122,7 @@ const MyAccount = ({ location }) => {
         setUserData(res.data.data[0]);
       })
       .catch((err) => {
-        console.log(err);
+        
       });
   };
                              
@@ -178,7 +180,7 @@ const MyAccount = ({ location }) => {
         getUser();
       })
       .catch((err) => {
-        console.log(err);
+        
         addToast("Unable to Edit the Account Info", {
           appearance: "error",
           autoDismiss: true,
@@ -219,7 +221,7 @@ const MyAccount = ({ location }) => {
         getUser();
       })
       .catch((err) => {
-        console.log(err);
+        
         addToast("Unable to Edit the Account Password", {
           appearance: "error",
           autoDismiss: true,
@@ -279,15 +281,15 @@ const MyAccount = ({ location }) => {
       });
   };
   
-  const dataForPicture = () => {
-    setDataForPicture({
-      modelType: "picture",
-      contact_id: user.contact_id,
-    });
-  };
-  const reloadPage = () => {
-    window.location.reload();
-  };
+  // const dataForPicture = () => {
+  //   setDataForPicture({
+  //     modelType: "picture",
+  //     contact_id: user.contact_id,
+  //   });
+  // };
+  // const reloadPage = () => {
+  //   window.location.reload();
+  // };
   useEffect(() => {
     api
       .post("/contact/getContactsById", { contact_id: user.contact_id })
@@ -295,7 +297,7 @@ const MyAccount = ({ location }) => {
         setUserData(res.data.data[0]);
       })
       .catch((err) => {
-        console.log(err);
+        
       });
   }, [user]);
   useEffect(() => {
@@ -304,7 +306,7 @@ const MyAccount = ({ location }) => {
     } else {
       setImageUrl("");
     }
-  }, [profile, imageBase]);
+  }, [profile]);
   useEffect(() => {
     const userData = localStorage.getItem("user")
       ? localStorage.getItem("user")
@@ -323,7 +325,7 @@ const MyAccount = ({ location }) => {
         setProfile(res.data);
       })
       .catch((err) => {
-        console.log(err);
+
       });
   }, [user.contact_id]);
 

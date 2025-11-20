@@ -70,7 +70,7 @@ export const fetchCartData = (userInfo) => {
     
     return (dispatch) => {
       dispatch(updateCartDataRequest(data));
-  console.log('updatecall');
+
       // Make the API call
       api
       .post("/contact/update-cart", data)
@@ -92,7 +92,7 @@ export const fetchCartData = (userInfo) => {
  
     return (dispatch) => {
       dispatch(removeCartDataRequest({ basket_id: Item.basket_id }));
-      console.log('rem',Item)
+
       // Make the API call
       api
       .post("/contact/deleteCartItem", { basket_id: Item.basket_id })

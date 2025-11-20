@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import React, { useEffect, useState } from "react";
+import React from "react";
 
 import OrderSearch from "./orderSearch";
 import OrderCategories from "./orderCategories";
@@ -12,7 +12,7 @@ const OrderSidebar = ({
   handleSearchSubmit,
   handleSearchChange,
 }) => {
-  const [categories, setCategories] = useState([
+  const categories=[
     {
       category_id: 2,
       category_title: "Last 30 days",
@@ -33,8 +33,9 @@ const OrderSidebar = ({
       category_id: 6,
       category_title: "This Year",
     },
-  ]);
-  const [statuses, setStatuses] = useState([
+  ]
+
+  const statuses=[
     {
       category_id: 1,
       category_title: "New",
@@ -47,7 +48,7 @@ const OrderSidebar = ({
       category_id: 3,
       category_title: "Paid",
     },
-  ]);
+  ];
 
   return (
     <div className={`sidebar-style ${sideSpaceClass ? sideSpaceClass : ""}`}>

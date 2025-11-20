@@ -7,27 +7,27 @@ import { BreadcrumbsItem } from "react-breadcrumbs-dynamic";
 import { getDiscountPrice } from "../../helpers/product";
 import LayoutOne from "../../layouts/Layout";
 import Breadcrumb from "../../wrappers/breadcrumb/Breadcrumb";
-import StripeCheckout from "react-stripe-checkout";
+//import StripeCheckout from "react-stripe-checkout";
 import { useToasts } from "react-toast-notifications";
-import { PayPalButtons, PayPalScriptProvider } from "@paypal/react-paypal-js";
+//import { PayPalButtons, PayPalScriptProvider } from "@paypal/react-paypal-js";
 import api from "../../constants/api";
 import { getUser } from "../../common/user";
-import { loadStripe } from "@stripe/stripe-js";
-import Payment from "../../components/Payment";
-import Stripe from "stripe";
+//import { loadStripe } from "@stripe/stripe-js";
+//import Payment from "../../components/Payment";
+//import Stripe from "stripe";
 import { Input } from "reactstrap";
 import CheckoutRazorpay from "./CheckoutRazorpay";
-import InstaPay from "./InstaPay";
+//import InstaPay from "./InstaPay";
 import { clearCartData } from "../../redux/actions/cartItemActions";
 //import DistanceCalculator from "../../components/DistaceCalculator";
 
 
-const stripePromise = loadStripe(
-  "pk_test_51BTUDGJAJfZb9HEBwDg86TN1KNprHjkfipXmEDMb0gSCassK5T3ZfxsAbcgKVmAIXF7oZ6ItlZZbXO6idTHE67IM007EwQ4uN3"
-);
-const stripe = Stripe(
-  "sk_test_51KX4uOSJWiuYw3gIHasMc0HZONGNydONE1kA9BPa2MpTDYQySDEAVVsBqoCRtpnKbPlscBgQzkqY1JGqKBO8pLl300spdpbXRm"
-);
+// const stripePromise = loadStripe(
+//   "pk_test_51BTUDGJAJfZb9HEBwDg86TN1KNprHjkfipXmEDMb0gSCassK5T3ZfxsAbcgKVmAIXF7oZ6ItlZZbXO6idTHE67IM007EwQ4uN3"
+// );
+// const stripe = Stripe(
+//   "sk_test_51KX4uOSJWiuYw3gIHasMc0HZONGNydONE1kA9BPa2MpTDYQySDEAVVsBqoCRtpnKbPlscBgQzkqY1JGqKBO8pLl300spdpbXRm"
+// );
 
 const Checkout = ({
   location,
@@ -37,48 +37,48 @@ const Checkout = ({
   const { pathname } = location;
   let cartTotalPrice = 0;
   const history = useHistory();
-const [stripeToken, setStripeToken]=useState();
+const stripeToken='';
 
-  const pay = async (token) => {
-    api
-      .post("/orders/api/payment", { token, cartTotalPrice })
-      .then((res) => {
-        console.log("res", res);
-      })
-      .catch((err) => console.log(err));
-  };
+  // const pay = async (token) => {
+  //   api
+  //     .post("/orders/api/payment", { token, cartTotalPrice })
+  //     .then((res) => {
 
-  const handleSuccess = () => {
-   history.push('/order-success')
-  };
-  const handleFailure = () => {
-    history.push('/orderfail')
-  };
+  //     })
+  //     .catch((err) => {});
+  // };
 
-  const onToken = async (token) => {
-    setStripeToken(token);
-   console.log('token',token)
-   try {
-    const response = await api.post('orders/api/payment',{
-        amount: cartTotalPrice * 100,
-        token,
-      }
-    );
-    if (response.status === 200) {
-      handleSuccess();
-    }
-  } catch (error) {
-    handleFailure();
-    console.log(error);
-  }
-  };
+  // const handleSuccess = () => {
+  //  history.push('/order-success')
+  // };
+  // const handleFailure = () => {
+  //   history.push('/orderfail')
+  // };
+
+  // const onToken = async (token) => {
+  //   setStripeToken(token);
+ 
+  //  try {
+  //   const response = await api.post('orders/api/payment',{
+  //       amount: cartTotalPrice * 100,
+  //       token,
+  //     }
+  //   );
+  //   if (response.status === 200) {
+  //     handleSuccess();
+  //   }
+  // } catch (error) {
+  //   handleFailure();
+ 
+  // }
+  // };
 
 
   
   useEffect(()=>{
 const makeRequest=async()=>{
   try{
-const res=await api.post('/orders/api/payment',{
+await api.post('/orders/api/payment',{
 token:stripeToken,
 amount:cartTotalPrice*100
 })
@@ -112,7 +112,7 @@ stripeToken && makeRequest();
   const { addToast } = useToasts();
 
   const placeOrder = (os) => {
-    console.log("userData", userData);
+
    
 
     if (userData) {
@@ -131,7 +131,7 @@ stripeToken && makeRequest();
       orderDetail.cust_address_country = userData.address_country;
       orderDetail.cust_address_state = userData.address_state;
       orderDetail.order_status =os;
-      console.log("orderDetail", orderDetail);
+
       api
         .post("/orders/insertorders", orderDetail)
         .then((res) => {
@@ -142,16 +142,16 @@ stripeToken && makeRequest();
             item.unit_price=item.price;
             item.cost_price=item.qty*item.price;
             item.item_title=item.title;
-            console.log("item", item);
+
             api
               .post("/orders/insertOrderItem", item)
               .then(() => {
-                console.log("order placed");
+
               })
-              .catch((err) => console.log(err));
+              .catch((err) => {});
           });
         }).then(() => {
-          console.log("cart user",userData)
+
           clearCartData(userData)
             // Make the API call
       api
@@ -161,9 +161,9 @@ stripeToken && makeRequest();
         .then(() => {
           history.push("/order-success");
         })
-        .catch((err) => console.log(err));
+        .catch((err) => {});
     } else {
-      console.log("please login");
+
     }
     const orderDate = new Date();
     const deliveryDate = new Date();
@@ -233,16 +233,16 @@ stripeToken && makeRequest();
   const apikey=paymentMode?.value ==='live'? razorpayLiveKey?.value: razorpayTestKey?.value;
 
 
-  console.log('paymentmode',paymentMode);
-  console.log('razorpaylive',razorpayLiveKey);
-  console.log('razorpaytest',razorpayTestKey);
 
-  console.log('apikey',apikey);
+
+
+
+
 
   useEffect(() => {
     const user = getUser();
     setUserData(user);
-    console.log(user);
+
     if (user) {
       api
         .post("/contact/getCartProductsByContactId", {
@@ -252,7 +252,7 @@ stripeToken && makeRequest();
           setCartItems(res.data.data);
         })
         .catch((err) => {
-          console.log(err);
+
         });
     }
     getAllCountries();
@@ -534,7 +534,7 @@ stripeToken && makeRequest();
                                 .capture()
                                 .then(function (details) {
                                   // Handle the payment success
-                                  console.log(details);
+
                                 });
                             }}
                           />
@@ -578,7 +578,9 @@ stripeToken && makeRequest();
                     </div>
                   </div>
                 </div>
-                <a href="https://www.instamojo.com/@sulfiya/l1d766e51cc7042599016fb8ee8aa58b9/" rel="im-checkout" data-text="Pay Now" data-css-style="color:#ffffff; background:#eb9694; width:180px; border-radius:30px"   data-layout="vertical"></a>
+                <a href="https://www.instamojo.com/@sulfiya/l1d766e51cc7042599016fb8ee8aa58b9/" rel="im-checkout" data-text="Pay Now" data-css-style="color:#ffffff; background:#eb9694; width:180px; border-radius:30px" data-layout="vertical">
+                  Pay Now
+                </a>
 <script src="https://js.instamojo.com/v1/button.js"></script>
               </div>
             )}

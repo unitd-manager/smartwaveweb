@@ -1,5 +1,5 @@
 import PropTypes from "prop-types"; 
-import React, { Fragment, useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import DOMPurify from 'dompurify';
 import { connect, useDispatch, useSelector } from "react-redux";
@@ -58,7 +58,8 @@ const ProductDescriptionInfo = ({
   const [selectedProductCount, setSelectedProductCount] = useState("");
   const [selectedProductDestinationPort, setSelectedProductDestinationPort] = useState("");
 
-
+console.log('proRating',proRating);
+console.log('sessionId',sessionId);
   const dispatch = useDispatch();
   const wishlistItems = useSelector(state => state.wishlistItems.wishlistItems);
 console.log('product',product);
@@ -168,7 +169,7 @@ useEffect(()=>{
     });
     const rates = parseFloat(totalRating) / parseInt(comments.length);
     setProRating(rates);
-  }, []);
+  }, [comments]);
 
   return (
     <div className="product-details-content ml-70">

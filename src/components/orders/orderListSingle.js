@@ -1,7 +1,7 @@
 import PropTypes from "prop-types";
 import React, { Fragment, useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { useToasts } from "react-toast-notifications";
+//import { useToasts } from "react-toast-notifications";
 import Rating from "../product/sub-components/ProductRating";
 import imageBase from "../../constants/imageBase";
 
@@ -13,10 +13,10 @@ const OrderListSingle = ({
   currency,
   titlePriceClass,
 }) => {
-  const { addToast } = useToasts();
+  //const { addToast } = useToasts();
   const [user, setUser] = useState();
   console.log("order", product);
-
+  console.log("order", user);
   product.images = String(product.images).split(",");
 
   useEffect(() => {

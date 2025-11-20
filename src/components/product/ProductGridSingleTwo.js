@@ -7,7 +7,7 @@ import { useToasts } from "react-toast-notifications";
 import { getDiscountPrice } from "../../helpers/product";
 import ProductModal from "./ProductModal";
 import imageBase from "../../constants/imageBase";
-import { useReducer } from "react";
+//import { useReducer } from "react";
 import { removeWishlistData } from "../../redux/actions/wishlistItemActions";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 
@@ -33,7 +33,7 @@ const ProductGridSingleTwo = ({
 }) => {
   const [modalShow, setModalShow] = useState(false);
   const { addToast } = useToasts();
-const[loginModal , setLoginModal]=useState(false);
+//const[loginModal , setLoginModal]=useState(false);
 const history = useHistory();
 const dispatch=useDispatch();
 

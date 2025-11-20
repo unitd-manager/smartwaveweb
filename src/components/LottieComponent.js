@@ -20,6 +20,7 @@ function LottieComponent() {
         height={200}
         width={200}
         loading={loading}
+        setLoading={setLoading}
       />
     </div>
   )

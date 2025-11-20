@@ -7,14 +7,14 @@ export default function CheckoutForm({amount,placeOrder,paymentMethod}) {
   const stripe = useStripe();
   const elements = useElements();
 
-  const [message, setMessage] = useState(null);
+  const message = null;
  const [isProcessing, setIsProcessing] = useState(false);
 
 
 const [error, setError] = useState(null);
 const [success, setSuccess] = useState(false);
-
-
+console.log('error',error);
+console.log('success',success);
 const handleSubmit = async (event) => {
   event.preventDefault();
 

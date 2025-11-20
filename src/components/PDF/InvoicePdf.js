@@ -51,7 +51,7 @@ console.log('data',createInvoice)
 React.useEffect(() => {
   getInvoiceItemById();
   getInvoiceById();
-}, []);
+},[]);
 
   const GetPdf = () => {
     const productItems = [

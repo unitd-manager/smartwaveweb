@@ -5,7 +5,7 @@ import api from "../../constants/api";
 import { Col, Row } from "reactstrap";
 import imageBase from "../../constants/imageBase";
 
-const BlogFeaturedSingle = ({}) => {
+const BlogFeaturedSingle = () => {
   const [blogs, setBlogs] = useState();
   const getBlog = () => {
     api.get("/blog/getHomeBlog", blogs).then((res) => {
@@ -15,7 +15,7 @@ const BlogFeaturedSingle = ({}) => {
 
   useEffect(() => {
     getBlog();
-  }, []);
+  },[]);
 
   return (
     <div className="col-lg-12 col-sm-12">

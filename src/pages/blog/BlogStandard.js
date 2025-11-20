@@ -8,27 +8,27 @@ import { connect } from "react-redux";
 import { getSortedCategories } from "../../helpers/product";
 import LayoutOne from "../../layouts/Layout";
 import Breadcrumb from "../../wrappers/breadcrumb/Breadcrumb";
-import ShopTopbar from "../../wrappers/product/ShopTopbar";
-import ShopProducts from "../../wrappers/product/ShopProducts";
+//import ShopTopbar from "../../wrappers/product/ShopTopbar";
+//import ShopProducts from "../../wrappers/product/ShopProducts";
 import api from "../../constants/api";
 import BlogPosts from "../../wrappers/blog/BlogPosts";
 import BlogSidebar from "../../wrappers/blog/BlogSidebar";
 
-const BlogStandard = ({}) => {
-  const [layout, setLayout] = useState("grid three-column");
+const BlogStandard = () => {
+  const layout="grid three-column";
   const [sortType, setSortType] = useState("");
   const [sortValue, setSortValue] = useState("");
-  const [filterSortType, setFilterSortType] = useState("");
-  const [filterSortValue, setFilterSortValue] = useState("");
+  const filterSortType= "";
+  const filterSortValue ="";
   const [offset, setOffset] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
   const [currentData, setCurrentData] = useState([]);
   const [sortedProducts, setSortedProducts] = useState([]);
   const [products, setProducts] = useState([]);
-  const [searchResults, setSearchResults] = useState([]);
+  //const [searchResults, setSearchResults] = useState([]);
 
   const [searchQuery, setSearchQuery] = useState("");
-  const [filteredProducts, setFilteredProducts] = useState([]);
+  //const [filteredProducts, setFilteredProducts] = useState([]);
 
   const location = useLocation();
   const history = useHistory();
@@ -64,19 +64,19 @@ const BlogStandard = ({}) => {
   const pageLimit = 15;
   const { pathname } = location;
 
-  const getLayout = (layout) => {
-    setLayout(layout);
-  };
+  // const getLayout = (layout) => {
+  //   setLayout(layout);
+  // };
 
   const getSortParams = (sortType, sortValue) => {
     setSortType(sortType);
     setSortValue(sortValue);
   };
 
-  const getFilterSortParams = (sortType, sortValue) => {
-    setFilterSortType(sortType);
-    setFilterSortValue(sortValue);
-  };
+  // const getFilterSortParams = (sortType, sortValue) => {
+  //   setFilterSortType(sortType);
+  //   setFilterSortValue(sortValue);
+  // };
 
   useEffect(() => {
     const filter = async () => {

@@ -11,8 +11,8 @@ import api from "../../constants/api";
 const BlogNoSidebar = ({ location }) => {
   const { pathname } = location;
   const [products, setProducts] = useState([]);
-  {
-    api
+  
+    const getBlog=()=>{api
       .get("/blog/getBlogImage")
       .then((res) => {
         setProducts(res.data.data);
@@ -20,7 +20,8 @@ const BlogNoSidebar = ({ location }) => {
       .catch(() => {
         console.log("error");
       });
-  }
+    }
+    getBlog();
   return (
     <Fragment>
       <MetaTags>

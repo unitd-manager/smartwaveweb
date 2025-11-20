@@ -6,7 +6,7 @@ import {
   Badge,
   Button,
   Col,
-  Input,
+  //Input,
   Modal,
   ModalBody,
   ModalHeader,
@@ -19,8 +19,8 @@ function ReturnOrderModal({ returnModal, setReturnModal, mobNo, newMobileNumber,
 const history = useHistory();
 const [userData, setUserData] = useState({ mobile: mobNo });
     const { addToast } = useToasts();
-  const [error, setError] = useState("");
-  const [quantity, setQuantity] = useState(0);
+  const error="";
+  //const [quantity, setQuantity] = useState(0);
 
 
   const handleUserData = (e) => {
@@ -100,7 +100,7 @@ const [userData, setUserData] = useState({ mobile: mobNo });
   };
   useEffect(() => {
    getUserDetail();
-  }, []);
+  });
   return (
     <div>
       <Modal isOpen={returnModal}>
@@ -118,7 +118,7 @@ const [userData, setUserData] = useState({ mobile: mobNo });
         </ModalHeader>
         <ModalBody>
           <div>
-            {error != "" && <span>{error}</span>}
+            {error !== "" && <span>{error}</span>}
             <Row>
               <Col> Mobile Number</Col>
             </Row>

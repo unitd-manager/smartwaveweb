@@ -11,7 +11,7 @@ const fetchProducts = async () => {
                 "Content-Type": "application/json",
             },
         });
-        console.log(response.data);
+
     } catch (error) {
         console.error("Error fetching products:", error);
     }

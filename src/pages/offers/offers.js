@@ -13,7 +13,7 @@ import ShopTopbar from "../../wrappers/product/ShopTopbar";
 import ShopProducts from "../../wrappers/product/ShopProducts";
 import api from "../../constants/api";
 
-const Offers = ({}) => {
+const Offers = () => {
   const [layout, setLayout] = useState("grid three-column");
   const [sortType, setSortType] = useState("");
   const [sortValue, setSortValue] = useState("");
@@ -24,15 +24,15 @@ const Offers = ({}) => {
   const [currentData, setCurrentData] = useState([]);
   const [sortedProducts, setSortedProducts] = useState([]);
   const [products, setProducts] = useState([]);
-  const [searchResults, setSearchResults] = useState([]);
+  //const [searchResults, setSearchResults] = useState([]);
 
   const [searchQuery, setSearchQuery] = useState("");
-  const [filteredProducts, setFilteredProducts] = useState([]);
+  //const [filteredProducts, setFilteredProducts] = useState([]);
 
   const location = useLocation();
   const history = useHistory();
 
-  console.log("search", searchQuery);
+
 
   useEffect(() => {
     const urlSearchParams = new URLSearchParams(location.search);
@@ -46,7 +46,7 @@ const Offers = ({}) => {
           setProducts(res.data.data);
         })
         .catch((err) => {
-          console.log(err);
+
         });
     } else {
       api
@@ -58,10 +58,10 @@ const Offers = ({}) => {
           setProducts(res.data.data);
         })
         .catch(() => {
-          console.log("error");
+
         });
     }
-    console.log("searchquery", query);
+
   }, [location]);
 
   const pageLimit = 15;
@@ -88,14 +88,14 @@ const Offers = ({}) => {
         sortType,
         sortValue
       );
-      console.log("sortedProducts", sortedProducts);
+
       const filterSortedProducts = getSortedOffersProducts(
         sortedProducts,
         filterSortType,
         filterSortValue
       );
       sortedProducts = filterSortedProducts;
-      console.log("sorted", sortedProducts);
+
       setSortedProducts(sortedProducts);
       setCurrentData(sortedProducts.slice(offset, offset + pageLimit));
     };

@@ -8,7 +8,7 @@ import MobileMenu from "../../components/header/MobileMenu";
 import HeaderTop from "../../components/header/HeaderTop";
 import api from "../../constants/api";
 import { getUser } from "../../common/user";
-import { addToCompare } from "../../redux/actions/compareActions";
+//import { addToCompare } from "../../redux/actions/compareActions";
 
 const Header = ({
   layout,
@@ -43,17 +43,17 @@ const Header = ({
       api.post('/contact/getCompareByContactId',{contact_id:user.contact_id})
       .then((res)=>{
         setCompareItems(res.data.data)
-      }).catch(err=>{console.log(err)})
+      }).catch(err=>{})
   
       api.post('/contact/getFavByContactId',{contact_id:user.contact_id})
       .then((res)=>{
         setWishlistItems(res.data.data)
-      }).catch(err=>{console.log(err)})
+      }).catch(err=>{})
      
       // api.post('/contact/getCartProductsByContactId',{contact_id:user.contact_id})
       // .then((res)=>{
       //   setCartItems(res.data.data)
-      // }).catch(err=>{console.log(err)})
+
     }
     
     },[])
@@ -64,7 +64,7 @@ const Header = ({
     api.get('/category/getAllCategory').then((res)=>{
       setCategories(res.data.data)
        
-           }).catch(err=>{console.log(err)})
+           }).catch(err=>{})
   },[])
  
   const handleScroll = () => {

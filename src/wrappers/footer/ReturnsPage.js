@@ -14,7 +14,7 @@ const StoreLocator = () => {
        setReturnPolicy(res.data.data);
        })
       .catch((err) => {
-        console.log(err);
+       
        });
    };  
 
@@ -26,7 +26,7 @@ const StoreLocator = () => {
         setAddress(res.data.data);
       })
       .catch((err) => {
-        console.log(err);
+        
       });
   };
 

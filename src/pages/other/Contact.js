@@ -24,7 +24,7 @@ export default function Contact({ location }) {
   const [address, setAddress] = useState();
   const [mailId, setmailId] = useState("");
   const [googlemapdata, setGoogleMapData] = useState('');
-
+console.log('mailId',mailId);
   const [user, setUser] = useState({
     first_name: "",
     last_name: "",

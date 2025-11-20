@@ -14,22 +14,22 @@ import api from "../../constants/api";
 import { useState } from "react";
 import { connect } from "react-redux";
 
-const BlogRightSidebar = ({}) => {
-  const [layout, setLayout] = useState("grid three-column");
+const BlogRightSidebar = () => {
+  const layout="grid three-column";
   const [sortType, setSortType] = useState("");
   const [sortValue, setSortValue] = useState("");
-  const [filterSortType, setFilterSortType] = useState("");
-  const [filterSortValue, setFilterSortValue] = useState("");
-  const [offset, setOffset] = useState(0);
-  const [currentPage, setCurrentPage] = useState(1);
+  const filterSortType="";
+  const filterSortValue="";
+  const offset=0;
+  //const [currentPage, setCurrentPage] = useState(1);
   const [currentData, setCurrentData] = useState([]);
   const [sortedProducts, setSortedProducts] = useState([]);
   const [products, setProducts] = useState([]);
-  const [searchResults, setSearchResults] = useState([]);
+  //const [searchResults, setSearchResults] = useState([]);
 
   const [searchQuery, setSearchQuery] = useState("");
-  const [filteredProducts, setFilteredProducts] = useState([]);
-
+  //const [filteredProducts, setFilteredProducts] = useState([]);
+ console.log("sortedproducts", sortedProducts);
   const location = useLocation();
   const history = useHistory();
 
@@ -64,19 +64,19 @@ const BlogRightSidebar = ({}) => {
   const pageLimit = 15;
   const { pathname } = location;
 
-  const getLayout = (layout) => {
-    setLayout(layout);
-  };
+  // const getLayout = (layout) => {
+  //   setLayout(layout);
+  // };
 
   const getSortParams = (sortType, sortValue) => {
     setSortType(sortType);
     setSortValue(sortValue);
   };
 
-  const getFilterSortParams = (sortType, sortValue) => {
-    setFilterSortType(sortType);
-    setFilterSortValue(sortValue);
-  };
+  // const getFilterSortParams = (sortType, sortValue) => {
+  //   setFilterSortType(sortType);
+  //   setFilterSortValue(sortValue);
+  // };
 
   useEffect(() => {
     const filter = async () => {

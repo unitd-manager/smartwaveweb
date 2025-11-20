@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
 import React, { Fragment, useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useToasts } from "react-toast-notifications";
 import MetaTags from "react-meta-tags";
 import { BreadcrumbsItem } from "react-breadcrumbs-dynamic";
@@ -13,7 +13,7 @@ import Breadcrumb from "../../wrappers/breadcrumb/Breadcrumb";
 import Rating from "../../components/product/sub-components/ProductRating";
 import imageBase from "../../constants/imageBase";
 import { getUser } from "../../common/user";
-import api from "../../constants/api";
+//import api from "../../constants/api";
 import { fetchCompareData,removeCompareData } from "../../redux/actions/compareItemActions";
 
 const Compare = ({
@@ -30,7 +30,7 @@ const Compare = ({
   const { addToast } = useToasts();
   const [user, setUser] = useState();
   // const [compareItems, setCompareItems] = useState([]);
-
+console.log(user);
   const deleteItemFromCompare = (Item) => {
    removeCompareData(Item,addToast)
   };
@@ -41,7 +41,7 @@ const Compare = ({
     if (userInfo) {
       fetchCompareData(userInfo,addToast)
     }
-  }, []);
+  },[addToast,fetchCompareData]);
 
   return (
     <Fragment>

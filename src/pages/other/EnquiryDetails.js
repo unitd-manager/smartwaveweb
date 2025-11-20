@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { FaArrowLeft, FaUpload, FaWhatsapp, FaFileDownload, FaFilePdf, FaTrash } from "react-icons/fa";
+import { FaArrowLeft, FaUpload, FaFileDownload, FaFilePdf, FaTrash } from "react-icons/fa";
 import { useHistory, useParams } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import LayoutOne from "../../layouts/Layout";
 import api from "../../constants/api";
 import moment from "moment";
 import { useToasts } from "react-toast-notifications";
-import { Alert, Badge, Button, Card, Col, Row } from "reactstrap";
+import { Badge, Card, Col, Row } from "reactstrap";
 import { Form } from "react-bootstrap";
 import ProductsLinkedModal from "../../components/EnquiryProductsLinked";
 import Swal from "sweetalert2";
@@ -18,14 +18,14 @@ const EnquiryDetails = () => {
   const [profile, setProfile] = useState({});
   const [receiptFile, setReceiptFile] = useState(null);
   const [receiptFileDoc, setReceiptFileDoc] = useState(null);
-  const [receiptArrival, setReceiptArrival] = useState(null);
-  const [receiptArrival1, setReceiptArrival1] = useState(null);
+ // const [receiptArrival, setReceiptArrival] = useState(null);
+  // const [receiptArrival1, setReceiptArrival1] = useState(null);
 
   const [receiptUrl, setReceiptUrl] = useState("");
   const [receiptUrl1, setReceiptUrl1] = useState("");
   const [receiptUrl2, setReceiptUrl2] = useState("");
   const [receiptUrl3, setReceiptUrl3] = useState("");
-  
+  console.log('receiptUrl2',receiptUrl2);
   
   const [receiptUrl4, setReceiptUrl4] = useState("");
   const [addressList, setAddressList] = useState([]);
@@ -33,11 +33,11 @@ const EnquiryDetails = () => {
   const [selectedAddress, setSelectedAddress] = useState(null); // State for selected address
   const[uploaded, setUploaded]=useState(null);
   const[uploaded1, setUploaded1]=useState(null);
-  const[uploaded2, setUploaded2]=useState(null);
+//   const[uploaded2, setUploaded2]=useState(null);
 
-
+// console.log('uploaded2',uploaded2);
   const [selectedAddressString, setSelectedAddressString] = useState('');
-  console.log('selectedAddressString',selectedAddressString);
+
   const { id } = useParams();
   const history = useHistory();
  const { addToast } = useToasts();
@@ -54,7 +54,7 @@ const EnquiryDetails = () => {
   address_country: profile.address_country || '',
 
 };
-console.log('profile',profile);
+
   useEffect(() => {
     api
     .post(`/contact/getContactsById`, { contact_id: user.contact_id })
@@ -62,14 +62,14 @@ console.log('profile',profile);
       setProfile(res.data.data[0]);
       
     })
-    .catch((err) => console.log(err));
+    .catch((err) => {});
     api
       .post(`/enquiry/getEnquiryById`, { enquiry_id: id })
       .then((res) => {
         setEnquiries(res.data.data[0]);
         
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {});
 
       api
       .post(`/enquiry/getEnquiryProductsByEnquiryId`, { enquiry_id: id })
@@ -77,7 +77,7 @@ console.log('profile',profile);
         setProductsLinked(res.data.data);
         
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {});
 
     api.post('/file/getListOfFiles', { record_id: id, room_name: 'PaymentReceipt' }).then((res) => {
       setReceiptUrl(res.data);
@@ -101,7 +101,7 @@ if(user){
       setAddressList(res.data.data);
       
     })
-    .catch((err) => console.log(err));
+    .catch((err) => {});
   }
 
   api
@@ -110,10 +110,10 @@ if(user){
     setTracking(res.data.data[0]);
     
   })
-  .catch((err) => console.log(err));
+  .catch((err) => {});
 
   
-  }, [id]);
+  }, [id,user]);
 
   const deleteFile = (fileId) => {
     Swal.fire({
@@ -129,7 +129,7 @@ if(user){
         api
           .post('/file/deleteFile', { media_id: fileId })
           .then((res) => {
-            console.log(res);
+
             Swal.fire('Deleted!', 'Media has been deleted.', 'success');
             //setViewLineModal(false)
 
@@ -160,7 +160,7 @@ if(user){
       setReceiptFile(file);
     }
   };
-console.log('receiptUrl',receiptUrl)
+
   const handleUpload = async () => {
     if (!receiptFile) {
       alert("Please select a PDF file first.");
@@ -168,6 +168,7 @@ console.log('receiptUrl',receiptUrl)
     }
 
     const formData = new FormData();
+    formData.append("enq_code", enquiries?.enquiry_code);
     formData.append("files", receiptFile);
     formData.append("enquiry_id", id);
     formData.append('record_id', id)
@@ -175,7 +176,7 @@ console.log('receiptUrl',receiptUrl)
     formData.append('alt_tag_data', 'PaymentReceipt')
     formData.append('description', 'PaymentReceipt')
     api.post('/file/uploadFiles',formData,{onUploadProgress:(filedata)=>{
-      console.log( Math.round((filedata.loaded/filedata.total)*100))
+
       setUploaded( Math.round((filedata.loaded/filedata.total)*100))                 
     }}).then(()=>{
       addToast("Files Uploaded Successfully", {
@@ -214,6 +215,7 @@ console.log('receiptUrl',receiptUrl)
     }
 
     const formData = new FormData();
+    formData.append("enq_code", enquiries?.enquiry_code);
     formData.append("files", receiptFileDoc);
     formData.append("enquiry_id", id);
     formData.append('record_id', id)
@@ -221,7 +223,7 @@ console.log('receiptUrl',receiptUrl)
     formData.append('alt_tag_data', 'OnDocPayment')
     formData.append('description', 'OnDocPayment')
     api.post('/file/uploadFiles',formData,{onUploadProgress:(filedata)=>{
-      console.log( Math.round((filedata.loaded/filedata.total)*100))
+
       setUploaded1( Math.round((filedata.loaded/filedata.total)*100))                 
     }}).then(()=>{
       addToast("Files Uploaded Successfully", {
@@ -239,50 +241,51 @@ console.log('receiptUrl',receiptUrl)
     })
   }; 
 
-  const handleArrival = (e) => {
-    const file = e.target.files[0];
+  // const handleArrival = (e) => {
+  //   const file = e.target.files[0];
 
-    if (file) {
-      if (file.type !== "application/pdf") {
-        alert("Only PDF files are allowed!");
-        e.target.value = "";
-        return;
-      }
-      setReceiptArrival(file);
-    }
-  };
+  //   if (file) {
+  //     if (file.type !== "application/pdf") {
+  //       alert("Only PDF files are allowed!");
+  //       e.target.value = "";
+  //       return;
+  //     }
+  //     setReceiptArrival(file);
+  //   }
+  // };
 
-  const handleUploadArrival = async () => {
-    if (!receiptArrival) {
-      alert("Please select a PDF file first.");
-      return;
-    }
+  // const handleUploadArrival = async () => {
+  //   if (!receiptArrival) {
+  //     alert("Please select a PDF file first.");
+  //     return;
+  //   }
 
-    const formData = new FormData();
-    formData.append("files", receiptArrival);
-    formData.append("enquiry_id", id);
-    formData.append('record_id', id)
-    formData.append('room_name', 'AfterArrival')
-    formData.append('alt_tag_data', 'AfterArrival')
-    formData.append('description', 'AfterArrival')
-    api.post('/file/uploadFiles',formData,{onUploadProgress:(filedata)=>{
-      console.log( Math.round((filedata.loaded/filedata.total)*100))
-      setUploaded2( Math.round((filedata.loaded/filedata.total)*100))                 
-    }}).then(()=>{
-      addToast("Files Uploaded Successfully", {
-        appearance: "success",
-        autoDismiss: true,
-      })
-      setTimeout(() => {
-          window.location.reload()
-      }, 400);
-    }).catch(()=>{                  
-      addToast("Unable to upload file", {
-        appearance: "error",
-        autoDismiss: true,
-      })                                
-    })
-  };
+  //   const formData = new FormData();
+    //formData.append("enq_code", enquiries?.enquiry_code);
+  //   formData.append("files", receiptArrival);
+  //   formData.append("enquiry_id", id);
+  //   formData.append('record_id', id)
+  //   formData.append('room_name', 'AfterArrival')
+  //   formData.append('alt_tag_data', 'AfterArrival')
+  //   formData.append('description', 'AfterArrival')
+  //   api.post('/file/uploadFiles',formData,{onUploadProgress:(filedata)=>{
+  //     console.log( Math.round((filedata.loaded/filedata.total)*100))
+  //     setUploaded2( Math.round((filedata.loaded/filedata.total)*100))                 
+  //   }}).then(()=>{
+  //     addToast("Files Uploaded Successfully", {
+  //       appearance: "success",
+  //       autoDismiss: true,
+  //     })
+  //     setTimeout(() => {
+  //         window.location.reload()
+  //     }, 400);
+  //   }).catch(()=>{                  
+  //     addToast("Unable to upload file", {
+  //       appearance: "error",
+  //       autoDismiss: true,
+  //     })                                
+  //   })
+  // };
 
   
 

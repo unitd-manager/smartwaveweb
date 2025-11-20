@@ -2,7 +2,6 @@ import React, {
   Fragment,
   useState,
   useEffect,
-  useMemo,
   useCallback,
 } from "react";
 import { Link, useHistory } from "react-router-dom";
@@ -33,14 +32,16 @@ const Cart = ({ location }) => {
   const history = useHistory();
   const [mailId, setmailId] = useState("");
   const [container, setContainer] = useState("");
+  console.log('mailId',mailId);
   const getEmail = () => {
     api.get("/setting/getMailId").then((res) => {
       setmailId(res.data.data[0]);
     });
   };
+
 const getContainer = () => {
   api.get("/setting/getContainer").then((res) => {
-    console.log("Container API Response:", res.data); // 👈 Add this line
+
     if (res.data.data.length > 0) {
       const value = res.data.data[0].value;
       try {
@@ -54,14 +55,14 @@ const getContainer = () => {
 };
 
 
-  const cartTotalPrice = useMemo(() => {
-    return cartItems.reduce((total, item) => {
-      const discountedPrice = item.discount_amount
-        ? item.price - item.discount_amount
-        : item.price;
-      return total + discountedPrice * item.qty;
-    }, 0);
-  }, [cartItems]);
+  // const cartTotalPrice = useMemo(() => {
+  //   return cartItems.reduce((total, item) => {
+  //     const discountedPrice = item.discount_amount
+  //       ? item.price - item.discount_amount
+  //       : item.price;
+  //     return total + discountedPrice * item.qty;
+  //   }, 0);
+  // }, [cartItems]);
 
   const handleIncreaseQuantity = useCallback(
     (item) => {
@@ -98,11 +99,11 @@ const getContainer = () => {
         placeEnquiriesForAllProducts('');
       });
   };
-console.log('user',user);
+
 
   const placeEnquiriesForAllProducts = async (code) => {
     if (!user) {
-      console.log("Please login");
+
       return;
     }
 
@@ -154,7 +155,7 @@ console.log('user',user);
 
     for (const productId in groupedCartItems) {
       const productsInGroup = groupedCartItems[productId];
-      const firstItemInGroup = productsInGroup[0]; // Use first item for general enquiry details
+     // const firstItemInGroup = productsInGroup[0]; // Use first item for general enquiry details
 
       const uniqueEnquiryCode = `${code}-${productId}`;
       const enquiryDetails = {
@@ -199,13 +200,13 @@ console.log('user',user);
             origins: item.origins,
             destination_port: item.destination_port,
           };
-          console.log('quoteitem',quoteItem);
+
           await api.post("/enquiry/insertQuoteItems", quoteItem);
-          console.log(`Quote item for ${item.title} added to enquiry ${insertedId}.`);
+
         }
-        console.log(`Enquiry for product group ${productId} placed successfully.`);
+
       } catch (err) {
-        console.error(`Error placing enquiry for product group ${productId}:`, err);
+  
       }
     }
 
@@ -231,7 +232,7 @@ console.log('user',user);
         text: "Your enquiry email has been successfully sent to the admin.",
       });
     } catch (error) {
-      console.error("❌ Error sending quote mail:", error);
+
       Swal.fire({
         icon: "error",
         title: "Email Failed",
@@ -275,20 +276,20 @@ console.log('user',user);
     api
       .post("/commonApi/sendProductAdmin", { to, subject, dynamic_template_data })
       .then((res) => {
-        console.log("Product admin email sent successfully.");
+
       })
       .catch((err) => {
-        console.error("Error sending product admin email:", err);
+  
       });
       
   // Send Email to Customer (Customer Dynamic Template)
 api
 .post("/commonApi/sendProduct",{ toCustomer, subject, dynamic_template_data })
 .then((res) => {
-  console.log("Customer email sent successfully.");
+
 })
 .catch((err) => {
-  console.error("Error sending customer email:", err);
+
 });
 
     {
@@ -353,7 +354,7 @@ api
         setUserData(res.data.data[0]);
       })
       .catch((err) => {
-        console.log(err);
+
       });
   };
 
@@ -362,13 +363,13 @@ api
       dispatch(fetchCartData(user));
     }
     getEmail();
-  }, []);
+  },[dispatch,user]);
 
   useEffect(() => {
     if (user) {
       getUser();
     }
-  }, []);
+  });
 useEffect(() => {
   getContainer();
 }, []);

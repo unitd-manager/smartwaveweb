@@ -7,7 +7,7 @@ import { insertWishlistData } from "../../redux/actions/wishlistItemActions";
 import { addToCart } from "../../redux/actions/cartActions";
 import { addToWishlist } from "../../redux/actions/wishlistActions";
 import { addToCompare } from "../../redux/actions/compareActions";
-import api from "../../constants/api";
+//import api from "../../constants/api";
 import ProductRelatedSingle from "../../components/product/ProductRelatedSingle";
 import { insertCompareData } from "../../redux/actions/compareItemActions";
 
@@ -32,14 +32,14 @@ const RelatedProductGrid = ({
 const {addToast}=useToasts();
 const dispatch=useDispatch();
 const[loginModal,setLoginModal]=useState(false);
-
+console.log('loginModal',loginModal);
   const onUpdateCart = (data) => {
     // if (avaiableQuantity === 0) {
     //   return;
     // }
-    console.log('updatedata',data);
+
   if(user){
-    console.log('user',user);
+
     data.contact_id=user.contact_id
     dispatch(updateCartData(data,addToast));
   }

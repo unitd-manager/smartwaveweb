@@ -11,7 +11,7 @@ import { useLocation, useHistory } from "react-router-dom";
 import OrderSidebar from "../../components/orders/orderSidebar";
 import OrderTopbar from "../../components/orders/orderTopbar";
 import OrderLists from "../../components/orders/orderLists";
-import useOrderData from "../../common/useOrderData";
+//import useOrderData from "../../common/useOrderData";
 import api from "../../constants/api";
 import { getUser } from "../../common/user";
 
@@ -31,7 +31,7 @@ const Orders = ({ products }) => {
   const location = useLocation();
   const history = useHistory();
 
-  console.log("search", searchQuery);
+
 
   useEffect(() => {
     const urlSearchParams = new URLSearchParams(location.search);
@@ -47,7 +47,7 @@ const Orders = ({ products }) => {
           setOrders(res.data.data);
         })
         .catch((err) => {
-          console.log(err);
+
         });
     } else {
       api
@@ -57,18 +57,18 @@ const Orders = ({ products }) => {
         })
         .then((res) => {
           setOrders(res.data.data);
-          console.log("orders", res.data.data);
-        })
-        .catch((err) => console.log(err));
-    }
-    console.log("searchquery", query);
-  }, [location]);
 
-  const data = useOrderData(
-    orders
-    // category,
-    // router.query.q
-  );
+        })
+
+    }
+
+  },[location,user]);
+
+  // const data = useOrderData(
+  //   orders
+  //   // category,
+  //   // router.query.q
+  // );
 
   const pageLimit = 15;
   const { pathname } = location;
@@ -99,9 +99,9 @@ const Orders = ({ products }) => {
         })
         .then((res) => {
           setOrders(res.data.data);
-          console.log("orders", res.data.data);
+
         })
-        .catch((err) => console.log(err));
+        .catch((err) => {});
 
       setUser(userData);
     }
@@ -122,12 +122,12 @@ const Orders = ({ products }) => {
       );
 
       sortedProducts = filterSortedProducts;
-      console.log("sorted orders", sortedProducts);
+
       setSortedProducts(sortedProducts);
       setCurrentData(sortedProducts.slice(offset, offset + pageLimit));
     };
     filter();
-  }, [offset, orders, sortType, sortValue, filterSortType, filterSortValue]);
+  },[offset, orders, sortType, sortValue, filterSortType, filterSortValue,user]);
   const handleSearchSubmit = (event) => {
     event.preventDefault();
     history.push(`?search=${searchQuery}`);

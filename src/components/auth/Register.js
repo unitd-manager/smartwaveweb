@@ -13,7 +13,7 @@ function Register() {
   const [firstName, setFirstName] = useState("");
   const [mobile, setMobile] = useState("");
   const [signupEmail, setSignupEmail] = useState("");
-  const [RegisterEmail, setRegisterEmail] = useState("");
+  //const [RegisterEmail, setRegisterEmail] = useState("");
   const [signupPassword, setSignupPassword] = useState("");
   const [signupData, setSignupData] = useState({
     first_name: "",
@@ -40,6 +40,7 @@ function Register() {
     });
   };
   const [userMessage, setMessage] = useState("");
+  console.log('user',userMessage);
   const getMessage = () => {
     api.get("/setting/getMessage").then((res) => {
       setMessage(res.data.data[0]);
@@ -143,11 +144,10 @@ function Register() {
           });
   };
   const sendMail = () => {
-    {
   
 
       // If both email and password are valid, proceed with form submission
-      {
+
         const to = signupData.email;
         const subject = "Registration";
         api
@@ -169,8 +169,8 @@ function Register() {
               autoDismiss: true,
             });
           });
-      }
-    }
+      
+    
     
 
       {

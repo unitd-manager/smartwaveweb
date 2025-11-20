@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import LayoutOne from "../../layouts/Layout";
-import { Row, Col, Container } from "reactstrap";
+//import LayoutOne from "../../layouts/Layout";
+//import { Row, Col, Container } from "reactstrap";
 import { useParams } from "react-router-dom/cjs/react-router-dom.min";
 import { useToasts } from "react-toast-notifications";
 import api from "../../constants/api";
@@ -15,7 +15,7 @@ function Review() {
 
   const handleRatingChange = (newRating) => {
     setRating(newRating);
-    console.log("rating", newRating);
+
   };
 
   const [addNoteData, setAddNoteData] = useState({
@@ -30,7 +30,7 @@ function Review() {
   };
 
   const SubmitNote = (e) => {
-    //setAddNoteData(console.log(addNoteData))
+
     e.preventDefault();
     addNoteData.contact_id = user.contact_id;
     addNoteData.rating = rating;

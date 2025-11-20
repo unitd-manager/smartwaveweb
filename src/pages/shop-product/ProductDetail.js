@@ -21,9 +21,9 @@ const ProductDetail = ({ location, product }) => {
   const [orderedProducts, setOrderedProducts] = useState([]);
   
   const [comments, setComments] = useState([]);
-  const [productImages, setProductImages] = useState([]);
+  const productImages = [];
   // const foundProduct = getProductsBySlug(productData, slug);
-  console.log("products", foundProduct);
+
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -43,16 +43,16 @@ const ProductDetail = ({ location, product }) => {
             category_id: res.data.data[0].category_id,
           })
           .then((resp) => {
-            const relateds=resp.data.data.filter((el)=>{return el.product_id !=res.data.data[0].product_id})
+            const relateds=resp.data.data.filter((el)=>{return el.product_id !==res.data.data[0].product_id})
             setRelatedProducts(relateds);
             setLoading(false);
           })
           .catch((err) => {
-            console.log(err);
+
           });
       })
       .catch((err) => {
-        console.log(err);
+
       });
   }, [id]);
   useEffect(() => {
@@ -66,7 +66,7 @@ const ProductDetail = ({ location, product }) => {
         setComments(res.data.data);
       })
       .catch((err) => {
-        console.log(err);
+
       });
 
       api
@@ -77,7 +77,7 @@ const ProductDetail = ({ location, product }) => {
         setOrderedProducts(res.data.data);
       })
       .catch((err) => {
-        console.log(err);
+
       });
   }, [id]);
   return (

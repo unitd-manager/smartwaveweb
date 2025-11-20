@@ -1,15 +1,15 @@
 import React, { Fragment } from "react";
-import { Link } from "react-router-dom";
+//import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
 import ReactHtmlParser from "react-html-parser";
-import imageBase from "../../constants/imageBase";
+//import imageBase from "../../constants/imageBase";
 
 export default function BlogPost({ editBlog, blogImages }) {
   BlogPost.propTypes = {
     editBlog: PropTypes.object,
     blogImages: PropTypes.any,
   };
-console.log('blogimages',blogImages)
+
   
   return (
     <Fragment>

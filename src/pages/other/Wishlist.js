@@ -5,7 +5,7 @@ import { useToasts } from "react-toast-notifications";
 import MetaTags from "react-meta-tags";
 import { BreadcrumbsItem } from "react-breadcrumbs-dynamic";
 import { connect, useDispatch } from "react-redux";
-import { getDiscountPrice } from "../../helpers/product";
+//import { getDiscountPrice } from "../../helpers/product";
 import {
   addToWishlist,
   deleteFromWishlist,
@@ -13,7 +13,7 @@ import {
 import { addToCart } from "../../redux/actions/cartActions";
 import LayoutOne from "../../layouts/Layout";
 import Breadcrumb from "../../wrappers/breadcrumb/Breadcrumb";
-import api from "../../constants/api";
+//import api from "../../constants/api";
 import { getUser } from "../../common/user";
 import imageBase from "../../constants/imageBase";
 import LottieComponent from "../../components/LottieComponent";
@@ -56,7 +56,7 @@ const onUpdateCart = (data) => {
     // if (avaiableQuantity === 0) {
     //   return;
     // }
-    console.log('updatedata',data);
+
  
     data.contact_id=user.contact_id
    dispatch(updateCartData(data,addToast))
@@ -119,12 +119,12 @@ const onUpdateCart = (data) => {
                           </thead>
                           <tbody>
                             {wishlistData.map((wishlistItem, key) => {
-                              const discountedPrice = getDiscountPrice(
-                                wishlistItem.price,
-                                wishlistItem.discount_amount
-                              );
-                              const finalProductPrice = wishlistItem.price;
-                              const finalDiscountedPrice = discountedPrice;
+                              // const discountedPrice = getDiscountPrice(
+                              //   wishlistItem.price,
+                              //   wishlistItem.discount_amount
+                              // );
+                              // const finalProductPrice = wishlistItem.price;
+                              //const finalDiscountedPrice = discountedPrice;
                               const cartItem = cartItems.find(
                                 (item) => item.product_id === wishlistItem.product_id
                               );

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { FaWhatsapp, FaCheckCircle, FaTimesCircle, FaClock, FaList } from "react-icons/fa";
+import { FaClock, FaList } from "react-icons/fa";
 import "bootstrap/dist/css/bootstrap.min.css";
 import LayoutOne from "../../layouts/Layout";
 import api from "../../constants/api";
@@ -38,9 +38,9 @@ const EnquiryHistory = () => {
         setEnquiries(sortedEnquiries);
       })
       .catch((err) => {
-        console.log(err);
+
       });
-  }, []);
+  });
 
   // Filter based on Enquiry Code & Order Code
   const filteredEnquiries = enquiries.filter(

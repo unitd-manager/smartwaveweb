@@ -16,7 +16,7 @@ const FaqPage = () => {
         setFaq(res.data.data);
       })
       .catch((err) => {
-        console.log(err);
+        
       });
   };
   

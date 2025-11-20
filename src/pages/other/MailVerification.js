@@ -16,8 +16,8 @@ const MailVerification = ({ location }) => {
     const urlSearchParams = new URLSearchParams(location.search);
     const query = urlSearchParams.get("token") || "";
     const token = query.replaceAll('"', '');
-    console.log('query',query);
-console.log('token',token);
+
+
     api
       .post("commonApi/resetVerification", { resetToken: token })
       .then(() => setSuccess(true))

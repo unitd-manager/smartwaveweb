@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
 import React, { Fragment, useState, useEffect } from "react";
-import Swiper from "react-id-swiper";
+//import Swiper from "react-id-swiper";
 import { v4 as uuid } from "uuid";
 // import { getProductCartQuantity } from "../../helpers/product";
 import { Modal } from "react-bootstrap";
@@ -9,7 +9,7 @@ import { connect, useDispatch, useSelector } from "react-redux";
 import { addToCart } from "../../redux/actions/cartActions";
 import { addToWishlist } from "../../redux/actions/wishlistActions";
 import { addToCompare } from "../../redux/actions/compareActions";
-import imageBase from "../../constants/imageBase";
+//import imageBase from "../../constants/imageBase";
 import LoginModal from "../LoginModal";
 import { insertCartData, updateCartData } from "../../redux/actions/cartItemActions";
 import { insertWishlistData, removeWishlistData } from "../../redux/actions/wishlistItemActions";
@@ -50,10 +50,10 @@ const ProductModal = ({
   const [loginModal, setLoginModal] = useState(false);
 
   console.log('productStockproduct',product);
-  console.log('productStock',productStock);
+ 
   console.log("proimage", product.images);
-  const [gallerySwiper, getGallerySwiper] = useState(null);
-  const [thumbnailSwiper, getThumbnailSwiper] = useState(null);
+  const gallerySwiper = null;
+  const thumbnailSwiper=null;
   const [selectedProductColor, setSelectedProductColor] = useState(
     product.variation ? product.variation[0].color : ""
   );
@@ -66,7 +66,8 @@ const ProductModal = ({
   const [quantityCount, setQuantityCount] = useState(1);
   const [sessionId, setSessionId] = useState("");
 console.log('modalcartitem',cartItem)
-
+ console.log('productStock',productStock);
+  console.log('sessionId',sessionId);
 const dispatch=useDispatch();
 
 
@@ -111,15 +112,15 @@ const wishlistItems=useSelector(state=>state.wishlistItems.wishlistItems);
       setLoginModal(true);
     }
   };
-  const onAddToCompare = (data) => {
-    if (user) {
-      data.contact_id = user.contact_id;
-      insertCompareData(data, addToast);
-    } else {
-      addToast("Please Login", { appearance: "warning", autoDismiss: true });
-      setLoginModal(true);
-    }
-  };
+  // const onAddToCompare = (data) => {
+  //   if (user) {
+  //     data.contact_id = user.contact_id;
+  //     insertCompareData(data, addToast);
+  //   } else {
+  //     addToast("Please Login", { appearance: "warning", autoDismiss: true });
+  //     setLoginModal(true);
+  //   }
+  // };
   useEffect(() => {
     if (
       gallerySwiper !== null &&
@@ -132,37 +133,37 @@ const wishlistItems=useSelector(state=>state.wishlistItems.wishlistItems);
     }
   }, [gallerySwiper, thumbnailSwiper]);
 
-  const gallerySwiperParams = {
-    getSwiper: getGallerySwiper,
-    spaceBetween: 10,
-    loopedSlides: 4,
-    loop: true,
-  };
+  // const gallerySwiperParams = {
+  //   getSwiper: getGallerySwiper,
+  //   spaceBetween: 10,
+  //   loopedSlides: 4,
+  //   loop: true,
+  // };
 
-  const thumbnailSwiperParams = {
-    getSwiper: getThumbnailSwiper,
-    spaceBetween: 10,
-    slidesPerView: 4,
-    loopedSlides: 4,
-    touchRatio: 0.2,
-    freeMode: true,
-    loop: true,
-    slideToClickedSlide: true,
-    navigation: {
-      nextEl: ".swiper-button-next",
-      prevEl: ".swiper-button-prev",
-    },
-    renderPrevButton: () => (
-      <button className="swiper-button-prev ht-swiper-button-nav">
-        <i className="pe-7s-angle-left" />
-      </button>
-    ),
-    renderNextButton: () => (
-      <button className="swiper-button-next ht-swiper-button-nav">
-        <i className="pe-7s-angle-right" />
-      </button>
-    ),
-  };
+  // const thumbnailSwiperParams = {
+  //   getSwiper: getThumbnailSwiper,
+  //   spaceBetween: 10,
+  //   slidesPerView: 4,
+  //   loopedSlides: 4,
+  //   touchRatio: 0.2,
+  //   freeMode: true,
+  //   loop: true,
+  //   slideToClickedSlide: true,
+  //   navigation: {
+  //     nextEl: ".swiper-button-next",
+  //     prevEl: ".swiper-button-prev",
+  //   },
+  //   renderPrevButton: () => (
+  //     <button className="swiper-button-prev ht-swiper-button-nav">
+  //       <i className="pe-7s-angle-left" />
+  //     </button>
+  //   ),
+  //   renderNextButton: () => (
+  //     <button className="swiper-button-next ht-swiper-button-nav">
+  //       <i className="pe-7s-angle-right" />
+  //     </button>
+  //   ),
+  // };
   useEffect(() => {
     const userData = localStorage.getItem("user")
       ? localStorage.getItem("user")

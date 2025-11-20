@@ -15,13 +15,13 @@ const[mostPopularProducts,setMostPopularProducts]=useState([]);
 useEffect(()=>{
 api.get('/product/getNewProducts').then((res)=>{
   setNewProducts(res.data.data)
-}).catch(err=>{console.log(err)})
+}).catch(err=>{})
 api.get('/product/getBestSellingProducts').then((res)=>{
   setBestSellingProducts(res.data.data)
-}).catch(err=>{console.log(err)})
+}).catch(err=>{})
 api.get('/product/getMostPopularProducts').then((res)=>{
   setMostPopularProducts(res.data.data)
-}).catch(err=>{console.log(err)})
+}).catch(err=>{})
 },[])
   return (
     <div

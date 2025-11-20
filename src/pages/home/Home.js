@@ -4,17 +4,17 @@ import Layout from "../../layouts/Layout";
 import TabProductTwo from "../../wrappers/product/TabProduct";
 import TabProductThree from "../../wrappers/product/BestSeller";
 import TabProductFour from "../../wrappers/product/MostPopular";
-import FeatureIconTwo from "../../wrappers/feature-icon/FeatureIcon";
+//import FeatureIconTwo from "../../wrappers/feature-icon/FeatureIcon";
 import FeatureIcon from "../../wrappers/feature-icon/FeatureIcon";
 
-import BlogFeatured from "../../wrappers/blog-featured/BlogFeatured";
+//import BlogFeatured from "../../wrappers/blog-featured/BlogFeatured";
 import DealProductSlider from "../../components/DealSlider";
 // import HeroSlider from "../../wrappers/hero-slider/HeroSlider";
 import api from "../../constants/api";
 import HeroSliderNine from "../../wrappers/hero-slider/HeroSliderNine";
-import TopBrands from "../../components/TopBrands";
+//import TopBrands from "../../components/TopBrands";
 import FeaturesSection from "../../components/FeaturesSection";
-import DiscountModal from "../../components/DiscountModal";
+//import DiscountModal from "../../components/DiscountModal";
 
 const Home = () => {
   const slideInterval = 3000;
@@ -45,18 +45,16 @@ const Home = () => {
         const banners = res.data.data;
   
         // Use forEach to iterate through the array of banners
-        banners.forEach((banner, index) => {
-          console.log(`Banner ${index + 1}:`, banner);  // Logs each banner's data
-        });
+        
   
         // Now set the state with the fetched data
         setSliderData(banners);
   
         // Logging the entire response data for debugging
-        console.log("sliderData", res.data);
+
       })
       .catch(error => {
-        console.log("error", error);
+
       });
   };
   
@@ -80,7 +78,7 @@ const Home = () => {
         setBestSellingProducts(res.data.data);
       })
       .catch((err) => {
-        console.log(err);
+
       });
   };
 
@@ -103,7 +101,7 @@ const Home = () => {
         setNewProducts(res.data.data);
       })
       .catch((err) => {
-        console.log(err);
+
       });
   };
   const getMostPopularProducts = () => {
@@ -125,7 +123,7 @@ const Home = () => {
         setMostPopularProducts(res.data.data);
       })
       .catch((err) => {
-        console.log(err);
+
       });
   };
 
@@ -151,7 +149,7 @@ const Home = () => {
         setOfferProducts(res.data.data);
       })
       .catch(() => {
-        console.log("error");
+
       });
   };
 
