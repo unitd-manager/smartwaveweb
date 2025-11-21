@@ -214,13 +214,7 @@ export const getSortedProducts = async (products, sortType, sortValue,sortarray)
   } 
   else if (sortType && !sortValue) {
     if (sortType === "tag") {
-      try {
-        const response = await api.get('/product/getAllProducts');
-        return response.data.data;
-      } catch (error) {
-        console.error("Error fetching all products:", error);
-        return [];
-      }
+      return products;
     }
   }
 

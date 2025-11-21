@@ -6,7 +6,7 @@ const SubcategoriesTree = ({
   selectedSubCategories, setSelectedSubCategories,
   selectedSubCategoryTypes, setSelectedSubCategoryTypes
 }) => {
-console.log('selectedSubCategories',selectedSubCategories);
+
   const handleSubcategorySelection = (subcategoryId) => {
     let updatedSubCategories = selectedSubCategories.includes(subcategoryId)
       ? selectedSubCategories.filter(id => id !== subcategoryId) // Remove if already selected
@@ -35,7 +35,7 @@ console.log('selectedSubCategories',selectedSubCategories);
       getSortParams("subcategorytype",typeId ,updatedTypes);
       }
       if(updatedTypes.length=== 0){
-        getSortParams("subcategory", typeId,selectedSubCategories);
+        getSortParams("category", categoryId);
       }
   };
 

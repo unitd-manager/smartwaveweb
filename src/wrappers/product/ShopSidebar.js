@@ -6,7 +6,7 @@ import ShopCategories from "../../components/product/ShopCategories";
 import ShopTag from "../../components/product/ShopTag";
 import api from "../../constants/api";
 
-const ShopSidebar = ({ products, getSortParams, selectedCategories,setSelectedCategories,sideSpaceClass,handleSearchSubmit,handleSearchChange }) => {
+const ShopSidebar = ({ products, getSortParams, getFilterSortParams, selectedCategories,setSelectedCategories,sideSpaceClass,handleSearchSubmit,handleSearchChange }) => {
 
   const uniqueTags = getIndividualTags(products);
 const[categories,setCategories]=useState([]);
@@ -14,22 +14,22 @@ const[subCategories,setSubCategories]=useState([]);
 const[subCategoryTypes,setSubCategoryTypes]=useState([]);
 const[selectedSubCategory,setSelectedSubCategory]=useState([]);
 const[selectedSubCategoryTypes,setSelectedSubCategoryTypes]=useState([]);
-console.log('subCategoryTypes',subCategoryTypes);
-console.log('products',products)
-console.log('tags',uniqueTags);
+
+
+
   useEffect(()=>{
     api.get('/category/getAllCategory').then((res)=>{
      setCategories(res.data.data)
       
-          }).catch(err=>{console.log(err)})
+          }).catch(err=>{})
           api.get('/category/getAllSubCategory').then((res)=>{
             setSubCategories(res.data.data)
              
-                 }).catch(err=>{console.log(err)})
+                 }).catch(err=>{})
                  api.get('/category/getAllSubCategoryTypes').then((res)=>{
                   setSubCategoryTypes(res.data.data)
                    
-                       }).catch(err=>{console.log(err)})
+                       }).catch(err=>{})
   },[])
   return (
     <div className={`sidebar-style ${sideSpaceClass ? sideSpaceClass : ""}`}>
@@ -51,13 +51,15 @@ console.log('tags',uniqueTags);
       />
 
  {/* filter by tag */}
-      <ShopTag tags={uniqueTags} getSortParams={getSortParams} />
+      
+      <ShopTag tags={uniqueTags} getFilterSortParams={getFilterSortParams}  getSortParams={getSortParams} />
     </div>
   );
 };
 
 ShopSidebar.propTypes = {
   getSortParams: PropTypes.func,
+  getFilterSortParams: PropTypes.func,
   products: PropTypes.array,
   sideSpaceClass: PropTypes.string,
   handleSearchSubmit:PropTypes.func,

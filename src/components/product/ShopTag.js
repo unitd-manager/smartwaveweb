@@ -9,11 +9,11 @@ const ShopTag = ({ tags, getSortParams }) => {
   const handleTagClick = (tag,e) => {
     if (selectedTags.includes(tag)) {
       setSelectedTags(selectedTags.filter(t => t !== tag));
-      getSortParams("tag",'');
+      getSortParams && getSortParams("tag",'');
       setInactiveSort(e);
     } else {
       setSelectedTags([...selectedTags, tag]);
-      getSortParams("tag", tag);
+      getSortParams && getSortParams("tag", tag);
       setActiveSort(e);
     }
     console.log('selected tags',selectedTags)
