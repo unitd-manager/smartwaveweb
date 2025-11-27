@@ -7,6 +7,8 @@ import Breadcrumb from "../../wrappers/breadcrumb/Breadcrumb";
 import LocationMap from "../../components/contact/LocationMap";
 import api from "../../constants/api";
 import { useToasts } from "react-toast-notifications";
+import Select from 'react-select';
+import axios from 'axios';
 
 export default function Contact({ location }) {
   const { pathname } = location;
@@ -30,6 +32,7 @@ console.log('mailId',mailId);
     last_name: "",
     email: "",
     phone: "",
+    mobile_country_code: "", // New state for country code
     comments: "",
     enquiry_code: "",
     company_name: "",
@@ -37,10 +40,29 @@ console.log('mailId',mailId);
     gst_number: "",
   });
 
+  const [countries, setCountries] = useState([]);
+
+  useEffect(() => {
+    axios.get('https://restcountries.com/v3.1/all?fields=name,idd,cca2')
+      .then(res => {
+          const list = res.data.map(c => ({
+            name: c.name.common,
+            dial_code: c.idd && c.idd.root && c.idd.suffixes && c.idd.suffixes.length > 0 ? `${c.idd.root}${c.idd.suffixes[0]}` : '',
+            cca2: c.cca2
+          }));
+        setCountries(list);
+      });
+  }, []);
+
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    const nextValue = name === "gst_number" ? value.toUpperCase() : value;
-    setUser((prevUser) => ({ ...prevUser, [name]: nextValue }));
+    if (e && e.target && e.target.name) {
+      const { name, value } = e.target;
+      const nextValue = name === "gst_number" ? value.toUpperCase() : value;
+      setUser((prevUser) => ({ ...prevUser, [name]: nextValue }));
+    } else if (e && e.dial_code) {
+      // This handles the react-select component's change event
+      setUser((prevUser) => ({ ...prevUser, mobile_country_code: e.dial_code }));
+    }
   };
 
   // const isValidEmail = (email) => {
@@ -70,6 +92,14 @@ console.log('mailId',mailId);
 
     if (!user.first_name || user.first_name.trim() === "") {
       addToast("Please enter your name.", {
+        appearance: "error",
+        autoDismiss: true,
+      });
+      return false;
+    }
+
+    if (!user.mobile_country_code || user.mobile_country_code.trim() === "") {
+      addToast("Please select a country code.", {
         appearance: "error",
         autoDismiss: true,
       });
@@ -108,21 +138,21 @@ console.log('mailId',mailId);
       return false;
     }
 
-    if (!user.gst_number || user.gst_number.trim() === "") {
-      addToast("Please enter your GST number.", {
-        appearance: "error",
-        autoDismiss: true,
-      });
-      return false;
-    }
+    // if (!user.gst_number || user.gst_number.trim() === "") {
+    //   addToast("Please enter your GST number.", {
+    //     appearance: "error",
+    //     autoDismiss: true,
+    //   });
+    //   return false;
+    // }
 
-    if (!isValidGSTIN(user.gst_number)) {
-      addToast("Please enter a valid 15-character GSTIN (e.g., 27ABCDE1234F1Z5).", {
-        appearance: "error",
-        autoDismiss: true,
-      });
-      return false;
-    }
+    // if (!isValidGSTIN(user.gst_number)) {
+    //   addToast("Please enter a valid 15-character GSTIN (e.g., 27ABCDE1234F1Z5).", {
+    //     appearance: "error",
+    //     autoDismiss: true,
+    //   });
+    //   return false;
+    // }
 
     return true;
   };
@@ -136,6 +166,7 @@ console.log('mailId',mailId);
         last_name: user.last_name,
         email: user.email,
         phone: user.phone,
+        mobile_country_code: user.mobile_country_code,
         comments: user.comments,
         enquiry_code: code,
         company_name: user.company_name,
@@ -152,6 +183,7 @@ console.log('mailId',mailId);
           last_name: "",
           email: "",
           phone: "",
+          mobile_country_code: "",
           comments: "",
           enquiry_code: "",
           company_name: "",
@@ -358,14 +390,42 @@ console.log('mailId',mailId);
                         />
                       </div>
                       <div className="col-lg-12">
-                        <input
-                          type="text"
-                          className="form-control mb-4"
-                          placeholder="Contact No *"
-                          name="phone"
-                          value={user.phone}
-                          onChange={handleChange}
-                        />
+                        <div className="d-flex mb-4">
+                          <Select
+                            name="mobile_country_code"
+                            value={countries && user?.mobile_country_code ? countries.find(option => option.dial_code === user.mobile_country_code) : null}
+                            options={countries || []}
+                            placeholder="Code"
+                            onChange={(selectedOption) => handleChange(selectedOption)}
+                            getOptionLabel={(option) => (
+                              <div style={{ display: 'flex', alignItems: 'center' }}>
+                                <img
+                                  src={`https://flagcdn.com/w20/${option.cca2.toLowerCase()}.png`}
+                                  alt={`${option.name} flag`}
+                                  style={{ marginRight: '10px', width: '20px' }}
+                                />
+                                {option.name} ({option.dial_code})
+                              </div>
+                            )}
+                            getOptionValue={(option) => option.dial_code}
+                            styles={{
+                              control: (base) => ({
+                                ...base,
+                                maxWidth: '120px',
+                                marginRight: '8px',
+                                height: '38px',
+                              }),
+                            }}
+                          />
+                          <input
+                            type="text"
+                            className="form-control"
+                            placeholder="Contact No *"
+                            name="phone"
+                            value={user.phone}
+                            onChange={handleChange}
+                          />
+                        </div>
                       </div>
                       <div className="col-12">
                         <input
@@ -387,7 +447,7 @@ console.log('mailId',mailId);
                           rows="3"
                         ></textarea>
                       </div>
-                      <div className="col-12">
+                      {/* <div className="col-12">
                         <input
                           type="text"
                           className="form-control mb-4"
@@ -399,7 +459,7 @@ console.log('mailId',mailId);
                         <small className="text-muted" style={{ display: 'block', marginTop: '-8px' }}>
                           For invoicing compliance. Format: 15 characters (e.g., 27ABCDE1234F1Z5).
                         </small>
-                      </div>
+                      </div> */}
                       <div className="col-12">
                         <textarea
                           name="comments"

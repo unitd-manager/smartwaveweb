@@ -89,19 +89,18 @@ const getContainer = () => {
     [dispatch, addToast]
   );
 
-  const generateCode = () => {
-    api
-      .post("/commonApi/getCodeValues", { type: "enquiry" })
-      .then((res) => {
-        placeEnquiriesForAllProducts(res.data.data);
-      })
-      .catch(() => {
-        placeEnquiriesForAllProducts('');
-      });
+  const getNewEnquiryCode = async () => {
+    try {
+      const res = await api.post("/commonApi/getCodeValues", { type: "enquiry" });
+      return res.data.data;
+    } catch (error) {
+      console.error("Error generating enquiry code:", error);
+      return ''; // Return empty string on error
+    }
   };
 
 
-  const placeEnquiriesForAllProducts = async (code) => {
+  const placeEnquiriesForAllProducts = async () => {
     if (!user) {
 
       return;
@@ -145,26 +144,16 @@ const getContainer = () => {
   return;
 }
 
-    const groupedCartItems = cartItems.reduce((acc, item) => {
-      if (!acc[item.origins]) {
-        acc[item.origins] = [];
-      }
-      acc[item.origins].push(item);
-      return acc;
-    }, {});
+    for (const item of cartItems) {
+      const enquiryCode = await getNewEnquiryCode();
 
-    for (const productId in groupedCartItems) {
-      const productsInGroup = groupedCartItems[productId];
-     // const firstItemInGroup = productsInGroup[0]; // Use first item for general enquiry details
-
-      const uniqueEnquiryCode = `${code}-${productId}`;
       const enquiryDetails = {
         contact_id : user.contact_id,
         enquiry_date : new Date().toISOString().split('T')[0],
         enquiry_type : 'Enquiry and order for Retail products.',
         status : 'New',
-        title : `Enquiry for ${productsInGroup.map(p => p.title).join(', ')} from ` + userData.first_name,      
-        enquiry_code: uniqueEnquiryCode,
+        title : `Enquiry for ${item.title} from ` + userData.first_name,      
+        enquiry_code: enquiryCode,
         creation_date : new Date().toISOString().split('T')[0],
         created_by: userData.first_name,
         first_name: userData.first_name,
@@ -185,28 +174,25 @@ const getContainer = () => {
         const res = await api.post("/enquiry/insertEnquiry", enquiryDetails);
         const insertedId = res.data.data.insertId;
 
-        for (const item of productsInGroup) {
-          const quoteItem = {
-            enquiry_id: insertedId, // Use the insertedId for the group's enquiry
-            quantity: item.qty,
-            product_id: item.product_id,
-            category_id: item.category_id,
-            sub_category_id: item.sub_category_id,
-            created_by: userData.first_name,
-            first_name: userData.first_name,
-            email: userData.email,
-            grades: item.grade,
-            counts: item.counts,
-            origins: item.origins,
-            destination_port: item.destination_port,
-          };
+        const quoteItem = {
+          enquiry_id: insertedId,
+          quantity: item.qty,
+          product_id: item.product_id,
+          category_id: item.category_id,
+          sub_category_id: item.sub_category_id,
+          created_by: userData.first_name,
+          first_name: userData.first_name,
+          email: userData.email,
+          grades: item.grade,
+          counts: item.counts,
+          origins: item.origins,
+          destination_port: item.destination_port,
+        };
 
-          await api.post("/enquiry/insertQuoteItems", quoteItem);
-
-        }
+        await api.post("/enquiry/insertQuoteItems", quoteItem);
 
       } catch (err) {
-  
+        console.error("Error placing enquiry for product", item.title, err);
       }
     }
 
@@ -363,13 +349,13 @@ api
       dispatch(fetchCartData(user));
     }
     getEmail();
-  },[dispatch,user]);
+  },[]);
 
   useEffect(() => {
     if (user) {
       getUser();
     }
-  });
+  },[]);
 useEffect(() => {
   getContainer();
 }, []);
@@ -460,7 +446,7 @@ useEffect(() => {
 
                 <div className="grand-totall">
                   <div className="button-group">
-                    <Link onClick={() => generateCode()} className="checkout-btn">
+                    <Link onClick={() => placeEnquiriesForAllProducts()} className="checkout-btn">
                       Request for Quote
                     </Link>
                     <button
