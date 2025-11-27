@@ -11,8 +11,9 @@ import Breadcrumb from "../../wrappers/breadcrumb/Breadcrumb";
 //import PictureAttachmentModalV3 from "../../components/ReturnOrder/PictureAttachmentModalV3";
 import api from "../../constants/api";
 import { Input } from "reactstrap";
-
+import axios from 'axios';
 import imageBase from "../../constants/imageBase";
+import Select from 'react-select';;
 
 const MyAccount = ({ location }) => {
   const { pathname } = location;
@@ -81,17 +82,19 @@ const MyAccount = ({ location }) => {
   };
 
   const validatePan = (pan) => {
-    const panPattern = /^[A-Z]{5}[0-9]{4}[A-Z]{1}$/;
+     const panPattern = /^[A-Za-z0-9]+$/;
     return panPattern.test(pan);
   };  
 
   const validateIec = (iec) => {
-    const iecPattern = /^[A-Z0-9]{10}$/i;
+    //const iecPattern = /^[A-Z0-9]{10}$/i;
+    const iecPattern = /^[A-Za-z0-9]+$/;
+
     return iecPattern.test(iec);
   };  
 
   const validateFssai = (fssai) => {
-    const fssaiPattern = /^[A-Za-z0-9]{14}$/;
+    const fssaiPattern = /^[A-Za-z0-9]+$/;
     return fssaiPattern.test(fssai);
   };
 
@@ -229,6 +232,22 @@ const MyAccount = ({ location }) => {
       });
   };
   
+const [countries, setCountries] = useState([]);
+
+useEffect(() => {
+  axios.get('https://restcountries.com/v3.1/all?fields=name,idd,cca2')
+    .then(res => {
+        console.log('restcountries.com API response:', res.data);
+        const list = res.data.map(c => ({
+          name: c.name.common,
+          dial_code: c.idd && c.idd.root && c.idd.suffixes && c.idd.suffixes.length > 0 ? `${c.idd.root}${c.idd.suffixes[0]}` : '',
+          cca2: c.cca2
+        }));
+      console.log('diallist',list)
+      setCountries(list);
+    });
+}, []);
+
   const updateUserAddress = () => {
     setAddressError("");
     setCityError("");
@@ -415,23 +434,51 @@ const MyAccount = ({ location }) => {
 
                               {/* Telephone Field */}
                               <div className="col-12 col-md-6">
-                              {mobileError && <span className="error">{mobileError}</span>}
-                              <div className="billing-info">
-                                <label>Mobile</label>
-                                  <input
-                                    type="text"
-                                    name="mobile"
-                                    value={userData && userData.mobile}
-                                    onChange={handleUserData}
-                                    className="form-control"
-                                  />
+                                {mobileError && <span className="error">{mobileError}</span>}
+                                <div className="billing-info">
+                                  <label>Mobile</label>
+                                  <div className="d-flex">
+                                    <Select
+                                      name="mobile_country_code"
+                                      value={countries && userData?.mobile_country_code ? countries.find(option => option.dial_code === userData.mobile_country_code) : null}
+                                      options={countries || []}
+                                      placeholder="Code"
+                                      onChange={(selectedOption) => handleUserData({ target: { name: 'mobile_country_code', value: selectedOption?.dial_code || '' } })}
+                                      getOptionLabel={(option) => (
+                                        <div style={{ display: 'flex', alignItems: 'center' }}>
+                                          <img
+                                            src={`https://flagcdn.com/w20/${option.cca2.toLowerCase()}.png`}
+                                            alt={`${option.name} flag`}
+                                            style={{ marginRight: '10px', width: '20px' }}
+                                          />
+                                          {option.name} ({option.dial_code})
+                                        </div>
+                                      )}
+                                      getOptionValue={(option) => option.dial_code}
+                                      styles={{
+                                        control: (base) => ({
+                                          ...base,
+                                          maxWidth: '120px',
+                                          marginRight: '8px',
+                                          height: '38px', // Adjust this value as needed
+                                        }),
+                                      }}
+                                    />
+                                    <input
+                                      type="text"
+                                      name="mobile"
+                                      value={userData && userData.mobile}
+                                      onChange={handleUserData}
+                                      className="form-control"
+                                    />
+                                  </div>
                                 </div>
                               </div>
 
                             <div className="col-12 col-md-6">
                               {panError && <span className="error">{panError}</span>}
                               <div className="billing-info">
-                                  <label>PAN</label>
+                                  <label>PAN/BRC</label>
                                   <input
                                     type="text"
                                     name="pan"
@@ -445,7 +492,7 @@ const MyAccount = ({ location }) => {
                               <div className="col-12 col-md-6">
                               {iecError && <span className="error">{iecError}</span>}
                               <div className="billing-info">
-                                  <label>IEC</label>
+                                  <label>Import Export License</label>
                                   <input
                                     type="text"
                                     name="iec"
@@ -472,7 +519,7 @@ const MyAccount = ({ location }) => {
 
                               <div className="col-12 col-md-6">
                               <div className="billing-info">
-                                  <label>GST</label>
+                                  <label>GST/Tax Registration Number</label>
                                   <input
                                     type="text"
                                     name="gst"
@@ -663,7 +710,7 @@ const MyAccount = ({ location }) => {
                                 <div className="col-lg-6 col-md-6">
                                 {pinCodeError && <span className="error">{pinCodeError}</span>}
                                   <div className="billing-info">
-                                    <label>Pin Code</label>
+                                    <label>Zip Code</label>
                                     <input
                                       type="text"
                                       name="address_po_code"
