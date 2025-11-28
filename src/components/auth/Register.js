@@ -10,6 +10,7 @@ function Register() {
   const [mobileError, setMobileError] = useState("");
   const [signUpEmailError, setSignUpEmailError] = useState("");
   const [signupPasswordError, setSignupPasswordError] = useState("");
+  const [userTypeError, setUserTypeError] = useState("");
   const [firstName, setFirstName] = useState("");
   const [mobile, setMobile] = useState("");
   const [signupEmail, setSignupEmail] = useState("");
@@ -21,6 +22,7 @@ function Register() {
     email: "",
     password: "",
     otp_no:"",
+    user_type: "customer", // Default to customer
      });
 
   const [otp, setOTP] = useState('');
@@ -76,6 +78,7 @@ function Register() {
       setMobileError("");
       setSignUpEmailError("");
       setSignupPasswordError("");
+      setUserTypeError("");
 
       let hasError = false;
 
@@ -102,6 +105,11 @@ function Register() {
         hasError = true;
       }
 
+      if (!signupData.user_type) {
+        setUserTypeError("Please select a user type.");
+        hasError = true;
+      }
+
       if (hasError) {
         return;
       }
@@ -111,6 +119,16 @@ function Register() {
           " ",
           signupData.last_name
         );
+        if(signupData.user_type ==="customer"){
+
+          signupData.customer = 1;
+           signupData.supplier = 0;
+        }
+         if(signupData.user_type ==="supplier"){
+
+            signupData.supplier = 1;
+             signupData.customer = 0;
+        }
         signupData.otp_no = otp;
         signupData.creation_date = new Date().toLocaleString();
         signupData.date_of_creation = new Date().toLocaleString();
@@ -260,6 +278,32 @@ function Register() {
           name="otp_no"
           value={otp}
           />   
+          {userTypeError && <span className="error">{userTypeError}</span>}
+          <div className="user-type-radio" style={{ marginBottom: '15px' }}>
+            <label style={{ marginRight: '15px' }}>
+              <input
+                type="radio"
+                name="user_type"
+                value="supplier"
+                checked={signupData.user_type === "supplier"}
+                onChange={handleSignupData}
+                style={{ marginRight: '5px' }}
+              />
+              Supplier
+            </label>
+            <label>
+              <input
+                type="radio"
+                name="user_type"
+                value="customer"
+                checked={signupData.user_type === "customer"}
+                onChange={handleSignupData}
+                style={{ marginRight: '5px' }}
+              />
+              Customer
+            </label>
+          </div>
+
           <div className="button-box">
             <button
               type="submit"
