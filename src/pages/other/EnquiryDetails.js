@@ -113,7 +113,7 @@ if(user){
   .catch((err) => {});
 
   
-  }, [id,user]);
+  }, []);
 
   const deleteFile = (fileId) => {
     Swal.fire({

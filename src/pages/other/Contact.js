@@ -74,11 +74,11 @@ console.log('mailId',mailId);
     return re.test(email);
   };
   
-  // Indian GSTIN format: 15 chars (2 digits state code, 10 PAN, 1 entity code, 1 'Z', 1 checksum)
-  const isValidGSTIN = (gstin) => {
-    const re = /^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$/;
-    return re.test((gstin || "").toUpperCase().trim());
-  };
+  // // Indian GSTIN format: 15 chars (2 digits state code, 10 PAN, 1 entity code, 1 'Z', 1 checksum)
+  // const isValidGSTIN = (gstin) => {
+  //   const re = /^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$/;
+  //   return re.test((gstin || "").toUpperCase().trim());
+  // };
   
 
   const validateForm = () => {
