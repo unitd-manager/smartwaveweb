@@ -417,6 +417,9 @@ console.log('mailId',mailId);
                                 display: 'flex',
                                 alignItems: 'center',
                                 justifyContent: 'center',
+                                border: '1px solid #ced4da',
+                                boxShadow: 'none',
+                                '&:hover': { border: '1px solid #ced4da' },
                               }),
                               menu: (base) => ({
                                 ...base,
@@ -430,6 +433,15 @@ console.log('mailId',mailId);
                                 ...base,
                                 textAlign: 'center',
                                 lineHeight: '38px',
+                              }),
+                              dropdownIndicator: (base) => ({
+                                ...base,
+                                padding: 0,
+                                paddingRight: '8px',
+                                borderLeft: 'none',
+                              }),
+                              indicatorSeparator: () => ({
+                                display: 'none',
                               }),
                             }}
                             menuPlacement="auto"
