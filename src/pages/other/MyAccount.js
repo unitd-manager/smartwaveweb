@@ -437,40 +437,107 @@ useEffect(() => {
                                 {mobileError && <span className="error">{mobileError}</span>}
                                 <div className="billing-info">
                                   <label>Mobile</label>
-                                  <div className="d-flex">
-                                    <Select
-                                      name="mobile_country_code"
-                                      value={countries && userData?.mobile_country_code ? countries.find(option => option.dial_code === userData.mobile_country_code) : null}
-                                      options={countries || []}
-                                      placeholder="Code"
-                                      onChange={(selectedOption) => handleUserData({ target: { name: 'mobile_country_code', value: selectedOption?.dial_code || '' } })}
-                                      getOptionLabel={(option) => (
-                                        <div style={{ display: 'flex', alignItems: 'center' }}>
-                                          <img
-                                            src={`https://flagcdn.com/w20/${option.cca2.toLowerCase()}.png`}
-                                            alt={`${option.name} flag`}
-                                            style={{ marginRight: '10px', width: '20px' }}
-                                          />
-                                          {option.name} ({option.dial_code})
-                                        </div>
-                                      )}
-                                      getOptionValue={(option) => option.dial_code}
-                                      styles={{
-                                        control: (base) => ({
-                                          ...base,
-                                          maxWidth: '120px',
-                                          marginRight: '8px',
-                                          height: '38px', // Adjust this value as needed
-                                        }),
-                                      }}
-                                    />
-                                    <input
-                                      type="text"
-                                      name="mobile"
-                                      value={userData && userData.mobile}
-                                      onChange={handleUserData}
-                                      className="form-control"
-                                    />
+                                  <div className="d-flex align-items-end">
+                                    <div className="position-relative flex-grow-0" style={{ minWidth: '140px' }}>
+                                     
+                                      <Select
+                                        name="mobile_country_code"
+                                        value={
+                                          countries && userData?.mobile_country_code
+                                            ? countries.find(
+                                                (option) => option.dial_code === userData.mobile_country_code
+                                              )
+                                            : null
+                                        }
+                                        options={countries || []}
+                                        placeholder="Dial Code"
+                                        onChange={(selectedOption) =>
+                                          handleUserData({
+                                            target: {
+                                              name: 'mobile_country_code',
+                                              value: selectedOption?.dial_code || '',
+                                            },
+                                          })
+                                        }
+                                        getOptionLabel={(option) => (
+                                          <div className="d-flex align-items-center">
+                                            <img
+                                              src={`https://flagcdn.com/w20/${option.cca2.toLowerCase()}.png`}
+                                              alt={`${option.name} flag`}
+                                              className="me-2"
+                                              width="20"
+                                              height="14"
+                                              style={{ objectFit: 'cover' }}
+                                            />
+                                            <span>{option.dial_code}</span>
+                                          </div>
+                                        )}
+                                        getOptionValue={(option) => option.dial_code}
+                                        classNamePrefix="countrySelect"
+                                        styles={{
+                                          control: (base) => ({
+                                            ...base,
+                                            height: '38px',
+                                            minHeight: '38px',
+                                            borderRadius: '6px 0 0 6px',
+                                            borderRight: 'none',
+                                            boxShadow: 'none',
+                                            '&:hover': { borderColor: '#80bdff' },
+                                            overflow: 'hidden',
+                                          }),
+                                          placeholder: (base) => ({
+                                            ...base,
+                                            lineHeight: '38px',
+                                            margin: 0,
+                                            padding: 0,
+                                          }),
+                                          singleValue: (base) => ({
+                                            ...base,
+                                            lineHeight: '38px',
+                                            margin: 0,
+                                            padding: 0,
+                                          }),
+                                          dropdownIndicator: (base) => ({
+                                            ...base,
+                                            padding: '8px',
+                                            borderLeft: 'none',
+                                          }),
+                                          indicatorSeparator: () => ({
+                                            display: 'none',
+                                          }),
+                                          menu: (base) => ({
+                                            ...base,
+                                            marginTop: '4px',
+                                            borderRadius: '6px',
+                                            boxShadow: '0 4px 12px rgba(0,0,0,.15)',
+                                          }),
+                                          option: (base, state) => ({
+                                            ...base,
+                                            backgroundColor: state.isSelected
+                                              ? '#007bff'
+                                              : state.isFocused
+                                              ? '#e7f1ff'
+                                              : 'white',
+                                            color: state.isSelected ? 'white' : '#212529',
+                                            cursor: 'pointer',
+                                          }),
+                                        }}
+                                      />
+                                    </div>
+                                    <div className="flex-grow-1">
+                                     
+                                      <input
+                                        type="text"
+                                        name="mobile"
+                                        value={userData && userData.mobile}
+                                        onChange={handleUserData}
+                                        className="form-control"
+                                        style={{
+                                          borderRadius: '0 6px 6px 0',
+                                          height: '38px',
+                                        }}
+                                      />
+                                    </div>
                                   </div>
                                 </div>
                               </div>

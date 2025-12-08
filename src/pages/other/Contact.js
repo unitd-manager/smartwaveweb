@@ -395,27 +395,44 @@ console.log('mailId',mailId);
                             name="mobile_country_code"
                             value={countries && user?.mobile_country_code ? countries.find(option => option.dial_code === user.mobile_country_code) : null}
                             options={countries || []}
-                            placeholder="Code"
+                            placeholder="Dial Code"
                             onChange={(selectedOption) => handleChange(selectedOption)}
                             getOptionLabel={(option) => (
-                              <div style={{ display: 'flex', alignItems: 'center' }}>
+                              <div style={{ display: 'flex', alignItems: 'center', whiteSpace: 'nowrap' }}>
                                 <img
                                   src={`https://flagcdn.com/w20/${option.cca2.toLowerCase()}.png`}
                                   alt={`${option.name} flag`}
-                                  style={{ marginRight: '10px', width: '20px' }}
+                                  style={{ marginRight: '10px', width: '20px', flexShrink: 0 }}
                                 />
-                                {option.name} ({option.dial_code})
+                                <span style={{ overflow: 'hidden', textOverflow: 'ellipsis' }}>{option.name} ({option.dial_code})</span>
                               </div>
                             )}
                             getOptionValue={(option) => option.dial_code}
                             styles={{
                               control: (base) => ({
                                 ...base,
-                                maxWidth: '120px',
+                                width: '160px',
                                 marginRight: '8px',
                                 height: '38px',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                              }),
+                              menu: (base) => ({
+                                ...base,
+                                width: '260px',
+                              }),
+                              option: (base) => ({
+                                ...base,
+                                whiteSpace: 'nowrap',
+                              }),
+                              placeholder: (base) => ({
+                                ...base,
+                                textAlign: 'center',
+                                lineHeight: '38px',
                               }),
                             }}
+                            menuPlacement="auto"
                           />
                           <input
                             type="text"
