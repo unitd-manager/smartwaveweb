@@ -390,7 +390,7 @@ console.log('mailId',mailId);
                         />
                       </div>
                       <div className="col-lg-12">
-                        <div className="d-flex mb-4">
+                        <div className="d-flex">
                           <Select
                             name="mobile_country_code"
                             value={countries && user?.mobile_country_code ? countries.find(option => option.dial_code === user.mobile_country_code) : null}

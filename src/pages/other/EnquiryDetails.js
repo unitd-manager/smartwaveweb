@@ -466,7 +466,7 @@ if(user){
 
         {/* Quotation Section */}
         <div className="card p-4 text-center border-dashed mb-3">
-        <h6 className="d-flex justify-content-between align-items-center my-2 fw-bold mt-4">Performa Invoice</h6>
+        <h6 className="d-flex justify-content-between align-items-center my-2 fw-bold mt-4">Proforma Invoice</h6>
           {receiptUrl4 && receiptUrl4.length > 0 && receiptUrl4.map((res1, index) => (
             <div
               key={index}
