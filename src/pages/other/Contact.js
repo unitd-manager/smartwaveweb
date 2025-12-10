@@ -395,7 +395,7 @@ console.log('mailId',mailId);
                             name="mobile_country_code"
                             value={countries && user?.mobile_country_code ? countries.find(option => option.dial_code === user.mobile_country_code) : null}
                             options={countries || []}
-                            placeholder="Dial Code"
+                            placeholder="Country Code"
                             onChange={(selectedOption) => handleChange(selectedOption)}
                             getOptionLabel={(option) => (
                               <div style={{ display: 'flex', alignItems: 'center', whiteSpace: 'nowrap' }}>
@@ -408,43 +408,97 @@ console.log('mailId',mailId);
                               </div>
                             )}
                             getOptionValue={(option) => option.dial_code}
-                            styles={{
-                              control: (base) => ({
-                                ...base,
-                                width: '160px',
-                                marginRight: '8px',
-                                height: '38px',
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                border: '1px solid #ced4da',
-                                boxShadow: 'none',
-                                '&:hover': { border: '1px solid #ced4da' },
-                              }),
-                              menu: (base) => ({
-                                ...base,
-                                width: '260px',
-                              }),
-                              option: (base) => ({
-                                ...base,
-                                whiteSpace: 'nowrap',
-                              }),
-                              placeholder: (base) => ({
-                                ...base,
-                                textAlign: 'center',
-                                lineHeight: '38px',
-                              }),
-                              dropdownIndicator: (base) => ({
-                                ...base,
-                                padding: 0,
-                                paddingRight: '8px',
-                                borderLeft: 'none',
-                              }),
-                              indicatorSeparator: () => ({
-                                display: 'none',
-                              }),
+                            filterOption={(candidate, input) => {
+                              const lowerInput = input.toLowerCase();
+                              return (
+                                candidate.data.name.toLowerCase().includes(lowerInput) ||
+                                candidate.data.dial_code.includes(lowerInput)
+                              );
                             }}
-                            menuPlacement="auto"
+styles={{
+  control: (base) => ({
+    ...base,
+    width: '160px',
+    marginRight: '8px',
+    height: '38px',
+    border: '1px solid #ced4da',
+    boxShadow: 'none',
+    display: 'flex',
+    alignItems: 'center',
+    '&:hover': { border: '1px solid #ced4da' },
+  }),
+
+  valueContainer: (base) => ({
+    ...base,
+    flex: 1,
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 0,
+  }),
+
+  placeholder: (base) => ({
+    ...base,
+    width: '100%',
+    textAlign: 'center',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 0,
+    margin: 0,
+    lineHeight: '38px',     // 👈 height match fix
+    height: '38px',         // 👈 force equal height
+  }),
+
+  input: (base) => ({
+    ...base,
+    margin: 0,
+    padding: 0,
+    textAlign: 'center',
+    lineHeight: '38px',     // 👈 same fix
+  }),
+
+  singleValue: (base) => ({
+    ...base,
+    width: '100%',
+    textAlign: 'center',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    lineHeight: '38px',     // 👈 center selected text
+    height: '38px',
+  }),
+
+  indicatorsContainer: (base) => ({
+  ...base,
+  height: '100%',
+  display: 'flex',
+  alignItems: 'center',     // 👈 vertically center the whole icon container
+}),
+
+dropdownIndicator: (base) => ({
+  ...base,
+  height: '100%',           // 👈 match height properly
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  padding: 0,
+  paddingRight: '8px',
+  borderLeft: 'none',
+}),
+
+
+  menu: (base) => ({
+    ...base,
+    width: '260px',
+  }),
+
+  option: (base) => ({
+    ...base,
+    whiteSpace: 'nowrap',
+  }),
+}}
+                       menuPlacement="auto"
                           />
                           <input
                             type="text"
