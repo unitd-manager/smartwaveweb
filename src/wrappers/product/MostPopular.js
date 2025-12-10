@@ -3,12 +3,12 @@ import React from "react";
 import { Link } from "react-router-dom";
 import Tab from "react-bootstrap/Tab";
 import SectionTitle from "../../components/section-title/SectionTitle";
-import ProductGridThree from "./ProductGrid";
+import ProductGridThree from "./ProductGridThree";
 
 const TabProductTwo = ({ spaceBottomClass, mostPopularProducts }) => {
   return (
-    <div className={`shop-top-bar mt-35 ml-30 ${spaceBottomClass ? spaceBottomClass : ""}`}>
-      <div className="shop-bottom-area mt-35">
+   <div className={`product-area ${spaceBottomClass ? spaceBottomClass : ""}`}>
+      <div className="container">
         <SectionTitle titleText="Most Popular" positionClass="text-center" />
         <Tab.Container defaultActiveKey="saleItems">
           <Tab.Content>
