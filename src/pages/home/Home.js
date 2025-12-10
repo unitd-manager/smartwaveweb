@@ -219,6 +219,7 @@ const Home = () => {
               </div>
             </div>
         </section>
+        <FeaturesSection spaceBottomClass="pb-100"/>
         {/* <HeroSlider /> */}
         <FeatureIcon spaceTopClass="pt-100" spaceBottomClass="pb-60" />
 
@@ -233,19 +234,13 @@ const Home = () => {
         />
         {/* <TopBrands/> */}
         <TabProductThree
-          spaceBottomClass="pb-100"
+          spaceBottomClass="pb-100"s
           category="furniture"
           bestSellingProducts={bestSellingProducts}
           mostPopularProducts={mostPopularProducts}
           
         />
- <FeaturesSection spaceBottomClass="pb-100"/>
-     
-
-        
-
-
-        <TabProductFour
+      <TabProductFour
           spaceBottomClass="pb-100"
           category="furniture"
           bestSellingProducts={bestSellingProducts}
