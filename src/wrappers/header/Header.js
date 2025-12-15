@@ -83,6 +83,7 @@ const Header = ({
         } header-top-area ${
           borderStyle === "fluid-border" ? "border-none" : ""
         }`}
+        style={{ backgroundColor: "#1fb0c1", color: "#fff" }}
       >
         <div className={layout === "container-fluid" ? layout : "container"}>
           {/* header top */}
