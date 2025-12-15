@@ -25,20 +25,7 @@ const user=getUser();
         <span>
           <i className="fa fa-envelope"></i> Email : support@smartwaveintl.com
         </span>
-        {/* <div className="lang-car-dropdown">
-          <ul>
-             <li>
-              <button value="fn" onClick={e => changeLanguageTrigger(e)}>
-                French
-              </button>
-            </li>
-            <li>
-              <button value="de" onClick={e => changeLanguageTrigger(e)}>
-                Germany
-              </button>
-            </li> 
-          </ul>
-        </div> */}
+    
       </div>
 
       <div className="same-language-currency">
@@ -51,7 +38,8 @@ const user=getUser();
   .language-currency-wrap {
     display: flex;
     align-items: center;
-    gap: 15px;
+    gap: 12px;
+    flex-wrap: nowrap;
     color: #fff;
     width: 100%;
   }
@@ -61,7 +49,8 @@ const user=getUser();
   .language-currency-wrap .same-language-currency span {
     color: #fff;
     margin: 0;
-    font-size: 14px;
+    font-size: 13px;
+    white-space: nowrap;
   }
 
   .language-currency-wrap i {
@@ -76,6 +65,7 @@ const user=getUser();
 
   /* Make the email icon pure white by default; text slightly dimmer */
   .language-currency-wrap .email-section span i {
+  
     color: #ffffff;
   }
 
@@ -90,9 +80,9 @@ const user=getUser();
   }
 
   .language-currency-wrap .same-language-currency + .same-language-currency {
-    border-left: 1px solid rgba(255,255,255,0.15);
-    padding-left: 18px;
-    margin-left: 18px;
+    border-left: none;
+    padding-left: 12px;
+    margin-left: 12px;
   }
 
   .welcome-section {

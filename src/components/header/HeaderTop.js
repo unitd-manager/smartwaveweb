@@ -18,7 +18,7 @@ const HeaderTop = ({
         borderStyle === "fluid-border" ? "border-bottom" : ""
       }`}
      
-       style={{ backgroundColor: "#1fb0c1", color: "#fff", padding: "8px 0" }}
+       style={{ backgroundColor: "#1fb0c1", color: "#fff" }}
     >
       <LanguageCurrencyChanger
         currency={currency}
