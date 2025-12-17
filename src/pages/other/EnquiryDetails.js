@@ -404,6 +404,11 @@ if(user){
                     <p className="label">Grades</p>
                     <p className="value">{enquiries?.grades || 'N/A'}</p>
                   </Col>
+
+                  <Col md={6} className="mb-3">
+                    <p className="label">Status</p>
+                    <p className="value">{enquiries?.status || 'N/A'}</p>
+                  </Col>
                 </Row>
 
                 <div className="text-center mt-3">
