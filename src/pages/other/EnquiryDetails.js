@@ -446,12 +446,12 @@ if(user){
                     <div className="upload-box">
                     <input
                       type="file"
-                      id="fileInput"
+                      id="advancePaymentInput"
                       className="d-none"
                       accept="application/pdf"
                       onChange={handleFileChange}
                     />
-                    <label htmlFor="fileInput" className="upload-label">
+                    <label htmlFor="advancePaymentInput" className="upload-label">
                       <FaFilePdf className="upload-icon" />
                       <p className="mb-1">
                         <span className="text-primary fw-medium">Click to upload</span> or drag and drop
@@ -506,41 +506,46 @@ if(user){
                       <span className="fw-medium">On documents payment</span>
                       <FaChevronUp />
                     </div>
+                    {enquiries?.on_document === 1 ? (
                     <div className="upload-box">
-                    <input
-                      type="file"
-                      id="fileInput"
-                      className="d-none"
-                      accept="application/pdf"
-                      onChange={handleFileDocChange}
-                    />
-                    <label htmlFor="fileInput" className="upload-label">
-                      <FaFilePdf className="upload-icon" />
-                      <p className="mb-1">
-                        <span className="text-primary fw-medium">Click to upload</span> or drag and drop
-                      </p>
-                      <small className="text-muted">PDF file only</small>
-                    </label>
-                    {receiptFileDoc && (
-                      <p className="mt-2 text-success">
-                        <FaFilePdf className="me-2" />
-                        {receiptFileDoc.name}
-                      </p>
-                    )}
+                      <input
+                        type="file"
+                        id="onDocPaymentInput"
+                        className="d-none"
+                        accept="application/pdf"
+                        onChange={handleFileDocChange}
+                      />
+                      <label htmlFor="onDocPaymentInput" className="upload-label">
+                        <FaFilePdf className="upload-icon" />
+                        <p className="mb-1">
+                          <span className="text-primary fw-medium">Click to upload</span> or drag and drop
+                        </p>
+                        <small className="text-muted">PDF file only</small>
+                      </label>
+                      {receiptFileDoc && (
+                        <p className="mt-2 text-success">
+                          <FaFilePdf className="me-2" />
+                          {receiptFileDoc.name}
+                        </p>
+                      )}
 
-                    {uploaded1 && (
-                      <div className="progress mt-2">
-                        <div className="progress-bar" style={{ width: `${uploaded1}%` }}>
-                          {uploaded1}%
+                      {uploaded1 && (
+                        <div className="progress mt-2">
+                          <div className="progress-bar" style={{ width: `${uploaded1}%` }}>
+                            {uploaded1}%
+                          </div>
                         </div>
-                      </div>
-                    )}
+                      )}
                       {receiptFileDoc && (
                       <button className="btn btn-primary mt-3" onClick={handleUploadOnDoc}>
                         Upload Receipt
                       </button>
+                      )}
+                    </div>
+                    ) : (
+                    <p className="text-muted small mb-0">
+                    </p>
                     )}
-                  </div>
                 </div>
 
                 {/* <h6 className="d-flex justify-content-between align-items-center my-2 fw-bold mt-4">On documents payment</h6>
@@ -604,7 +609,7 @@ if(user){
               {/* 2. On documents payment Upload Section */}
                 <div className="doc-box mb-3">
                     <div className="d-flex justify-content-between align-items-center mb-2">
-                      <span className="fw-medium">On documents payment</span>
+                      <span className="fw-medium">Business Document</span>
                       <FaChevronUp />
                     </div>
                       {receiptUrl3 && receiptUrl3.length > 0 && receiptUrl3.map((res1, index) => (
