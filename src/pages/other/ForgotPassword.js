@@ -9,7 +9,7 @@ import Nav from "react-bootstrap/Nav";
 import LayoutOne from "../../layouts/Layout";
 import Breadcrumb from "../../wrappers/breadcrumb/Breadcrumb";
 import api from "../../constants/api";
-
+ 
 const ForgotPassword = ({ location }) => {
   const { pathname } = location;
 

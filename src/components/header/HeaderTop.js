@@ -17,6 +17,8 @@ const HeaderTop = ({
       className={`header-top-wap ${
         borderStyle === "fluid-border" ? "border-bottom" : ""
       }`}
+     
+       style={{ backgroundColor: "#1fb0c1", color: "#fff" }}
     >
       <LanguageCurrencyChanger
         currency={currency}

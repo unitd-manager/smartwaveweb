@@ -10,7 +10,7 @@ import LayoutOne from "../../layouts/Layout";
 import Breadcrumb from "../../wrappers/breadcrumb/Breadcrumb";
 import api from "../../constants/api";
 import { useEffect } from "react";
-
+ 
 const ResetPassword = ({ location }) => {
   const { pathname } = location;
 const addToast=useToasts();

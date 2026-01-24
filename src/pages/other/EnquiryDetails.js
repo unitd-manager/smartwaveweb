@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { FaArrowLeft, FaUpload, FaFileDownload, FaFilePdf, FaTrash } from "react-icons/fa";
+import { FaPhone, FaUser, FaHome, FaTruck, FaChevronUp, FaFileAlt, FaFileInvoice, FaArrowLeft, FaUpload, FaFileDownload, FaFilePdf, FaTrash } from "react-icons/fa";
 import { useHistory, useParams } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import LayoutOne from "../../layouts/Layout";
@@ -21,13 +21,13 @@ const EnquiryDetails = () => {
  // const [receiptArrival, setReceiptArrival] = useState(null);
   // const [receiptArrival1, setReceiptArrival1] = useState(null);
 
-  const [receiptUrl, setReceiptUrl] = useState("");
-  const [receiptUrl1, setReceiptUrl1] = useState("");
-  const [receiptUrl2, setReceiptUrl2] = useState("");
-  const [receiptUrl3, setReceiptUrl3] = useState("");
+  const [receiptUrl, setReceiptUrl] = useState([]);
+  const [receiptUrl1, setReceiptUrl1] = useState([]);
+  const [receiptUrl2, setReceiptUrl2] = useState([]);
+  const [receiptUrl3, setReceiptUrl3] = useState([]);
+  const [receiptUrl4, setReceiptUrl4] = useState([]);
   console.log('receiptUrl2',receiptUrl2);
   
-  const [receiptUrl4, setReceiptUrl4] = useState("");
   const [addressList, setAddressList] = useState([]);
   const [productsLinked, setProductsLinked] = useState([]);
   const [selectedAddress, setSelectedAddress] = useState(null); // State for selected address
@@ -79,21 +79,30 @@ const EnquiryDetails = () => {
       })
       .catch((err) => {});
 
-    api.post('/file/getListOfFiles', { record_id: id, room_name: 'PaymentReceipt' }).then((res) => {
-      setReceiptUrl(res.data);
-    });
-    api.post('/file/getListOfFiles', { record_id: id, room_name: 'OnDocPayment' }).then((res) => {
-      setReceiptUrl1(res.data);
-    });
-    api.post('/file/getListOfFiles', { record_id: id, room_name: 'AfterArrival' }).then((res) => {
-      setReceiptUrl2(res.data);
-    });
-    api.post('/file/getListOfFiles', { record_id: id, room_name: 'Enquiry' }).then((res) => {
-      setReceiptUrl3(res.data);
-    });
-   api.post('/file/getListOfFiles', { record_id: id, room_name: 'EnquiryQuotation' }).then((res) => {
-      setReceiptUrl4(res.data);
-   })
+    api.post('/file/getListOfFiles', { record_id: id, room_name: 'PaymentReceipt' })
+      .then(res => {
+        setReceiptUrl(Array.isArray(res.data) ? res.data : []);
+      });
+
+    api.post('/file/getListOfFiles', { record_id: id, room_name: 'OnDocPayment' })
+      .then(res => {
+        setReceiptUrl1(Array.isArray(res.data) ? res.data : []);
+      });
+
+    api.post('/file/getListOfFiles', { record_id: id, room_name: 'AfterArrival' })
+      .then(res => {
+        setReceiptUrl2(Array.isArray(res.data) ? res.data : []);
+      });
+
+    api.post('/file/getListOfFiles', { record_id: id, room_name: 'Enquiry' })
+      .then(res => {
+        setReceiptUrl3(Array.isArray(res.data) ? res.data : []);
+      });
+
+    api.post('/file/getListOfFiles', { record_id: id, room_name: 'EnquiryQuotation' })
+      .then(res => {
+        setReceiptUrl4(Array.isArray(res.data) ? res.data : []);
+      });
 if(user){
     api
     .post(`/contact/getAddressessByContactId`, { contact_id: user.contact_id })
@@ -338,8 +347,11 @@ if(user){
   };
   
   return (
-    <LayoutOne headerTop="visible">
-      <div className="container mt-4">
+    <>
+      <LayoutOne headerTop="visible">
+        <div className="container my-4">
+
+          {/* Header */}
         <div className="d-flex align-items-center justify-content-between mb-3 w-100">
           <div className="d-flex align-items-center">
             <button className="btn btn-outline-primary me-3" onClick={() => history.goBack()}>
@@ -348,482 +360,602 @@ if(user){
             <h4 className="m-4">Enquiry Details</h4>
             <p className="m-4">Creation Date : {enquiries?.creation_date?.toLocaleString()}</p>
           </div>
-          <div>
-            {productsLinked && <ProductsLinkedModal productsLinked={productsLinked} />}
-          </div>
         </div>
-        <div>
-          <Card className="p-4 shadow-sm rounded-3">
-            {/* Enquiry Code & Status */}
-            <h5 className="fw-bold mb-4">
-              Enquiry Code: <span className="text-primary">{enquiries?.enquiry_code || 'N/A'}</span>
-              {enquiries?.status && (
-                <Badge
-                  bg={enquiries.status === "Active" ? "success" : "secondary"}
-                  className="ms-2 text-white ml-3"
-                >
-                  {enquiries.status}
-                </Badge>
-              )}
-            </h5>
 
-            <Row className="gy-3">
-              {/* Title */}
-              <Col md={6}>
-                <div className="mb-3">
-                  <p className="text-muted mb-1">Title:</p>
-                  <p className="fw-bold m-0">{enquiries?.title || 'N/A'}</p>
+          <Row className="g-4">
+
+            {/* LEFT COLUMN */}
+            <Col lg={7}>
+
+              {/* Enquiry Details */}
+              <Card className="card-soft bg-soft-blue p-4 mb-4">
+                <div className="d-flex align-items-center mb-3">
+                  <div className="icon-circle me-3">
+                    <FaFileAlt />
+                  </div>
+                  <h6 className="section-title mb-0">Enquiry Details</h6>
                 </div>
-              </Col>
 
-              {/* Enquiry Type */}
-              <Col md={6}>
-                <div className="mb-3">
-                  <p className="text-muted mb-1">Enquiry Type:</p>
-                  <p className="fw-bold m-0">{enquiries?.enquiry_type || 'N/A'}</p>
+                <hr className="soft-divider" />
+
+
+                <Row className="mt-3">
+                  <Col md={6} className="mb-3">
+                    <p className="label">Enquiry Code:</p>
+                    <p className="value text-primary">
+                      {enquiries?.enquiry_code || 'N/A'}
+                    </p>
+                  </Col>
+                  <Col md={6} className="mb-3">
+                    <p className="label">Order Code</p>
+                    <p className="value">{enquiries?.order_code || 'N/A'}</p>
+                  </Col>
+
+                  <Col md={6} className="mb-3">
+                    <p className="label">Title</p>
+                    <p className="value">{enquiries?.title || 'N/A'}</p>
+                  </Col>
+                  <Col md={6} className="mb-3">
+                    <p className="label">Enquiry Type</p>
+                    <p className="value">{enquiries?.enquiry_type || 'N/A'}</p>
+                  </Col>
+
+                  <Col md={6} className="mb-3">
+                    <p className="label">Grades</p>
+                    <p className="value">{enquiries?.grades || 'N/A'}</p>
+                  </Col>
+
+                  <Col md={6} className="mb-3">
+                    <p className="label">Status</p>
+                    <p className="value">{enquiries?.status || 'N/A'}</p>
+                  </Col>
+                </Row>
+
+                <div className="text-center mt-3">
+                  {productsLinked && <ProductsLinkedModal productsLinked={productsLinked} />}
                 </div>
-              </Col>
+              </Card>
 
-              {/* Enquiry Type */}
-              <Col md={6}>
-                <div className="mb-3">
-                  <p className="text-muted mb-1">Grades</p>
-                  <p className="fw-bold m-0">{enquiries?.grades || 'N/A'}</p>
+              {/* Documents & Payments */}
+              <Card className="card-soft bg-soft-purple p-4">
+                <div className="d-flex align-items-center mb-3">
+                  <div className="icon-circle-purple me-3">
+                    <FaFileInvoice />
+                  </div>
+                  <h6 className="section-title mb-0">Documents & Payments</h6>
                 </div>
-              </Col>
+                <hr className="soft-divider-purple" />
 
-              {/* Address */}
-              <Col md={6}>
-                <div className="mb-3">
-                  <p className="text-muted mb-1">Address:</p>
-                  <p className="fw-bold m-0">{enquiries?.shipping_address || 'N/A'}</p>
+                <div className="doc-box mb-3">
+                  <div className="d-flex justify-content-between align-items-center">
+                    <span className="fw-medium">Proforma Invoice</span>
+                    {receiptUrl4 && receiptUrl4.length > 0 && receiptUrl4.map((res1, index) => (
+                      <a
+                        key={index}
+                        href={`https://smartwaveadmin.unitdtechnologies.com/storage/uploads/${res1.name}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-primary text-decoration-none"
+                      >
+                        <FaFileDownload />
+                      </a>
+                    ))}
+                  </div>
                 </div>
-              </Col>
 
-              {/* Creation Date */}
-              <Col md={6}>
-                <div>
-                  <p className="text-muted mb-1">Creation Date:</p>
-                  <p className="fw-bold m-0">
-                    {enquiries?.creation_date ? moment(enquiries.creation_date).format("MMM DD, YYYY") : 'N/A'}
-                  </p>
+                <div className="doc-box mb-3">
+                    <div className="d-flex justify-content-between align-items-center mb-2">
+                      <span className="fw-medium">Advance Payment</span>
+                      <FaChevronUp />
+                    </div>
+                    <div className="upload-box">
+                    <input
+                      type="file"
+                      id="advancePaymentInput"
+                      className="d-none"
+                      accept="application/pdf"
+                      onChange={handleFileChange}
+                    />
+                    <label htmlFor="advancePaymentInput" className="upload-label">
+                      <FaFilePdf className="upload-icon" />
+                      <p className="mb-1">
+                        <span className="text-primary fw-medium">Click to upload</span> or drag and drop
+                      </p>
+                      <small className="text-muted">PDF file only</small>
+                    </label>
+                    {receiptFile && (
+                      <p className="mt-2 text-success">
+                        <FaFilePdf className="me-2" />
+                        {receiptFile.name}
+                      </p>
+                    )}
+                    {uploaded && (
+                      <div className="progress mt-2">
+                        <div className="progress-bar" style={{ width: `${uploaded}%` }}>
+                          {uploaded}%
+                        </div>
+                      </div>
+                    )}
+                      {receiptFile && (
+                      <button className="btn btn-primary mt-3" onClick={handleUpload}>
+                        Upload Receipt
+                      </button>
+                    )}
+                  </div>
                 </div>
-              </Col>
+                {receiptUrl.length > 0 &&
+                  receiptUrl.map((file, index) => (
+                    <div key={index} className="file-box mb-2">
+                      <a
+                        href={`https://smartwave.unitdtechnologies.com:2014/category/download/${file.name}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        <FaFileDownload className="me-2" />
+                        {file.originalname}
+                      </a>
+                      <button
+                        type="button"
+                        className="btn btn-sm btn-light shadow-none"
+                        onClick={() => deleteFile(file.media_id)}
+                      >
+                        <FaTrash />
+                      </button>
+                    </div>
+                  ))
+                }
 
-              <Col md={6}>
-                <div>
-                  <p className="text-muted mb-1">Order Code:</p>
-                  <p className="fw-bold m-0">{enquiries?.order_code || 'N/A'}</p>
+                {/* 2. On documents payment Upload Section */}
+                <div className="doc-box mb-3">
+                    <div className="d-flex justify-content-between align-items-center mb-2">
+                      <span className="fw-medium">On documents payment</span>
+                      <FaChevronUp />
+                    </div>
+                    {enquiries?.on_document === 1 ? (
+                    <div className="upload-box">
+                      <input
+                        type="file"
+                        id="onDocPaymentInput"
+                        className="d-none"
+                        accept="application/pdf"
+                        onChange={handleFileDocChange}
+                      />
+                      <label htmlFor="onDocPaymentInput" className="upload-label">
+                        <FaFilePdf className="upload-icon" />
+                        <p className="mb-1">
+                          <span className="text-primary fw-medium">Click to upload</span> or drag and drop
+                        </p>
+                        <small className="text-muted">PDF file only</small>
+                      </label>
+                      {receiptFileDoc && (
+                        <p className="mt-2 text-success">
+                          <FaFilePdf className="me-2" />
+                          {receiptFileDoc.name}
+                        </p>
+                      )}
+
+                      {uploaded1 && (
+                        <div className="progress mt-2">
+                          <div className="progress-bar" style={{ width: `${uploaded1}%` }}>
+                            {uploaded1}%
+                          </div>
+                        </div>
+                      )}
+                      {receiptFileDoc && (
+                      <button className="btn btn-primary mt-3" onClick={handleUploadOnDoc}>
+                        Upload Receipt
+                      </button>
+                      )}
+                    </div>
+                    ) : (
+                    <p className="text-muted small mb-0">
+                    </p>
+                    )}
                 </div>
-              </Col>
-            </Row>
-          </Card>
 
-          <h5 className="mb-4 mt-4 fw-bold">Select Address</h5>
+                {/* <h6 className="d-flex justify-content-between align-items-center my-2 fw-bold mt-4">On documents payment</h6>
+                {enquiries?.on_document === 1 && (
+                  <>
+                  <div className="custom-file-upload">
+                    <input
+                      type="file"
+                      id="fileInputDoc"
+                      className="d-none"
+                      accept="application/pdf"
+                      onChange={handleFileDocChange}
+                    />
+                    <label htmlFor="fileInputDoc" className="btn btn-outline-primary">
+                      <FaUpload className="me-2" /> Choose PDF File
+                    </label>
+                  </div>
 
-          {combinedAddressList?.map((addr) => (
-          <Card
-            key={addr.customer_address_id}
-            className={`mb-3 p-3 shadow-sm ${selectedAddress === addr.customer_address_id ? 'border-primary' : ''}`}
-            style={{ borderRadius: '15px' }}
-          >
-            <Row>
-              <Col xs={10}>
-                <div className="d-flex align-items-center mb-2">
-                  <Badge bg="secondary" className="me-2">
-                    {/* <h6 className="m-0 fw-bold text-white">{addr.shipper_name || "Address"}</h6> */}
-                    <h6 className="m-0 fw-bold text-white">
-                      {addr.customer_address_id === 'profile' ? 'Profile Address' : (addr.shipper_name || 'Address')}
-                    </h6>
-                  </Badge>        
-                </div>
-                <div className="text-muted small">
-                  {addr.address_flat}, {addr.address_street}<br />
-                  {addr.address_city}, {addr.address_town} - {addr.address_po_code}<br />
-                  {addr.address_state}, {addr.address_country}
-                </div>
-                {addr.phone && (
-                  <p className="m-0 text-muted small mt-1"><b>Phone:</b> {addr.phone}</p>
-                )}
-              </Col>
-              <Col xs={2} className="text-end">
-                <Form.Check
-                  type="radio"
-                  name="addressSelect"
-                  checked={selectedAddress === addr.customer_address_id}
-                  onChange={() => handleSelect(addr.customer_address_id)}
-                  style={{ transform: 'scale(0.5)' }}
-                />
-              </Col>
-            </Row>
-          </Card>
-        ))}
-
-        <button className="btn btn-primary mt-2" onClick={()=>generateOrder()}>
-            Save Address
-        </button><br/><br/>
-      </div>
-
-        {/* Quotation Section */}
-        <div className="card p-4 text-center border-dashed mb-3">
-        <h6 className="d-flex justify-content-between align-items-center my-2 fw-bold mt-4">Proforma Invoice</h6>
-          {receiptUrl4 && receiptUrl4.length > 0 && receiptUrl4.map((res1, index) => (
-            <div
-              key={index}
-              className="d-flex justify-content-between align-items-center my-2"
-            >
-              <a
-                href={`https://smartwaveadmin.unitdtechnologies.com/storage/uploads/${res1.name}`}
-                target="_blank" 
-                download
-                rel="noopener noreferrer"
-                className="text-decoration-none d-flex align-items-center text-primary"
-              >
-                <FaFileDownload className="me-2" />
-                {res1.originalname}
-              </a>
-            </div>
-          ))}
-        </div>
-
-        {/* Stylish File Upload Section */}
-        <div className="card p-4 text-center border-dashed mb-3">
-        <h6 className="d-flex justify-content-between align-items-center my-2 fw-bold mt-4">Advance Payment</h6>
-          <div className="custom-file-upload">
-            <input
-              type="file"
-              id="fileInput"
-              className="d-none"
-              accept="application/pdf"
-              onChange={handleFileChange}
-            />
-            <label htmlFor="fileInput" className="btn btn-outline-primary">
-              <FaUpload className="me-2" /> Choose PDF File
-            </label>
-          </div>
-
-          {receiptFile && (
-            <p className="mt-2 text-success">
-              <FaFilePdf className="me-2" />
-              {receiptFile.name}
-            </p>
-          )}
-          { uploaded &&  <div className='progress mt-2'>
-            <div className="progress-bar h-4" role='progressbar'
-              aria-valuenow={uploaded}
-              aria-valuemin='0'
-              aria-valuemax='100'
-              style={{width:`${uploaded}%`}}>
-                {`${uploaded}% uploaded`}
-            </div>
-          </div>}
-          {receiptFile && (<button className="btn btn-primary mt-2" onClick={handleUpload} disabled={!receiptFile}>
-            <FaUpload className="me-2" /> Upload Receipt
-          </button>)}
-            {/* Show Uploaded Receipt */}
-        {receiptUrl && receiptUrl.length > 0 && receiptUrl.map((res, index) => (
-        <div
-          key={index}
-          className="d-flex justify-content-between align-items-center my-2"
-        >
-          <a
-            href={`https://smartwave.unitdtechnologies.com:2014/category/download/${res.name}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-decoration-none d-flex align-items-center text-primary"
-          >
-            <FaFileDownload className="me-2" />
-            {res.originalname}
-          </a>
-    
-          <button
-            type="button"
-            className="btn btn-sm btn-light shadow-none"
-            onClick={() => deleteFile(res.media_id)}
-          >
-            <FaTrash />
-          </button>
-        </div>
-        ))}
-        </div>
-
-      
-
-        {/* 2. On documents payment Upload Section */}
-        <div className="card p-4 text-center border-dashed mb-3">
-        <h6 className="d-flex justify-content-between align-items-center my-2 fw-bold mt-4">On documents payment</h6>
-        {enquiries?.on_document === 1 && (
-          <>
-          <div className="custom-file-upload">
-            <input
-              type="file"
-              id="fileInputDoc"
-              className="d-none"
-              accept="application/pdf"
-              onChange={handleFileDocChange}
-            />
-            <label htmlFor="fileInputDoc" className="btn btn-outline-primary">
-              <FaUpload className="me-2" /> Choose PDF File
-            </label>
-          </div>
-
-          {receiptFileDoc && (
-            <p className="mt-2 text-success">
-              <FaFilePdf className="me-2" />
-              {receiptFileDoc.name}
-            </p>
-          )}
-          { uploaded1 &&  <div className='progress mt-2'>
-            <div className="progress-bar h-4" role='progressbar'
-              aria-valuenow={uploaded1}
-              aria-valuemin='0'
-              aria-valuemax='100'
-              style={{width:`${uploaded1}%`}}>
-                {`${uploaded1}% uploaded`}
-            </div>
-          </div>}
-          {receiptFileDoc && (<button className="btn btn-primary mt-2" onClick={handleUploadOnDoc} disabled={!receiptFileDoc}>
-            <FaUpload className="me-2" /> Upload Receipt
-          </button>)}
-          </>
-        )}
-          
-        {receiptUrl1 && receiptUrl1.length > 0 && receiptUrl1.map((res1, index) => (
-        <div
-          key={index}
-          className="d-flex justify-content-between align-items-center my-2"
-        >
-          <a
-            href={`https://smartwave.unitdtechnologies.com:2014/category/download/${res1.name}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-decoration-none d-flex align-items-center text-primary"
-          >
-            <FaFileDownload className="me-2" />
-            {res1.originalname}
-          </a>
-    
-          <button
-            type="button"
-            className="btn btn-sm btn-light shadow-none"
-            onClick={() => deleteFile(res1.media_id)}
-          >
-            <FaTrash />
-          </button>
-        </div>
-        ))}
-        </div>
-
-
-  
-{/* 
-       {/* 2. On documents payment Upload Section */}
-        {/* <div className="card p-4 text-center border-dashed mb-3"> */}
-        {/* <h6 className="d-flex justify-content-between align-items-center my-2 fw-bold mt-4">After Arrival</h6> */} 
-{/* 
-        {enquiries?.after_arrival === 1 && (
-          <>
-          <div className="custom-file-upload">
-            <input
-              type="file"
-              id="fileInputArrival"
-              className="d-none"
-              accept="application/pdf"
-              onChange={handleArrival}
-            />
-            <label htmlFor="fileInputArrival" className="btn btn-outline-primary">
-              <FaUpload className="me-2" /> Choose PDF File
-            </label>
-          </div>
-
-          {receiptArrival && (
-            <p className="mt-2 text-success">
-              <FaFilePdf className="me-2" />
-              {receiptArrival.name}
-            </p>
-          )}
-          { uploaded2 &&  <div className='progress mt-2'>
-            <div className="progress-bar h-4" role='progressbar'
-              aria-valuenow={uploaded2}
-              aria-valuemin='0'
-              aria-valuemax='100'
-              style={{width:`${uploaded2}%`}}>
-                {`${uploaded2}% uploaded`}
-            </div>
-          </div>}
-          {receiptArrival && (<button className="btn btn-primary mt-2" onClick={handleUploadArrival} disabled={!receiptArrival}>
-            <FaUpload className="me-2" /> Upload Arrival Receipt
-          </button>)}
-          </>
-        )} */}
-
-          {/* {receiptUrl2 && receiptUrl2.length > 0 && receiptUrl2.map((res1, index) => (
-        <div
-          key={index}
-          className="d-flex justify-content-between align-items-center my-2"
-        >
-          <a
-            href={`https://smartwave.unitdtechnologies.com:2014/category/download/${res1.name}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-decoration-none d-flex align-items-center text-primary"
-          >
-            <FaFileDownload className="me-2" />
-            {res1.name}
-          </a>
-    
-          <button
-            type="button"
-            className="btn btn-sm btn-light shadow-none"
-            onClick={() => deleteFile(res1.media_id)}
-          >
-            <FaTrash />
-          </button>
-        </div>
-        ))}
-        </div> */}
-
-
-
-        
-       {/* 2. On documents payment Upload Section */}
-       <div className="card p-4 text-center border-dashed mb-3">
-        <h6 className="d-flex justify-content-between align-items-center my-2 fw-bold mt-4">Buisness Document</h6>
-
-          {/* <div className="custom-file-upload">
-            <input
-              type="file"
-              id="fileInputArrival"
-              className="d-none"
-              accept="application/pdf"
-              onChange={handleArrival}
-            />
-            <label htmlFor="fileInputArrival" className="btn btn-outline-primary">
-              <FaUpload className="me-2" /> Choose PDF File
-            </label>
-          </div> */}
-
-          {/* {receiptArrival1 && (
-            <p className="mt-2 text-success">
-              <FaFilePdf className="me-2" />
-              {receiptArrival1.name}
-            </p>
-          )} */}
-          {/* { uploaded2 &&  <div className='progress mt-2'>
-            <div className="progress-bar h-4" role='progressbar'
-              aria-valuenow={uploaded2}
-              aria-valuemin='0'
-              aria-valuemax='100'
-              style={{width:`${uploaded2}%`}}>
-                {`${uploaded2}% uploaded`}
-            </div>
-          </div>}
-          {receiptArrival1 && (<button className="btn btn-primary mt-2" onClick={handleUploadArrival} disabled={!receiptArrival1}>
-            <FaUpload className="me-2" /> Upload Arrival Receipt
-          </button>)} */}
-
-          {receiptUrl3 && receiptUrl3.length > 0 && receiptUrl3.map((res1, index) => (
-        <div
-          key={index}
-          className="d-flex justify-content-between align-items-center my-2"
-        >
-          <a
-            href={`https://smartwaveadmin.unitdtechnologies.com/storage/uploads/${res1.name}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-decoration-none d-flex align-items-center text-primary"
-          >
-            <FaFileDownload className="me-2" />
-            {res1.originalname}
-          </a>
-{/*     
-          <button
-            type="button"
-            className="btn btn-sm btn-light shadow-none"
-            onClick={() => deleteFile(res1.media_id)}
-          >
-            <FaTrash />
-          </button> */}
-        </div>
-        ))}
-        </div>
-
-      
-      
-
-        <Card className="p-4 shadow-sm rounded-3 mb-4">
-          {/* Enquiry Code & Status */}
-          <h5 className="fw-bold mb-4">
-            Carrier Tracking
-          </h5>
-
-          <Row className="gy-3">
-            {/* Title */}
-            <Col md={6}>
-              <div className="mb-3">
-                <p className="text-muted mr-3 pull-left">Carrier Name :</p>
-                <p className="fw-bold m-0 pull-left">{tracking?.carrier_name || 'N/A'}</p>
-              </div>
-            </Col>
-
-            <Col md={6}>
-              <div className="mb-3">
-                <p className="text-muted mr-3 pull-left">Container Number :</p>
-                <p className="fw-bold m-0 pull-left">{tracking?.container_no || 'N/A'}</p>
-              </div>
-            </Col>
-
-            <Col md={6}>
-              <div className="mb-3">
-                <p className="text-muted mr-3 pull-left">Bill of Lading :</p>
-                <p className="fw-bold m-0 pull-left">{tracking?.bill_of_loading || 'N/A'}</p>
-              </div>
-            </Col>
-
-            <Col md={6}>
-              <div className="mb-3">
-                <p className="text-muted mr-3 pull-left">Order Number :</p>
-                <p className="fw-bold m-0 pull-left">{tracking?.order_no || 'N/A'}</p>
-              </div>
-            </Col>
-
-            <Col md={6}>
-              <div className="mb-3">
-                <p className="text-muted mr-3 pull-left">ETD :</p>
-                <p className="fw-bold m-0 pull-left">{tracking?.actual_delivery_date || 'N/A'}</p>
-              </div>
-            </Col>
-
-            <Col md={6}>
-              <div className="mb-3">
-                <p className="text-muted mr-3 pull-left">ETA :</p>
-                <p className="fw-bold m-0 pull-left">{tracking?.expected_delivery_date || 'N/A'}</p>
-              </div>
-            </Col>          
-
-            <Col md={6}>
-              <div className="mb-3">
-                <p className="text-muted mr-3 pull-left">Website Link :</p>
-                <p className="fw-bold m-0 pull-left">
-                  {tracking?.tracking_link ? (
-                    <a
-                      href={tracking.tracking_link}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      {tracking.tracking_link}
-                    </a>
-                  ) : (
-                    'N/A'
+                  {receiptFileDoc && (
+                    <p className="mt-2 text-success">
+                      <FaFilePdf className="me-2" />
+                      {receiptFileDoc.name}
+                    </p>
                   )}
-                </p>
-              </div>
-            </Col>          
+                  { uploaded1 &&  <div className='progress mt-2'>
+                    <div className="progress-bar h-4" role='progressbar'
+                      aria-valuenow={uploaded1}
+                      aria-valuemin='0'
+                      aria-valuemax='100'
+                      style={{width:`${uploaded1}%`}}>
+                        {`${uploaded1}% uploaded`}
+                    </div>
+                  </div>}
+                  {receiptFileDoc && (<button className="btn btn-primary mt-2" onClick={handleUploadOnDoc} disabled={!receiptFileDoc}>
+                    <FaUpload className="me-2" /> Upload Receipt
+                  </button>)}
+                  </>
+                )} */}
+                {receiptUrl1.length > 0 &&
+                  receiptUrl1.map((res1, index) => (
+                    <div key={index} className="file-box mb-2">
+                      <a
+                        href={`https://smartwave.unitdtechnologies.com:2014/category/download/${res1.name}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        <FaFileDownload className="me-2" />
+                        {res1.originalname}
+                      </a>
+                      <button
+                        type="button"
+                        className="btn btn-sm btn-light shadow-none"
+                        onClick={() => deleteFile(res1.media_id)}
+                      >
+                        <FaTrash />
+                      </button>
+                    </div>
+                  ))
+                }
+                              
+              {/* 2. On documents payment Upload Section */}
+                <div className="doc-box mb-3">
+                    <div className="d-flex justify-content-between align-items-center mb-2">
+                      <span className="fw-medium">Business Document</span>
+                      <FaChevronUp />
+                    </div>
+                      {receiptUrl3 && receiptUrl3.length > 0 && receiptUrl3.map((res1, index) => (
+                        <div className="d-flex justify-content-between align-items-center mb-2">
+                          <a
+                            key={index}
+                            href={`https://smartwaveadmin.unitdtechnologies.com/storage/uploads/${res1.name}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-primary text-decoration-none"
+                          >
+                          <FaFileDownload className="me-2" />
+                          {res1.originalname}
+                          </a>
+                        </div>
+                    ))}
+                </div>
+              </Card>
+            </Col>
+
+            {/* RIGHT COLUMN */}
+            <Col lg={5}>
+
+              {/* Carrier Tracking */}
+              <Card className="card-soft bg-soft-yellow p-4 mb-4">
+                <div className="d-flex align-items-center mb-3">
+                  <div className="icon-circle-yellow me-3">
+                    <FaTruck />
+                  </div>
+                  <h6 className="section-title mb-0">Carrier Tracking</h6>
+                </div>
+
+                <hr className="soft-divider-yellow" />
+
+                <Row className="mt-3">
+                  {[
+                    ['Carrier Name', tracking?.carrier_name],
+                    ['Container Number', tracking?.container_no],
+                    ['Bill of Lading', tracking?.bill_of_loading],
+                    ['Order Number', tracking?.order_no],
+                    ['ETD', tracking?.actual_delivery_date],
+                    ['ETA', tracking?.expected_delivery_date],
+                  ].map(([label, value], i) => (
+                    <Col md={12} key={i} className="mb-3">
+                      <p className="label">{label}:</p>
+                      <p className="value">{value || 'N/A'}</p>
+                    </Col>
+                  ))}
+
+                  <Col md={12}>
+                    <p className="label">Website Link</p>
+                    {tracking?.tracking_link ? (
+                      <a
+                        href={tracking.tracking_link}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="value text-primary text-decoration-none"
+                      >
+                        {tracking.tracking_link}
+                      </a>
+                    ) : (
+                      <p className="value">N/A</p>
+                    )}
+                  </Col>
+                </Row>
+              </Card>
+
+              {/* Address Details */}
+              <Card className="card-soft bg-soft-green p-4">
+                <div className="d-flex align-items-center mb-3">
+                  <div className="icon-circle-green me-3">
+                    <FaHome />
+                  </div>
+                  <h6 className="section-title mb-0">Address Details</h6>
+                </div>
+                <hr className="soft-divider-green" />
+                    {combinedAddressList?.map((addr) => {
+                        const isSelected = selectedAddress === addr.customer_address_id;
+
+                        return (
+                          <div
+                            key={addr.customer_address_id}
+                            className={`address-card ${isSelected ? 'selected' : ''}`}
+                            onClick={() => handleSelect(addr.customer_address_id)}
+                          >
+                            <div className="d-flex align-items-start">
+
+                              {/* Radio */}
+                              <input
+                                type="radio"
+                                name="addressSelect"
+                                checked={isSelected}
+                                readOnly
+                                className="address-radio me-3"
+                              />
+
+                              {/* Content */}
+                              <div className="flex-grow-1">
+                                <div className="d-flex align-items-center mb-1">
+                                  {addr.customer_address_id === 'profile' ? (
+                                    <FaUser className="me-2 text-muted" />
+                                  ) : (
+                                    <FaTruck className="me-2 text-muted" />
+                                  )}
+                                  <strong className="ml-2">
+                                    {addr.customer_address_id === 'profile'
+                                      ? 'Profile Address'
+                                      : 'Shipping Address'}
+                                  </strong>
+                                </div>
+
+                                <p className="mb-1 fw-semibold">{addr.shipper_name}</p>
+
+                                <p className="text-muted mb-1 small">
+                                  {addr.address_flat}, {addr.address_street}<br />
+                                  {addr.address_city}, {addr.address_town} {addr.address_po_code}<br />
+                                  {addr.address_state}, {addr.address_country}
+                                </p>
+
+                                {addr.phone && (
+                                  <p className="text-muted small mb-0">
+                                    <FaPhone className="me-1" /> {addr.phone}
+                                  </p>
+                                )}
+                              </div>
+                            </div>
+                          </div>
+                        );
+                      })}
+
+                      <button className="btn btn-primary w-100 mt-4" onClick={generateOrder}>
+                        Save
+                      </button>
+                    </Card>
+            </Col>
           </Row>
-          
-        </Card>
-      </div>
-    </LayoutOne>
+        </div>
+      </LayoutOne>
+      {/* Custom Styling */}
+      <style jsx>{`
+        .card-soft {
+          border-radius: 14px;
+          border: none;
+        }
+
+        .bg-soft-blue {
+          background: #eaf2ff;
+        }
+
+        .bg-soft-yellow {
+          background: #fff5d6;
+        }
+
+        .bg-soft-purple {
+          background: #f4edff;
+        }
+
+        .bg-soft-green {
+          background: #e9f9ef;
+        }
+
+        .section-title {
+          font-weight: 600;
+          font-size: 16px;
+          margin-bottom: 1rem;
+        }
+
+
+        .file-box {
+          background: #fff;
+          border-radius: 10px;
+          padding: 10px 14px;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+        }
+
+        /* Icon Circle */
+          .icon-circle {
+            width: 42px;
+            height: 42px;
+            background: #ffffff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #2f6fed;
+            font-size: 18px;
+            margin-right: 15px;
+          }
+
+          /* Section Title */
+          .section-title {
+            font-weight: 600;
+            font-size: 16px;
+          }
+
+          /* Divider */
+          .soft-divider {
+            border: none;
+            border-top: 1px solid #cfe0ff;
+            margin: 12px 0 0;
+          }
+
+          /* Label & Value */
+          .label {
+            color: #6c757d;
+            font-size: 13px;
+            margin-bottom: 4px;
+          }
+          .value {
+            font-weight: 600;
+            margin-bottom: 0;
+          }
+          .btn-light {
+            background: #ffffff;
+            border-radius: 10px;
+            padding: 8px 18px;
+            font-weight: 500;
+          }
+          /* Header Icon */
+          .icon-circle-purple {
+            width: 42px;
+            height: 42px;
+            background: #ffffff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #7b3fe4;
+            font-size: 18px;
+            margin-right: 15px;
+          }
+
+          /* Divider */
+          .soft-divider-purple {
+            border: none;
+            border-top: 1px solid #e2d6ff;
+            margin-top: 10px;
+          }
+
+          /* Document Boxes */
+          .doc-box {
+            background: #ffffff;
+            border-radius: 12px;
+            padding: 14px 16px;
+          }
+
+          /* Upload Area */
+          .upload-box {
+            border: 2px dashed #d7c7ff;
+            border-radius: 12px;
+            padding: 30px;
+            text-align: center;
+            background: #faf8ff;
+          }
+
+          .upload-label {
+            cursor: pointer;
+          }
+
+          .upload-icon {
+            font-size: 28px;
+            color: #7b3fe4;
+            margin-bottom: 8px;
+          }
+          /* Header Icon */
+        .icon-circle-yellow {
+          width: 42px;
+          height: 42px;
+          background: #ffffff;
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: #f59e0b;
+          font-size: 18px;
+            margin-right: 15px;
+        }
+
+        /* Divider */
+        .soft-divider-yellow {
+          border: none;
+          border-top: 1px solid #f5e3a1;
+          margin-top: 10px;
+        }
+          /* Header icon */
+        .icon-circle-green {
+          width: 42px;
+          height: 42px;
+          background: #ffffff;
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: #22c55e;
+          font-size: 18px;
+          margin-right: 15px;
+        }
+
+        /* Divider */
+        .soft-divider-green {
+          border: none;
+          border-top: 1px solid #bbf7d0;
+          margin-bottom: 20px;
+        }
+
+        /* Address card */
+        .address-card {
+          background: #f0fdf4;
+          border: 1.5px solid #e5e7eb;
+          border-radius: 14px;
+          padding: 16px;
+          margin-bottom: 14px;
+          cursor: pointer;
+          transition: all 0.2s ease;
+        }
+
+        /* Selected */
+        .address-card.selected {
+          border-color: #2563eb;
+          background: #ecf3ff;
+          box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.15);
+        }
+
+        .address-radio {
+            width: 18px;
+            height: 18px;
+            margin-top: 4px;
+            accent-color: #2563eb; /* Blue like screenshot */
+            cursor: pointer;
+            margin-right: 12px;
+          }
+
+
+        /* Radio alignment */
+        .address-card .form-check-input {
+          margin-top: 6px;
+        }
+      `}</style>
+    </>
   );
 };
 
