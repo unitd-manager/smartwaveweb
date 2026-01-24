@@ -234,19 +234,47 @@ const MyAccount = ({ location }) => {
   
 const [countries, setCountries] = useState([]);
 
-useEffect(() => {
+// useEffect(() => {
+//   axios.get('https://restcountries.com/v3.1/all?fields=name,idd,cca2')
+//     .then(res => {
+//         console.log('restcountries.com API response:', res.data);
+//         const list = res.data.map(c => ({
+//           name: c.name.common,
+//           dial_code: c.idd && c.idd.root && c.idd.suffixes && c.idd.suffixes.length > 0 ? `${c.idd.root}${c.idd.suffixes[0]}` : '',
+//           cca2: c.cca2
+//         }));
+//       console.log('diallist',list)
+//       setCountries(list);
+//     });
+// }, []);
+
+  useEffect(() => {
   axios.get('https://restcountries.com/v3.1/all?fields=name,idd,cca2')
     .then(res => {
-        console.log('restcountries.com API response:', res.data);
-        const list = res.data.map(c => ({
-          name: c.name.common,
-          dial_code: c.idd && c.idd.root && c.idd.suffixes && c.idd.suffixes.length > 0 ? `${c.idd.root}${c.idd.suffixes[0]}` : '',
-          cca2: c.cca2
-        }));
-      console.log('diallist',list)
+      const list = res.data
+        .filter(c => c.idd && c.idd.root)
+        .map(c => {
+          const dial = c.idd.root + (c.idd.suffixes?.[0] || '');
+          return {
+            value: dial,                     // REQUIRED
+            label: `${c.name.common} (${dial})`, // REQUIRED FOR SEARCH
+            name: c.name.common,
+            dial_code: dial,
+            cca2: c.cca2,
+          };
+        });
+
       setCountries(list);
     });
 }, []);
+const customFilter = (option, input) => {
+  const search = input.toLowerCase();
+  return (
+    option.data.name.toLowerCase().includes(search) ||
+    option.data.dial_code.includes(search)
+  );
+};
+
 
   const updateUserAddress = () => {
     setAddressError("");
@@ -309,6 +337,61 @@ useEffect(() => {
   // const reloadPage = () => {
   //   window.location.reload();
   // };
+ const customSelectStyles = {
+  control: (base) => ({
+    ...base,
+    height: "38px",
+    minHeight: "38px",
+    borderRadius: "6px 0 0 6px",
+    border: "1px solid #ced4da",
+    borderRight: "none",
+    boxShadow: "none",
+    display: "flex",
+    alignItems: "center",
+  }),
+
+  valueContainer: (base) => ({
+    ...base,
+    height: "38px",
+    display: "flex",
+    alignItems: "center",   // ✅ CENTER VERTICALLY
+    padding: "0 8px",
+  }),
+
+  singleValue: (base) => ({
+    ...base,
+    display: "flex",
+    alignItems: "center",   // ✅ CENTER TEXT
+    lineHeight: "38px",
+  }),
+
+  input: (base) => ({
+    ...base,
+    margin: 0,
+    padding: 0,
+  }),
+
+  indicatorsContainer: (base) => ({
+    ...base,
+    height: "38px",
+    display: "flex",
+    alignItems: "center",
+  }),
+
+  dropdownIndicator: (base) => ({
+    ...base,
+    padding: "0 8px",
+    display: "flex",
+    alignItems: "center",
+  }),
+
+  placeholder: (base) => ({
+    ...base,
+    lineHeight: "38px",
+  }),
+};
+
+
   useEffect(() => {
     api
       .post("/contact/getContactsById", { contact_id: user.contact_id })
@@ -440,89 +523,43 @@ useEffect(() => {
                                   <div className="d-flex align-items-end">
                                     <div className="position-relative flex-grow-0" style={{ minWidth: '140px' }}>
                                      
-                                      <Select
-                                        name="mobile_country_code"
-                                        value={
-                                          countries && userData?.mobile_country_code
-                                            ? countries.find(
-                                                (option) => option.dial_code === userData.mobile_country_code
-                                              )
-                                            : null
-                                        }
-                                        options={countries || []}
-                                        placeholder="Dial Code"
-                                        onChange={(selectedOption) =>
-                                          handleUserData({
-                                            target: {
-                                              name: 'mobile_country_code',
-                                              value: selectedOption?.dial_code || '',
-                                            },
-                                          })
-                                        }
-                                        getOptionLabel={(option) => (
-                                          <div className="d-flex align-items-center">
-                                            <img
-                                              src={`https://flagcdn.com/w20/${option.cca2.toLowerCase()}.png`}
-                                              alt={`${option.name} flag`}
-                                              className="me-2"
-                                              width="20"
-                                              height="14"
-                                              style={{ objectFit: 'cover' }}
-                                            />
-                                            <span>{option.dial_code}</span>
-                                          </div>
-                                        )}
-                                        getOptionValue={(option) => option.dial_code}
-                                        classNamePrefix="countrySelect"
-                                        styles={{
-                                          control: (base) => ({
-                                            ...base,
-                                            height: '38px',
-                                            minHeight: '38px',
-                                            borderRadius: '6px 0 0 6px',
-                                            borderRight: 'none',
-                                            boxShadow: 'none',
-                                            '&:hover': { borderColor: '#80bdff' },
-                                            overflow: 'hidden',
-                                          }),
-                                          placeholder: (base) => ({
-                                            ...base,
-                                            lineHeight: '38px',
-                                            margin: 0,
-                                            padding: 0,
-                                          }),
-                                          singleValue: (base) => ({
-                                            ...base,
-                                            lineHeight: '38px',
-                                            margin: 0,
-                                            padding: 0,
-                                          }),
-                                          dropdownIndicator: (base) => ({
-                                            ...base,
-                                            padding: '8px',
-                                            borderLeft: 'none',
-                                          }),
-                                          indicatorSeparator: () => ({
-                                            display: 'none',
-                                          }),
-                                          menu: (base) => ({
-                                            ...base,
-                                            marginTop: '4px',
-                                            borderRadius: '6px',
-                                            boxShadow: '0 4px 12px rgba(0,0,0,.15)',
-                                          }),
-                                          option: (base, state) => ({
-                                            ...base,
-                                            backgroundColor: state.isSelected
-                                              ? '#007bff'
-                                              : state.isFocused
-                                              ? '#e7f1ff'
-                                              : 'white',
-                                            color: state.isSelected ? 'white' : '#212529',
-                                            cursor: 'pointer',
-                                          }),
-                                        }}
-                                      />
+                                    <Select
+  name="mobile_country_code"
+
+  options={countries}
+
+  value={countries.find(c => c.value === userData?.mobile_country_code)}
+
+  placeholder="Country"
+
+  filterOption={customFilter}
+
+  onChange={(selected) =>
+    handleUserData({
+      target: {
+        name: "mobile_country_code",
+        value: selected.value,
+      },
+    })
+  }
+
+  getOptionLabel={(option) => (
+    <div style={{ display: "flex", alignItems: "center" }}>
+      <img
+        src={`https://flagcdn.com/w20/${option.cca2.toLowerCase()}.png`}
+        width="20"
+        height="14"
+        style={{ marginRight: 8 }}
+      />
+      <span>{option.name} ({option.dial_code})</span>
+    </div>
+  )}
+
+  getOptionValue={(option) => option.value}
+
+  styles={customSelectStyles}
+/>
+
                                     </div>
                                     <div className="flex-grow-1">
                                      
