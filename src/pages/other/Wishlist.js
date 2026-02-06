@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
 import React, { Fragment, useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { useToasts } from "react-toast-notifications";
 import MetaTags from "react-meta-tags";
 import { BreadcrumbsItem } from "react-breadcrumbs-dynamic";
@@ -41,6 +41,7 @@ const Wishlist = ({
   const [user, setUser] = useState();
   const [loading, setLoading] = useState(false);
 const dispatch=useDispatch();
+  const history = useHistory();
   const getWishlistItems = (userin) => {
     fetchWishlistData(userin);
   };
@@ -160,17 +161,11 @@ const onUpdateCart = (data) => {
                                       </a>
                                     ) : wishlistItem.qty_in_stock > 0 ? (
                                       <button
-                                        // onClick={() => onAddToCart(wishlistItem)}
-                                        onClick={ () => { 
-                                          const cartItem = cartItems.find(
-                                (item) => item.product_id === wishlistItem.product_id
-                              );
-                  if(cartItem?.qty>0){
-                  wishlistItem.qty=parseFloat(cartItem?.qty) +Number(1);
-                  wishlistItem.basket_id=cartItem.basket_id;
-                  onUpdateCart(wishlistItem,addToast)
-                }else{
-                  onAddToCart(wishlistItem, addToast)}}}
+                                        onClick={() =>
+                                          history.push(
+                                            `/product/${wishlistItem.product_id}/${wishlistItem.title}`
+                                          )
+                                        }
                                         className={
                                           cartItem && cartItem.quantity > 0 ? "active" : ""
                                         }
