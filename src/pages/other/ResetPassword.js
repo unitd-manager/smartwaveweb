@@ -56,8 +56,8 @@ setTimeout(()=>{
   };
   useEffect(() => {
     const urlSearchParams = new URLSearchParams(location.search);
-    const query = urlSearchParams.get("token")? urlSearchParams.get("token"):null;
-    const q = query!==null ?query.slice(0, -1):'';
+    const query = urlSearchParams.get("token");
+    const q = query || "";
     setToken(q);
   },[location.search]);
 
