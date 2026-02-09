@@ -13,7 +13,7 @@ import { useEffect } from "react";
  
 const ResetPassword = ({ location }) => {
   const { pathname } = location;
-const addToast=useToasts();
+      const { addToast } = useToasts();
 const history=useHistory();
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -58,6 +58,7 @@ setTimeout(()=>{
     const urlSearchParams = new URLSearchParams(location.search);
     const query = urlSearchParams.get("token");
     const q = query || "";
+    console.log('token',q)
     setToken(q);
   },[location.search]);
 
